@@ -1,18 +1,176 @@
-import { defineConfig, globalIgnores } from "eslint/config";
-import nextVitals from "eslint-config-next/core-web-vitals";
-import nextTs from "eslint-config-next/typescript";
+import { defineConfig } from 'eslint/config';
+import next from 'eslint-config-next';
 
-const eslintConfig = defineConfig([
-  ...nextVitals,
-  ...nextTs,
-  // Override default ignores of eslint-config-next.
-  globalIgnores([
-    // Default ignores of eslint-config-next:
-    ".next/**",
-    "out/**",
-    "build/**",
-    "next-env.d.ts",
-  ]),
+export default defineConfig([
+  // 基础 Next.js 配置（包含 TypeScript、React、可访问性等规则）
+  ...next,
+
+  // === 自定义规则覆盖（基于 frontend-code-reviewer.md 规范） ===
+  {
+    files: ['**/*.{js,jsx,ts,tsx}'],
+    rules: {
+      // === 命名和变量规则 ===
+
+      // 禁止使用 var，优先使用 const/let
+      'no-var': 'error',
+      'prefer-const': 'error',
+
+      // 未使用变量检查（以下划线开头的参数除外）
+      'no-unused-vars': [
+        'error',
+        {
+          argsIgnorePattern: '^_',
+          varsIgnorePattern: '^_',
+        },
+      ],
+
+      // === 比较和操作符规则 ===
+
+      // 强制使用严格相等比较（=== 和 !==）
+      eqeqeq: ['error', 'always'],
+
+      // 禁止使用 eval()（安全考虑）
+      'no-eval': 'error',
+
+      // === 函数和箭头函数规则 ===
+
+      // 优先使用箭头函数作为回调函数
+      'prefer-arrow-callback': 'error',
+
+      // 箭头函数前后必须有空格
+      'arrow-spacing': ['error', { before: true, after: true }],
+
+      // === 空格和格式化规则 ===
+
+      // 强制使用 2 个空格缩进
+      indent: ['error', 2, { SwitchCase: 1 }],
+
+      // 关键字前后必须有空格 (if, else, for 等)
+      'keyword-spacing': ['error', { before: true, after: true }],
+
+      // 代码块前必须有空格
+      'space-before-blocks': ['error', 'always'],
+
+      // 操作符前后必须有空格
+      'space-infix-ops': 'error',
+
+      // 函数括号前的空格规则
+      'space-before-function-paren': [
+        'error',
+        {
+          anonymous: 'always', // 匿名函数前有空格: function () {}
+          named: 'never', // 命名函数前无空格: function name() {}
+          asyncArrow: 'always', // 异步箭头函数前有空格: async () => {}
+        },
+      ],
+
+      // 逗号后的空格规则
+      'comma-spacing': ['error', { before: false, after: true }],
+
+      // 对象字面量花括号内的空格: { key: value }
+      'object-curly-spacing': ['error', 'always'],
+
+      // 数组方括号内无空格: [1, 2, 3]
+      'array-bracket-spacing': ['error', 'never'],
+
+      // === 分号规则（强制显式分号） ===
+
+      // 强制使用分号（符合代码规范）
+      semi: ['error', 'always'],
+
+      // 分号前后的空格规则
+      'semi-spacing': ['error', { before: false, after: true }],
+
+      // === 引号规则 ===
+
+      // JavaScript 中使用单引号，避免使用双引号
+      quotes: ['error', 'single', { avoidEscape: true }],
+
+      // 属性名只在必要时使用引号
+      'quote-props': ['error', 'as-needed'],
+
+      // === 行间距和格式化规则 ===
+
+      // 最多连续2个空行，文件末尾最多1个空行
+      'no-multiple-empty-lines': ['error', { max: 2, maxEOF: 1 }],
+
+      // 强制文件末尾有换行符
+      'eol-last': ['error', 'always'],
+
+      // === 注释规则 ===
+
+      // 单行注释后必须有空格: // 这是注释
+      'spaced-comment': [
+        'error',
+        'always',
+        {
+          line: { markers: ['/'], exceptions: ['-', '+'] },
+          block: { markers: ['!'], exceptions: ['*'], balanced: true },
+        },
+      ],
+
+      // 多行注释使用 /* */ 块注释格式
+      'multiline-comment-style': ['error', 'starred-block'],
+
+      // === 导入/导出规则 ===
+
+      // 导入语句排序和格式
+      'import/order': [
+        'error',
+        {
+          groups: [
+            'builtin', // Node.js 内置模块
+            'external', // 第三方库
+            'internal', // 项目内部模块
+            'parent', // 父目录导入
+            'sibling', // 兄弟文件导入
+            'index', // 索引文件导入
+          ],
+          'newlines-between': 'always', // 组之间必须有空行
+          alphabetize: { order: 'asc', caseInsensitive: true }, // 按字母顺序排序
+        },
+      ],
+
+      // === 代码质量规则 ===
+
+      // 禁止未声明的变量
+      'no-undef': 'error',
+
+      // 禁止使用未定义的变量
+      'no-undef-init': 'error',
+
+      // 禁止空语句块
+      'no-empty': 'error',
+
+      // 禁止使用 with 语句
+      'no-with': 'error',
+
+      // 禁止使用 void 操作符
+      'no-void': 'error',
+
+      // 禁止使用一元 ++ 和 --
+      'no-plusplus': 'error',
+    },
+  },
+
+  // === 全局忽略配置 ===
+  {
+    ignores: [
+      // Next.js 默认忽略的文件和目录
+      '.next/**', // Next.js 构建输出
+      'out/**', // 静态导出输出
+      'build/**', // 构建文件
+      'next-env.d.ts', // Next.js 类型定义
+
+      // 额外忽略的文件和目录
+      'node_modules/**', // 依赖包
+      '.git/**', // Git 文件
+      '*.min.js', // 压缩文件
+      '*.min.css', // 压缩 CSS 文件
+      'dist/**', // 分发目录
+      'coverage/**', // 测试覆盖率报告
+      '.eslintrc.*', // ESLint 配置文件本身
+      'prettier.config.*', // Prettier 配置文件
+    ],
+  },
 ]);
-
-export default eslintConfig;

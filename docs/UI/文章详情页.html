@@ -1,0 +1,444 @@
+<!doctype html>
+<html class="light" lang="zh">
+  <head>
+    <meta charset="utf-8" />
+    <meta content="width=device-width, initial-scale=1.0" name="viewport" />
+    <title>探索自然美学设计 - 暖木博客</title>
+    <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+    <link href="https://fonts.googleapis.com" rel="preconnect" />
+    <link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect" />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Nunito:ital,wght@0,200..1000;1,200..1000&amp;family=Noto+Sans+SC:wght@300;400;500;700&amp;display=swap"
+      rel="stylesheet"
+    />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200"
+      rel="stylesheet"
+    />
+    <script>
+      tailwind.config = {
+        darkMode: 'class',
+        theme: {
+          extend: {
+            colors: {
+              primary: '#D4A574',
+              'background-light': '#F8F6F2',
+              'background-dark': '#1e1914',
+              'text-light': '#8B6F47',
+              'text-dark': '#e0d5c6',
+              'cta-light': '#7A8B6E',
+              'cta-dark': '#a0b599',
+            },
+            fontFamily: {
+              display: ['Nunito', 'Noto Sans SC', 'sans-serif'],
+            },
+            borderRadius: {
+              DEFAULT: '8px',
+              lg: '12px',
+              xl: '16px',
+              full: '9999px',
+            },
+            boxShadow: {
+              natural: '0 4px 10px rgba(139, 111, 71, 0.1)',
+              'natural-hover': '0 8px 20px rgba(139, 111, 71, 0.15)',
+            },
+            lineHeight: {
+              loose: '1.8',
+            },
+          },
+        },
+      };
+    </script>
+    <style>
+      .material-symbols-outlined {
+        font-variation-settings:
+          'FILL' 0,
+          'wght' 300,
+          'GRAD' 0,
+          'opsz' 24;
+      }
+
+      .prose-dark strong {
+        color: var(--tw-prose-invert-bold);
+      }
+
+      .prose-dark a {
+        color: var(--tw-prose-invert-links);
+      }
+
+      .prose-dark a:hover {
+        color: #a0b599;
+      }
+    </style>
+  </head>
+
+  <body
+    class="bg-background-light dark:bg-background-dark font-display text-text-light dark:text-text-dark"
+  >
+    <div class="relative flex min-h-screen w-full flex-col">
+      <div class="layout-container flex h-full grow flex-col items-center">
+        <div class="layout-content-container flex w-full max-w-5xl flex-col px-6 sm:px-8">
+          <header
+            class="flex items-center justify-between whitespace-nowrap border-b border-primary/30 py-4"
+          >
+            <div class="flex items-center gap-4">
+              <div class="size-6 text-cta-light dark:text-cta-dark">
+                <svg fill="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                  <path
+                    d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z"
+                  ></path>
+                </svg>
+              </div>
+              <h2 class="text-xl font-bold tracking-tight text-text-light dark:text-text-dark">
+                暖木博客
+              </h2>
+            </div>
+            <div class="hidden items-center gap-8 md:flex">
+              <a
+                class="text-sm font-medium transition-colors hover:text-cta-light dark:hover:text-cta-dark"
+                href="#"
+                >首页</a
+              >
+              <a
+                class="text-sm font-medium transition-colors hover:text-cta-light dark:hover:text-cta-dark"
+                href="#"
+                >关于</a
+              >
+              <a
+                class="text-sm font-medium transition-colors hover:text-cta-light dark:hover:text-cta-dark"
+                href="#"
+                >文章</a
+              >
+              <a
+                class="text-sm font-medium transition-colors hover:text-cta-light dark:hover:text-cta-dark"
+                href="#"
+                >AI作品展示</a
+              >
+            </div>
+            <div class="relative">
+              <input
+                class="h-10 w-40 rounded-full border-2 border-primary/50 bg-background-light dark:bg-background-dark py-2 pl-4 pr-10 text-sm placeholder-text-light/60 dark:placeholder-text-dark/60 focus:border-primary focus:outline-none focus:ring-1 focus:ring-primary"
+                placeholder="搜索..."
+                type="text"
+              />
+              <span
+                class="material-symbols-outlined absolute right-3 top-1/2 -translate-y-1/2 text-text-light/70 dark:text-text-dark/70"
+                >search</span
+              >
+            </div>
+          </header>
+          <main class="flex-grow py-8 md:py-16">
+            <nav
+              aria-label="Breadcrumb"
+              class="mb-6 text-sm text-text-light/80 dark:text-text-dark/80"
+            >
+              <ol class="flex items-center space-x-2">
+                <li><a class="transition-colors hover:text-cta-light" href="#">首页</a></li>
+                <li><span class="material-symbols-outlined text-base">chevron_right</span></li>
+                <li><a class="transition-colors hover:text-cta-light" href="#">文章</a></li>
+                <li><span class="material-symbols-outlined text-base">chevron_right</span></li>
+                <li><a class="transition-colors hover:text-cta-light" href="#">生活故事</a></li>
+                <li><span class="material-symbols-outlined text-base">chevron_right</span></li>
+                <li aria-current="page" class="truncate">探索自然美学设计</li>
+              </ol>
+            </nav>
+            <article class="mx-auto max-w-[800px]">
+              <div
+                class="aspect-video w-full overflow-hidden rounded-xl border-4 border-wood-border/50 shadow-natural"
+              >
+                <div
+                  class="h-full w-full bg-cover bg-center"
+                  style="
+                    background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuDxxeiiQE8rPhpirjsq4Ma9fGD0S4wRl5s2Vgojh2p6wlXdB7pQ3WoCLnBkusXlfiAuM1hsCYWH0a5V5Oo8a7KIUhBK8KzZg7WJwclGtU8IfgWcTPHSUIOys9YYFvVwox3Tnc2yjYmMesIguNy7b3OE11bsow3shbyereU9bF1LAwJLKgGgBxE5Djt3OHO5TmoGPN_1vSZJh_YqfVinWj4YGMW6ewF2zYulR0cr_4B-kqmpfhQfRIP4iu95XuxGW1eMx_BD9WHKXx8F');
+                  "
+                ></div>
+              </div>
+              <header class="my-8 text-center">
+                <h1
+                  class="text-4xl font-extrabold tracking-tight text-[#5a472b] dark:text-text-dark sm:text-5xl"
+                >
+                  探索自然美学设计
+                </h1>
+                <div
+                  class="mt-6 flex flex-wrap items-center justify-center gap-x-4 gap-y-2 text-sm text-text-light/80 dark:text-text-dark/80"
+                >
+                  <div class="flex items-center gap-1.5">
+                    <span class="material-symbols-outlined !text-base">calendar_month</span
+                    ><span>2023年10月26日</span>
+                  </div>
+                  <div class="flex items-center gap-1.5">
+                    <span class="material-symbols-outlined !text-base">person</span
+                    ><span>作者: 木心</span>
+                  </div>
+                  <div class="flex items-center gap-1.5">
+                    <span class="material-symbols-outlined !text-base">folder</span
+                    ><span
+                      >分类:
+                      <a class="transition-colors hover:text-cta-light" href="#">生活故事</a></span
+                    >
+                  </div>
+                  <div class="flex items-center gap-1.5">
+                    <span class="material-symbols-outlined !text-base">mode_comment</span
+                    ><span>评论: 12</span>
+                  </div>
+                </div>
+              </header>
+              <div
+                class="prose prose-lg max-w-none leading-loose text-[#5a472b] prose-headings:text-[#5a472b] prose-strong:text-[#4a3b23] prose-a:text-cta-light prose-a:transition-colors hover:prose-a:text-cta-light/80 dark:text-text-dark/90 dark:prose-headings:text-text-dark dark:prose-strong:text-text-dark dark:prose-a:text-cta-dark dark:hover:prose-a:text-cta-dark/80"
+              >
+                <p>
+                  深入探讨无印良品风格的极简主义原则，以及它如何为我们的生活带来平静，创造一个宁静和谐的居住环境。MUJI的美学不仅仅是关于“少即是多”，更是一种对材质、功能和简洁形式的尊重。这种哲学渗透到生活的每一个角落，从一支笔到一个完整的家居环境。
+                </p>
+                <p>
+                  在我的家中，我尝试着将这种理念付诸实践。选择天然材料，如橡木、亚麻和棉花，它们不仅触感温润，而且随着时间的推移会展现出独特的美感。色彩上，我偏爱大地色系——米白、卡其、浅灰和木本色，这些颜色能够营造出一种舒缓、放松的氛围。
+                </p>
+                <figure class="cursor-pointer">
+                  <img
+                    alt="一个人在日出时分，于俯瞰宁静湖泊的木制甲板上平静地冥想。"
+                    class="rounded-lg border-2 border-wood-border/50 shadow-sm transition-shadow duration-300 hover:shadow-natural-hover"
+                    src="https://lh3.googleusercontent.com/aida-public/AB6AXuA9o6Pb2MwKzCoJWgCxrYhACztTG1_LJBgBXz1TZRJgNcR1vizibXhIvPZ4gHDpKs3PMOsfTOXln_SoQLup-75R0giBh3NFY0EFcay-_1XPq6t0wrhoZfsBRa_oxshjX--hIFINOcL6DGrbAGt-d8X6ULnQK7uTkjBTlY2ZzhCg_lf77C91mqoV-bkeY0Sls1qpbEOvDHPmAINfrNILt1cvVkGEtkas_TDxVcaXe36qFUaIws_RF4IcwbLs22gDYkJP7_q9dbaXFt8n"
+                  />
+                  <figcaption
+                    class="text-center text-sm italic text-text-light/70 dark:text-text-dark/70 mt-2"
+                  >
+                    点击图片放大 - 在自然中寻找设计的灵感
+                  </figcaption>
+                </figure>
+                <h2>核心原则：留白与秩序</h2>
+                <p>
+                  设计中的“留白”至关重要。它不是空无一物，而是给予物品呼吸的空间，让视觉焦点更加突出。通过精心的收纳和整理，将杂乱隐藏起来，只展示那些真正喜爱和需要的物品，从而创造出一种井然有序的美感。这不仅是物理空间的整理，更是对内心思绪的梳理。
+                </p>
+                <blockquote>
+                  <p>“简单，并不是一种选择，而是一种哲学。它关乎于剥离多余，直抵事物的本质。”</p>
+                </blockquote>
+                <p>
+                  实现这种和谐并非易事。它需要我们不断地审视自己的需求，学会舍弃。每一次购买前，我都会问自己：“这件东西是必需的吗？它能为我的生活带来真正的愉悦和便利吗？”这种消费观念的转变，是迈向极简生活方式的关键一步。
+                </p>
+                <div
+                  class="relative rounded-lg bg-code-bg dark:bg-background-dark p-4 border border-primary/20 shadow-sm my-8"
+                >
+                  <button
+                    class="absolute top-2 right-2 flex items-center gap-1 rounded-md bg-background-light dark:bg-gray-700 px-2 py-1 text-xs text-text-light/80 dark:text-text-dark/80 transition-colors hover:bg-primary/20 dark:hover:bg-primary/30"
+                  >
+                    <span class="material-symbols-outlined !text-sm">content_copy</span>
+                    <span>复制</span>
+                  </button>
+                  <pre><code class="language-css text-sm">
+.home-study {
+  background-color: #F8F6F2;
+  font-family: 'Nunito', 'Noto Sans SC', sans-serif;
+  line-height: 1.8;
+  color: #6b4f2c;
+}
+                                </code></pre>
+                </div>
+              </div>
+              <div class="mt-12 border-t border-primary/20 pt-8">
+                <div class="flex flex-wrap items-center justify-between gap-4">
+                  <div class="flex flex-wrap items-center gap-2">
+                    <span class="text-sm font-semibold">分类:</span>
+                    <a
+                      class="rounded-full bg-primary/20 px-3 py-1 text-sm text-text-light transition-colors hover:bg-primary/30 dark:bg-primary/30 dark:text-text-dark dark:hover:bg-primary/40"
+                      href="#"
+                      >生活故事
+                      </a
+                    >
+                  </div>
+                  <div class="flex items-center gap-3">
+                    <span class="text-sm font-semibold">分享:</span>
+                    <a
+                      class="text-text-light/70 transition-colors duration-300 hover:text-[#1877F2] dark:text-text-dark/70 dark:hover:text-[#1877F2]"
+                      href="#"
+                      ><svg class="h-5 w-5" fill="currentColor" viewBox="0 0 24 24">
+                        <path
+                          d="M22 12c0-5.523-4.477-10-10-10S2 6.477 2 12c0 4.991 3.657 9.128 8.438 9.878v-6.987h-2.54V12h2.54V9.797c0-2.506 1.492-3.89 3.777-3.89 1.094 0 2.238.195 2.238.195v2.46h-1.26c-1.243 0-1.63.771-1.63 1.562V12h2.773l-.443 2.89h-2.33v6.988C18.343 21.128 22 16.991 22 12z"
+                        ></path></svg
+                    ></a>
+                    <a
+                      class="text-text-light/70 transition-colors duration-300 hover:text-[#1DA1F2] dark:text-text-dark/70 dark:hover:text-[#1DA1F2]"
+                      href="#"
+                      ><svg class="h-5 w-5" fill="currentColor" viewBox="0 0 24 24">
+                        <path
+                          d="M8.29 20.251c7.547 0 11.675-6.253 11.675-11.675 0-.178 0-.355-.012-.53A8.348 8.348 0 0022 5.92a8.19 8.19 0 01-2.357.646 4.118 4.118 0 001.804-2.27 8.224 8.224 0 01-2.605.996 4.107 4.107 0 00-6.993 3.743 11.65 11.65 0 01-8.457-4.287 4.106 4.106 0 001.27 5.477A4.072 4.072 0 012.8 9.71v.052a4.105 4.105 0 003.292 4.022 4.095 4.095 0 01-1.853.07 4.108 4.108 0 003.834 2.85A8.233 8.233 0 012 18.407a11.616 11.616 0 006.29 1.84"
+                        ></path></svg
+                    ></a>
+                  </div>
+                </div>
+              </div>
+            </article>
+            <section class="mt-16 sm:mt-24 mx-auto max-w-[800px]">
+              <h2 class="text-2xl font-bold text-[#5a472b] dark:text-text-dark mb-6">评论 (12)</h2>
+              <div class="space-y-8">
+                <div class="rounded-xl bg-primary/5 dark:bg-primary/10 p-6 shadow-sm">
+                  <div class="grid grid-cols-1 gap-4 sm:grid-cols-2">
+                    <input
+                      class="h-10 rounded-lg border-primary/30 bg-background-light dark:bg-background-dark/50 p-4 text-sm placeholder-text-light/60 dark:placeholder-text-dark/60 focus:border-primary focus:ring-1 focus:ring-primary transition"
+                      placeholder="昵称"
+                      type="text"
+                    />
+                    <textarea
+                      class="w-full rounded-lg border-primary/30 bg-background-light dark:bg-background-dark/50 p-4 text-sm placeholder-text-light/60 dark:placeholder-text-dark/60 focus:border-primary focus:ring-1 focus:ring-primary transition sm:col-span-2"
+                      placeholder="写下你的想法..."
+                      rows="4"
+                    ></textarea>
+                  </div>
+                  <button
+                    class="mt-4 rounded-full bg-cta-light px-6 py-2 text-sm font-semibold text-white transition-colors duration-300 hover:bg-cta-light/80 dark:bg-cta-dark dark:hover:bg-cta-dark/80"
+                  >
+                    发表评论
+                  </button>
+                </div>
+                <div class="space-y-6">
+                  <div class="flex items-start gap-4">
+                    <img
+                      alt="User Avatar"
+                      class="h-10 w-10 rounded-full"
+                      src="https://lh3.googleusercontent.com/aida-public/AB6AXuASq2OmS9EOgPBijZjVIXPnhSfOb2VWoIQR19KAGAiQxNFFOC41dxabow60bbvGJU03NHiN0UUOGd08ege5gDP4GCdlFIBY4m6sVX5Vs5pMhLlK6l1OtAVqAgPOR8oC14xtWbZFGHRm6-aMonWlOOLa4HZWX5X1j-zkKj3PhtpVkTmx0YF2qOICZ798XyfE2e7giGK3iUGHVjRjPCkCeu2z_vWkL1Qir4PdK17c4KsGxmPk0vnUzDTbFSg8mffa9uJIXs7GQIHfvMFH"
+                    />
+                    <div class="flex-1">
+                      <div class="rounded-lg bg-primary/5 dark:bg-primary/10 p-4">
+                        <div class="flex items-center justify-between">
+                          <p class="font-bold text-[#5a472b] dark:text-text-dark">旅人A</p>
+                          <p class="text-xs text-text-light/70 dark:text-text-dark/70">3小时前</p>
+                        </div>
+                        <p class="mt-2 text-sm text-text-light dark:text-text-dark/90">
+                          这篇文章说出了我的心声！我也一直在实践极简主义，感觉生活清爽了很多。
+                        </p>
+                      </div>
+                      <div class="mt-4 ml-8 flex items-start gap-4">
+                        <img
+                          alt="User Avatar"
+                          class="h-10 w-10 rounded-full"
+                          src="https://lh3.googleusercontent.com/aida-public/AB6AXuCs08HsgTBAGpiwvnNvhndGcm8oQGOahdrvcL0I8iPCg1__GkJDKyhJlwivRDcDPikuPUZps4yu83IBIJeNL6Yl5CKi7nG1OV0eyn0ABSmLTEcvbAyaZN1ys-_FKi4cx2L0f7oNgyKCJf1YasctGlimxJ9KvE3DnpYZdZIJL7DqaQi7wc7Ht8SFRRZQkZM875PqvyS4YuQk1GOZxQwexIYX5pdaBlI_Fp4j0xmcV4iT0Qr5dg1oaJpNEulec8-3100-jLiTx9T9OdpG"
+                        />
+                        <div class="flex-1">
+                          <div class="rounded-lg bg-primary/5 dark:bg-primary/10 p-4">
+                            <div class="flex items-center justify-between">
+                              <p class="font-bold text-[#5a472b] dark:text-text-dark">
+                                木心
+                                <span
+                                  class="ml-1 rounded bg-cta-light/20 px-1.5 py-0.5 text-xs font-normal text-cta-light dark:bg-cta-dark/20 dark:text-cta-dark"
+                                  >作者</span
+                                >
+                              </p>
+                              <p class="text-xs text-text-light/70 dark:text-text-dark/70">
+                                1小时前
+                              </p>
+                            </div>
+                            <p class="mt-2 text-sm text-text-light dark:text-text-dark/90">
+                              很高兴你喜欢！是的，心灵的空间和物理空间同样重要。
+                            </p>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="flex items-start gap-4">
+                    <img
+                      alt="User Avatar"
+                      class="h-10 w-10 rounded-full"
+                      src="https://lh3.googleusercontent.com/aida-public/AB6AXuBsiL-EPXnncMp3G7ZWdgCkk6KJt7Bz-aCxQGBPh6WghOyCQo3GJHqRlLliDNGc9clQ7SxSkDgI4TG6M-6QmIHN5cTrq6tkUeoOoVVyPXkZX9NJx_xCD3RzLqfiOcUDriEDUouBVxde-Z6y5DmvFt8PSM7653s13Ji3NwSCfOeRbhg97_UA-t52WdXbOrLATadwNWbSR8FVIKn3BcYKirGH6o8jpWnQUMVYahwxWhosnR7CZoaHtrmntHQWVGX-tN3wdGGZvkV08H3p"
+                    />
+                    <div class="flex-1">
+                      <div class="rounded-lg bg-primary/5 dark:bg-primary/10 p-4">
+                        <div class="flex items-center justify-between">
+                          <p class="font-bold text-[#5a472b] dark:text-text-dark">摄影师小李</p>
+                          <p class="text-xs text-text-light/70 dark:text-text-dark/70">昨天</p>
+                        </div>
+                        <p class="mt-2 text-sm text-text-light dark:text-text-dark/90">
+                          文中的配图太美了，很有意境。请问是用什么相机拍的？
+                        </p>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </section>
+          </main>
+          <footer class="border-t border-primary/30 py-12">
+            <div class="grid grid-cols-1 gap-8 text-center md:grid-cols-2 md:text-left">
+              <div class="flex flex-col items-center gap-4 md:items-start">
+                <div class="flex items-center gap-4">
+                  <div class="size-6 text-cta-light dark:text-cta-dark">
+                    <svg fill="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                      <path
+                        d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z"
+                      ></path>
+                    </svg>
+                  </div>
+                  <h2 class="text-xl font-bold tracking-tight text-text-light dark:text-text-dark">
+                    暖木博客
+                  </h2>
+                </div>
+                <div class="flex gap-4">
+                  <a
+                    class="text-text-light/80 transition-colors hover:text-cta-light dark:text-text-dark/80 dark:hover:text-cta-dark"
+                    href="#"
+                  >
+                    <svg aria-hidden="true" class="h-6 w-6" fill="currentColor" viewBox="0 0 24 24">
+                      <path
+                        clip-rule="evenodd"
+                        d="M22 12c0-5.523-4.477-10-10-10S2 6.477 2 12c0 4.991 3.657 9.128 8.438 9.878v-6.987h-2.54V12h2.54V9.797c0-2.506 1.492-3.89 3.777-3.89 1.094 0 2.238.195 2.238.195v2.46h-1.26c-1.243 0-1.63.771-1.63 1.562V12h2.773l-.443 2.89h-2.33v6.988C18.343 21.128 22 16.991 22 12z"
+                        fill-rule="evenodd"
+                      ></path>
+                    </svg>
+                  </a>
+                  <a
+                    class="text-text-light/80 transition-colors hover:text-cta-light dark:text-text-dark/80 dark:hover:text-cta-dark"
+                    href="#"
+                  >
+                    <svg aria-hidden="true" class="h-6 w-6" fill="currentColor" viewBox="0 0 24 24">
+                      <path
+                        d="M8.29 20.251c7.547 0 11.675-6.253 11.675-11.675 0-.178 0-.355-.012-.53A8.348 8.348 0 0022 5.92a8.19 8.19 0 01-2.357.646 4.118 4.118 0 001.804-2.27 8.224 8.224 0 01-2.605.996 4.107 4.107 0 00-6.993 3.743 11.65 11.65 0 01-8.457-4.287 4.106 4.106 0 001.27 5.477A4.072 4.072 0 012.8 9.71v.052a4.105 4.105 0 003.292 4.022 4.095 4.095 0 01-1.853.07 4.108 4.108 0 003.834 2.85A8.233 8.233 0 012 18.407a11.616 11.616 0 006.29 1.84"
+                      ></path>
+                    </svg>
+                  </a>
+                  <a
+                    class="text-text-light/80 transition-colors hover:text-cta-light dark:text-text-dark/80 dark:hover:text-cta-dark"
+                    href="#"
+                  >
+                    <svg aria-hidden="true" class="h-6 w-6" fill="currentColor" viewBox="0 0 24 24">
+                      <path
+                        clip-rule="evenodd"
+                        d="M12.315 2c2.43 0 2.784.013 3.808.06 1.064.049 1.791.218 2.427.465a4.902 4.902 0 011.772 1.153 4.902 4.902 0 011.153 1.772c.247.636.416 1.363.465 2.427.048 1.024.06 1.378.06 3.808s-.012 2.784-.06 3.808c-.049 1.064-.218 1.791-.465 2.427a4.902 4.902 0 01-1.153 1.772 4.902 4.902 0 01-1.772 1.153c-.636.247-1.363.416-2.427.465-1.024.048-1.378.06-3.808.06s-2.784-.012-3.808-.06c-1.064-.049-1.791-.218-2.427-.465a4.902 4.902 0 01-1.772-1.153 4.902 4.902 0 01-1.153-1.772c-.247-.636-.416-1.363-.465-2.427-.048-1.024-.06-1.378-.06-3.808s.012-2.784.06-3.808c.049-1.064.218-1.791.465-2.427a4.902 4.902 0 011.153-1.772A4.902 4.902 0 016.345 2.525c.636-.247 1.363-.416 2.427-.465C9.793 2.013 10.147 2 12.315 2h.001zm-1.04 2.265c-2.456 0-2.784.011-3.807.058-.975.045-1.504.207-1.857.344-.467.182-.86.399-1.249.789-.389.389-.607.782-.789 1.249-.137.353-.3.882-.344 1.857-.047 1.023-.058 1.351-.058 3.807s.011 2.784.058 3.807c.045.975.207 1.504.344 1.857.182.466.399.86.789 1.249.389.389.782.607 1.249.789.353.137.882.3 1.857.344 1.023.047 1.351.058 3.807.058s2.784-.011 3.807-.058c.975-.045 1.504-.207 1.857-.344.467-.182.86-.399 1.249-.789.389-.389.607-.782.789-1.249.137-.353.3-.882-.344-1.857.047-1.023.058-1.351-.058-3.807s-.011-2.784-.058-3.807c-.045-.975-.207-1.504-.344-1.857a3.097 3.097 0 00-.789-1.249 3.097 3.097 0 00-1.249-.789c-.353-.137-.882-.3-1.857-.344-1.023-.047-1.351-.058-3.807-.058zM12 6.865a5.135 5.135 0 100 10.27 5.135 5.135 0 000-10.27zm0 8.468a3.333 3.333 0 110-6.666 3.333 3.333 0 010 6.666zm5.338-9.87a1.262 1.262 0 100 2.524 1.262 1.262 0 000-2.524z"
+                        fill-rule="evenodd"
+                      ></path>
+                    </svg>
+                  </a>
+                </div>
+              </div>
+              <div class="flex flex-col items-center gap-4 md:items-start">
+                <h3 class="font-bold text-text-light dark:text-text-dark">链接</h3>
+                <a
+                  class="text-sm text-text-light/80 transition-colors hover:text-cta-light dark:text-text-dark/80 dark:hover:text-cta-dark"
+                  href="#"
+                  >关于</a
+                >
+                <a
+                  class="text-sm text-text-light/80 transition-colors hover:text-cta-light dark:text-text-dark/80 dark:hover:text-cta-dark"
+                  href="#"
+                  >文章</a
+                >
+                <a
+                  class="text-sm text-text-light/80 transition-colors hover:text-cta-light dark:text-text-dark/80 dark:hover:text-cta-dark"
+                  href="#"
+                  >隐私政策</a
+                >
+              </div>
+            </div>
+            <div
+              class="mt-12 border-t border-primary/30 pt-8 text-center text-sm text-text-light/60 dark:text-text-dark/60"
+            >
+              <p>© 2024 暖木博客. 版权所有.</p>
+            </div>
+          </footer>
+        </div>
+      </div>
+      <button
+        class="fixed bottom-8 right-8 z-40 flex h-12 w-12 items-center justify-center rounded-full bg-primary/80 text-white shadow-lg backdrop-blur-sm transition-all duration-300 hover:bg-primary hover:shadow-xl dark:bg-primary/70 dark:hover:bg-primary"
+      >
+        <span class="material-symbols-outlined">arrow_upward</span>
+      </button>
+    </div>
+  </body>
+</html>

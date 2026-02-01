@@ -1,0 +1,383 @@
+<!doctype html>
+<html class="light" lang="zh">
+  <head>
+    <meta charset="utf-8" />
+    <meta content="width=device-width, initial-scale=1.0" name="viewport" />
+    <title>个人博客 - 暖木与阳光</title>
+    <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+    <link href="https://fonts.googleapis.com" rel="preconnect" />
+    <link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect" />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Nunito:ital,wght@0,200..1000;1,200..1000&amp;family=Noto+Sans+SC:wght@300;400;500;700&amp;display=swap"
+      rel="stylesheet"
+    />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200"
+      rel="stylesheet"
+    />
+    <script>
+      tailwind.config = {
+        darkMode: 'class',
+        theme: {
+          extend: {
+            colors: {
+              primary: '#D4A574',
+              'background-light': '#F8F6F2',
+              'background-dark': '#1e1914',
+              'text-light': '#8B6F47',
+              'text-dark': '#e0d5c6',
+              'cta-light': '#7A8B6E',
+              'cta-dark': '#a0b599',
+            },
+            fontFamily: {
+              display: ['Nunito', 'Noto Sans SC', 'sans-serif'],
+            },
+            borderRadius: {
+              DEFAULT: '8px',
+              lg: '12px',
+              xl: '16px',
+              full: '9999px',
+            },
+            boxShadow: {
+              natural: '0 4px 10px rgba(139, 111, 71, 0.1)',
+              'natural-hover': '0 8px 20px rgba(139, 111, 71, 0.15)',
+            },
+          },
+        },
+      };
+    </script>
+    <style>
+      .material-symbols-outlined {
+        font-variation-settings:
+          'FILL' 0,
+          'wght' 400,
+          'GRAD' 0,
+          'opsz' 24;
+      }
+    </style>
+  </head>
+  <body
+    class="bg-background-light dark:bg-background-dark font-display text-text-light dark:text-text-dark"
+  >
+    <div class="relative flex min-h-screen w-full flex-col">
+      <div class="layout-container flex h-full grow flex-col items-center">
+        <div class="layout-content-container flex w-full max-w-5xl flex-col px-6 sm:px-8">
+          <header
+            class="flex items-center justify-between whitespace-nowrap border-b border-primary/30 py-4"
+          >
+            <div class="flex items-center gap-4">
+              <div class="size-6 text-cta-light dark:text-cta-dark">
+                <svg fill="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                  <path
+                    d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z"
+                  ></path>
+                </svg>
+              </div>
+              <h2 class="text-xl font-bold tracking-tight text-text-light dark:text-text-dark">
+                暖木博客
+              </h2>
+            </div>
+            <div class="hidden items-center gap-8 md:flex">
+              <a
+                class="text-sm font-medium transition-colors hover:text-cta-light dark:hover:text-cta-dark"
+                href="#"
+                >首页</a
+              >
+              <a
+                class="text-sm font-medium transition-colors hover:text-cta-light dark:hover:text-cta-dark"
+                href="#"
+                >关于</a
+              >
+              <a
+                class="text-sm font-medium transition-colors hover:text-cta-light dark:hover:text-cta-dark"
+                href="#"
+                >文章</a
+              >
+              <a
+                class="text-sm font-medium transition-colors hover:text-cta-light dark:hover:text-cta-dark"
+                href="#"
+                >AI作品展示</a
+              >
+            </div>
+            <div class="relative">
+              <input
+                class="h-10 w-40 rounded-full border-2 border-primary/50 bg-background-light dark:bg-background-dark py-2 pl-4 pr-10 text-sm placeholder-text-light/60 dark:placeholder-text-dark/60 focus:border-primary focus:outline-none focus:ring-1 focus:ring-primary"
+                placeholder="搜索..."
+                type="text"
+              />
+              <span
+                class="material-symbols-outlined absolute right-3 top-1/2 -translate-y-1/2 text-text-light/70 dark:text-text-dark/70"
+                >search</span
+              >
+            </div>
+          </header>
+          <main class="flex-grow">
+            <section class="py-16 sm:py-24">
+              <div class="flex flex-col items-center gap-12 lg:flex-row">
+                <div class="flex-shrink-0">
+                  <div
+                    class="size-48 rounded-full bg-cover bg-center shadow-natural"
+                    data-alt="博主微笑着的肖像照"
+                    style="
+                      background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuBCh8q7kolbH_dw3W-__QBEs0rxI3l-ya03gKWEZk82N4JSxXgMe2-xEd7E9ZeOptuoIT2_uh8AIWsgZH1s08cmi_BX6dKILs5Ou7lCmZfGELnJiF7kCQPugePHsS-goyrWYods0QFjV1BUoOKQwlxaoMmRrT1wTO9ufhNx1qt1NRhEQsWdBLipj41dUKKQLpLTHA8wfZcKFD-TY5QcGImzzC-LKo5fctlnN4dW_DY51r59yQwleZPXxQfXZ1JakWOQYTFAOOf9Hnda');
+                    "
+                  ></div>
+                </div>
+                <div class="flex flex-col gap-6 text-center lg:text-left">
+                  <div class="flex flex-col gap-2">
+                    <h1
+                      class="text-4xl font-extrabold leading-tight tracking-tight text-text-light dark:text-text-dark sm:text-5xl"
+                    >
+                      欢迎来到我的空间
+                    </h1>
+                    <p class="text-base font-normal leading-relaxed sm:text-lg">
+                      一个探索科技、设计、生活及AI创作潜能的个人博客。欢迎来到我这片受“阳光穿过树叶”启发的网络角落。
+                    </p>
+                  </div>
+                  <div class="flex justify-center lg:justify-start">
+                    <button
+                      class="flex min-w-[84px] cursor-pointer items-center justify-center overflow-hidden rounded-full h-12 px-8 bg-primary text-background-dark text-base font-bold tracking-wide transition-shadow hover:shadow-lg"
+                    >
+                      <span class="truncate">阅读我的故事</span>
+                    </button>
+                  </div>
+                </div>
+              </div>
+            </section>
+            <section class="py-16">
+              <h2
+                class="text-2xl font-bold tracking-tight px-0 pb-8 text-center sm:text-3xl text-text-light dark:text-text-dark"
+              >
+                最新文章
+              </h2>
+              <div class="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3">
+                <div
+                  class="flex transform flex-col gap-4 overflow-hidden rounded border-2 border-primary/50 bg-background-light dark:bg-background-dark p-4 shadow-natural transition-all duration-300 hover:-translate-y-1 hover:shadow-natural-hover"
+                >
+                  <div
+                    class="aspect-video w-full rounded-sm bg-cover bg-center"
+                    data-alt="一个极简主义的桌面布置，有笔记本电脑、一株植物和一杯咖啡，沐浴在晨光中。"
+                    style="
+                      background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuDxxeiiQE8rPhpirjsq4Ma9fGD0S4wRl5s2Vgojh2p6wlXdB7pQ3WoCLnBkusXlfiAuM1hsCYWH0a5V5Oo8a7KIUhBK8KzZg7WJwclGtU8IfgWcTPHSUIOys9YYFvVwox3Tnc2yjYmMesIguNy7b3OE11bsow3shbyereU9bF1LAwJLKgGgBxE5Djt3OHO5TmoGPN_1vSZJh_YqfVinWj4YGMW6ewF2zYulR0cr_4B-kqmpfhQfRIP4iu95XuxGW1eMx_BD9WHKXx8F');
+                    "
+                  ></div>
+                  <div class="flex flex-col gap-2">
+                    <p class="text-lg font-bold">探索自然美学设计</p>
+                    <p class="text-sm font-normal text-text-light/80 dark:text-text-dark/80">
+                      深入探讨无印良品风格的极简主义原则，以及它如何为我们的生活带来平静。
+                    </p>
+                    <p class="pt-2 text-xs font-medium text-text-light/60 dark:text-text-dark/60">
+                      2023年10月26日
+                    </p>
+                  </div>
+                </div>
+                <div
+                  class="flex transform flex-col gap-4 overflow-hidden rounded border-2 border-primary/50 bg-background-light dark:bg-background-dark p-4 shadow-natural transition-all duration-300 hover:-translate-y-1 hover:shadow-natural-hover"
+                >
+                  <div
+                    class="aspect-video w-full rounded-sm bg-cover bg-center"
+                    data-alt="代表创意AI的蓝色和金色光线的抽象漩涡图案。"
+                    style="
+                      background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuAE_evV1XMgG_6SnfUaXV1-zsA_FXmKU3WA5xIpSquriXNBbtABOlQ1PvsUHDPneyCzrJgRhNgXn5xtFQHLUSuUuu9oS7pR0ankjy0dkJwkmuZEtKRNqGYDTh-1QLAeLy5T6nk0dNXWcsAJnoBvu6R_kU4YOjV6GMf96k8lZyX6kB8hX0_s5wbF7qSmTir37Ecr6s5xgv5SBrrYybj2lYt2yUsqR49Ar8JJm3qZBjC5Pgy-GIb-ssf06V1qHevdVhiGBCqad1VrwtTz');
+                    "
+                  ></div>
+                  <div class="flex flex-col gap-2">
+                    <p class="text-lg font-bold">我的AI创作之旅</p>
+                    <p class="text-sm font-normal text-text-light/80 dark:text-text-dark/80">
+                      我如何开始使用AI工具生成艺术作品，以及一路走来的所学所感。
+                    </p>
+                    <p class="pt-2 text-xs font-medium text-text-light/60 dark:text-text-dark/60">
+                      2023年10月22日
+                    </p>
+                  </div>
+                </div>
+                <div
+                  class="flex transform flex-col gap-4 overflow-hidden rounded border-2 border-primary/50 bg-background-light dark:bg-background-dark p-4 shadow-natural transition-all duration-300 hover:-translate-y-1 hover:shadow-natural-hover"
+                >
+                  <div
+                    class="aspect-video w-full rounded-sm bg-cover bg-center"
+                    data-alt="一个人在日出时分，于俯瞰宁静湖泊的木制甲板上平静地冥想。"
+                    style="
+                      background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuA9o6Pb2MwKzCoJWgCxrYhACztTG1_LJBgBXz1TZRJgNcR1vizibXhIvPZ4gHDpKs3PMOsfTOXln_SoQLup-75R0giBh3NFY0EFcay-_1XPq6t0wrhoZfsBRa_oxshjX--hIFINOcL6DGrbAGt-d8X6ULnQK7uTkjBTlY2ZzhCg_lf77C91mqoV-bkeY0Sls1qpbEOvDHPmAINfrNILt1cvVkGEtkas_TDxVcaXe36qFUaIws_RF4IcwbLs22gDYkJP7_q9dbaXFt8n');
+                    "
+                  ></div>
+                  <div class="flex flex-col gap-2">
+                    <p class="text-lg font-bold">数字世界中的正念生活</p>
+                    <p class="text-sm font-normal text-text-light/80 dark:text-text-dark/80">
+                      在日益互联的世界里，关于寻找平衡、活在当下的技巧和思考。
+                    </p>
+                    <p class="pt-2 text-xs font-medium text-text-light/60 dark:text-text-dark/60">
+                      2023年10月18日
+                    </p>
+                  </div>
+                </div>
+              </div>
+            </section>
+            <section class="py-16">
+              <h2
+                class="text-2xl font-bold tracking-tight px-0 pb-8 text-center sm:text-3xl text-text-light dark:text-text-dark"
+              >
+                文章分类
+              </h2>
+              <div class="flex flex-wrap items-center justify-center gap-4">
+                <button
+                  class="cursor-pointer rounded-full border-2 border-primary/50 bg-background-light dark:bg-background-dark px-5 py-2 text-sm font-semibold text-text-light dark:text-text-dark shadow-natural transition-all hover:bg-primary/20 dark:hover:bg-primary/30 hover:shadow-natural-hover"
+                >
+                  科技
+                </button>
+                <button
+                  class="cursor-pointer rounded-full border-2 border-primary/50 bg-background-light dark:bg-background-dark px-5 py-2 text-sm font-semibold text-text-light dark:text-text-dark shadow-natural transition-all hover:bg-primary/20 dark:hover:bg-primary/30 hover:shadow-natural-hover"
+                >
+                  设计
+                </button>
+                <button
+                  class="cursor-pointer rounded-full border-2 border-primary/50 bg-background-light dark:bg-background-dark px-5 py-2 text-sm font-semibold text-text-light dark:text-text-dark shadow-natural transition-all hover:bg-primary/20 dark:hover:bg-primary/30 hover:shadow-natural-hover"
+                >
+                  生活
+                </button>
+                <button
+                  class="cursor-pointer rounded-full border-2 border-primary/50 bg-background-light dark:bg-background-dark px-5 py-2 text-sm font-semibold text-text-light dark:text-text-dark shadow-natural transition-all hover:bg-primary/20 dark:hover:bg-primary/30 hover:shadow-natural-hover"
+                >
+                  AI
+                </button>
+              </div>
+            </section>
+            <section class="py-16">
+              <h2
+                class="text-2xl font-bold tracking-tight px-0 pb-8 text-center sm:text-3xl text-text-light dark:text-text-dark"
+              >
+                AI艺术画廊
+              </h2>
+              <div class="relative">
+                <div class="flex snap-x snap-mandatory scroll-p-6 gap-6 overflow-x-auto pb-4">
+                  <div class="w-2/3 flex-shrink-0 snap-center sm:w-1/3">
+                    <div
+                      class="aspect-square w-full rounded border-2 border-primary/50 bg-cover bg-center p-2 shadow-natural"
+                      data-alt="AI生成的未来城市图像，拥有茂盛的绿植和飞行汽车。"
+                      style="
+                        background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuBbbYWRNDcMk4ZN07ciEVwJVeHzpZKtL4zGMN1v9EWiRQfWg5iuGPqaVrjbtG7x2eDjeCgQ3-p-CCAu9DeGs2nOOvNJuTDsw8ZCa4YAeACysXW2tC-9OHueuXzUgO9FuZ7PNFSW_lDa-iVeZvIQ4DKi1cVqa_Sjo8HMnt9DsTeWmHyi-5lhVgkdFapIXknU-Mi1309SMosB9kmsoReJRF7dV54gLwnJq1tMXSm5AZhx9UvpAea1R1rTa7RgJf8GsC42I3B-47pML8g-');
+                      "
+                    ></div>
+                  </div>
+                  <div class="w-2/3 flex-shrink-0 snap-center sm:w-1/3">
+                    <div
+                      class="aspect-square w-full rounded border-2 border-primary/50 bg-cover bg-center p-2 shadow-natural"
+                      data-alt="AI生成的超现实森林图像，有发光的蘑菇和神秘生物。"
+                      style="
+                        background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuC49aRPROQZxecsdJcfrHhz0AYiVnIG-zxcz48Hh7zvN0627lurkEwbncp8QtxFFYSrqLWwPEn4nzdPB9KnLbIt_Vx5BRl5bqbzhz5v6OZakHy3uWysGKOvXHejj7XjtfHTZtLqGtnpfk2QdNRlIxKNp_YyUke5NzhKLDZmLV2XpyMhCegeSPfBn5TH9LarzTknXScbx6GmHcw8cZnwi5sEaLbO7fHcPNrtsk0mAdM2glD8SmAkN_8s3OsQgtzKVsj-QX2qRg7-2nYF');
+                      "
+                    ></div>
+                  </div>
+                  <div class="w-2/3 flex-shrink-0 snap-center sm:w-1/3">
+                    <div
+                      class="aspect-square w-full rounded border-2 border-primary/50 bg-cover bg-center p-2 shadow-natural"
+                      data-alt="AI生成的经典油画风格肖像，画中人带有机器人增强特征。"
+                      style="
+                        background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuArFG4TvfDdHhDSCznEkkcf9YHrbenDWHgNE_HHhG4Cm5xyTdikMWitESSTlP41ZRs1-rZjLAiVaE4PAuWElGh7Y40OCgNXFuhvUxbsZgmv3DuBfZGAPEDJmVSs4h2FnQmHJINCxfFIgFxnWuix9-AHFJeHd8PY4Qn3Y74js-SEkuVqOlyuQMlVywggdZyUMhCq64MnRLIHLfZX0pbhDVRi3AAPcG39IspLCbsTxCNMv7zo5_4xIdEdUHaRy7Ryn1R-p1Eh06ZlgfWw');
+                      "
+                    ></div>
+                  </div>
+                  <div class="w-2/3 flex-shrink-0 snap-center sm:w-1/3">
+                    <div
+                      class="aspect-square w-full rounded border-2 border-primary/50 bg-cover bg-center p-2 shadow-natural"
+                      data-alt="AI生成的抽象艺术，包含几何形状和温暖的色调。"
+                      style="
+                        background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuCAJyEA8fwaIXwL-4sqzT9j8aixBOy5zqPjUR2F2MUtHsT6KL0wOpTvyv19wDnx2RJzwF6NwN_suNzaGOyTGaXADPz3CJTlni6Rpgoc5J466X0zQWrhDHcRNgJEjjijtP8O5iOc70N8QPBp-B5uld4PA3wmWI3SCja4cSKMKodnY-iAj0e7z1-bQBF6zc5P0VPKzDB3e7yM55xxIJaSmv4fEHS4QEZxZ75fvuJkXdpnaVDDl9LjZczq7JWD7MenmKUmnMhxGlEr6eqL');
+                      "
+                    ></div>
+                  </div>
+                  <div class="w-2/3 flex-shrink-0 snap-center sm:w-1/3">
+                    <div
+                      class="aspect-square w-full rounded border-2 border-primary/50 bg-cover bg-center p-2 shadow-natural"
+                      data-alt="AI生成的水下世界图像，有生物发光的植物和鱼类。"
+                      style="
+                        background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuAcr6StAnOzg0VTp-H_5WlaSCmsACMXKXegs75eozm_zgiBWLYglX0zvJjJdjAX9FvgZ9XrF7sB6QXRKa8kl47nn6pWZQ4saT-1er42F3IxPGhjkHuQqKPCwluffT4M5-FSUFqv6xO4F2dPsb-9c3sHEFzcq_MFqIVZTOu-zMu1nt_IEr6GAq04P8lNSi4t-KdyqyWyFf9uVlU8F76xGairHWct3_RwSc1oNiBSnYB62ypugqBU2ewBNeWy6tf8YAUKIb_IPjbICw1T');
+                      "
+                    ></div>
+                  </div>
+                </div>
+              </div>
+            </section>
+          </main>
+          <footer class="border-t border-primary/30 py-12">
+            <div class="grid grid-cols-1 gap-8 text-center md:grid-cols-2 md:text-left">
+              <div class="flex flex-col items-center gap-4 md:items-start">
+                <div class="flex items-center gap-4">
+                  <div class="size-6 text-cta-light dark:text-cta-dark">
+                    <svg fill="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                      <path
+                        d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z"
+                      ></path>
+                    </svg>
+                  </div>
+                  <h2 class="text-xl font-bold tracking-tight text-text-light dark:text-text-dark">
+                    暖木博客
+                  </h2>
+                </div>
+                <div class="flex gap-4">
+                  <a
+                    class="text-text-light/80 transition-colors hover:text-cta-light dark:text-text-dark/80 dark:hover:text-cta-dark"
+                    href="#"
+                  >
+                    <svg aria-hidden="true" class="h-6 w-6" fill="currentColor" viewBox="0 0 24 24">
+                      <path
+                        clip-rule="evenodd"
+                        d="M22 12c0-5.523-4.477-10-10-10S2 6.477 2 12c0 4.991 3.657 9.128 8.438 9.878v-6.987h-2.54V12h2.54V9.797c0-2.506 1.492-3.89 3.777-3.89 1.094 0 2.238.195 2.238.195v2.46h-1.26c-1.243 0-1.63.771-1.63 1.562V12h2.773l-.443 2.89h-2.33v6.988C18.343 21.128 22 16.991 22 12z"
+                        fill-rule="evenodd"
+                      ></path>
+                    </svg>
+                  </a>
+                  <a
+                    class="text-text-light/80 transition-colors hover:text-cta-light dark:text-text-dark/80 dark:hover:text-cta-dark"
+                    href="#"
+                  >
+                    <svg aria-hidden="true" class="h-6 w-6" fill="currentColor" viewBox="0 0 24 24">
+                      <path
+                        d="M8.29 20.251c7.547 0 11.675-6.253 11.675-11.675 0-.178 0-.355-.012-.53A8.348 8.348 0 0022 5.92a8.19 8.19 0 01-2.357.646 4.118 4.118 0 001.804-2.27 8.224 8.224 0 01-2.605.996 4.107 4.107 0 00-6.993 3.743 11.65 11.65 0 01-8.457-4.287 4.106 4.106 0 001.27 5.477A4.072 4.072 0 012.8 9.71v.052a4.105 4.105 0 003.292 4.022 4.095 4.095 0 01-1.853.07 4.108 4.108 0 003.834 2.85A8.233 8.233 0 012 18.407a11.616 11.616 0 006.29 1.84"
+                      ></path>
+                    </svg>
+                  </a>
+                  <a
+                    class="text-text-light/80 transition-colors hover:text-cta-light dark:text-text-dark/80 dark:hover:text-cta-dark"
+                    href="#"
+                  >
+                    <svg aria-hidden="true" class="h-6 w-6" fill="currentColor" viewBox="0 0 24 24">
+                      <path
+                        clip-rule="evenodd"
+                        d="M12.315 2c2.43 0 2.784.013 3.808.06 1.064.049 1.791.218 2.427.465a4.902 4.902 0 011.772 1.153 4.902 4.902 0 011.153 1.772c.247.636.416 1.363.465 2.427.048 1.024.06 1.378.06 3.808s-.012 2.784-.06 3.808c-.049 1.064-.218 1.791-.465 2.427a4.902 4.902 0 01-1.153 1.772 4.902 4.902 0 01-1.772 1.153c-.636.247-1.363.416-2.427.465-1.024.048-1.378.06-3.808.06s-2.784-.012-3.808-.06c-1.064-.049-1.791-.218-2.427-.465a4.902 4.902 0 01-1.772-1.153 4.902 4.902 0 01-1.153-1.772c-.247-.636-.416-1.363-.465-2.427-.048-1.024-.06-1.378-.06-3.808s.012-2.784.06-3.808c.049-1.064.218-1.791.465-2.427a4.902 4.902 0 011.153-1.772A4.902 4.902 0 016.345 2.525c.636-.247 1.363-.416 2.427-.465C9.793 2.013 10.147 2 12.315 2h.001zm-1.04 2.265c-2.456 0-2.784.011-3.807.058-.975.045-1.504.207-1.857.344-.467.182-.86.399-1.249.789-.389.389-.607.782-.789 1.249-.137.353-.3.882-.344 1.857-.047 1.023-.058 1.351-.058 3.807s.011 2.784.058 3.807c.045.975.207 1.504.344 1.857.182.466.399.86.789 1.249.389.389.782.607 1.249.789.353.137.882.3 1.857.344 1.023.047 1.351.058 3.807.058s2.784-.011 3.807-.058c.975-.045 1.504-.207 1.857-.344.467-.182.86-.399 1.249-.789.389-.389.607-.782.789-1.249.137-.353.3-.882-.344-1.857.047-1.023.058-1.351.058-3.807s-.011-2.784-.058-3.807c-.045-.975-.207-1.504-.344-1.857a3.097 3.097 0 00-.789-1.249 3.097 3.097 0 00-1.249-.789c-.353-.137-.882-.3-1.857-.344-1.023-.047-1.351-.058-3.807-.058zM12 6.865a5.135 5.135 0 100 10.27 5.135 5.135 0 000-10.27zm0 8.468a3.333 3.333 0 110-6.666 3.333 3.333 0 010 6.666zm5.338-9.87a1.262 1.262 0 100 2.524 1.262 1.262 0 000-2.524z"
+                        fill-rule="evenodd"
+                      ></path>
+                    </svg>
+                  </a>
+                </div>
+              </div>
+              <div class="flex flex-col items-center gap-4 md:items-start">
+                <h3 class="font-bold text-text-light dark:text-text-dark">链接</h3>
+                <a
+                  class="text-sm text-text-light/80 transition-colors hover:text-cta-light dark:text-text-dark/80 dark:hover:text-cta-dark"
+                  href="#"
+                  >关于</a
+                >
+                <a
+                  class="text-sm text-text-light/80 transition-colors hover:text-cta-light dark:text-text-dark/80 dark:hover:text-cta-dark"
+                  href="#"
+                  >文章</a
+                >
+                <a
+                  class="text-sm text-text-light/80 transition-colors hover:text-cta-light dark:text-text-dark/80 dark:hover:text-cta-dark"
+                  href="#"
+                  >隐私政策</a
+                >
+              </div>
+            </div>
+            <div
+              class="mt-12 border-t border-primary/30 pt-8 text-center text-sm text-text-light/60 dark:text-text-dark/60"
+            >
+              <p>© 2024 暖木博客. 版权所有.</p>
+            </div>
+          </footer>
+        </div>
+      </div>
+    </div>
+  </body>
+</html>
