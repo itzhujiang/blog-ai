@@ -5,14 +5,10 @@
       "args": ["-y", "@promptx/mcp-server"]
     },
     "playwright": {
-      "type": "stdio",
       "command": "npx",
       "args": [
         "@playwright/mcp@latest"
-      ],
-      "env": {
-        "PLAYWRIGHT_SKIP_BROWSER_DOWNLOAD": "1"
-      }
+      ]
     },
     "context7": {
       "type": "http",

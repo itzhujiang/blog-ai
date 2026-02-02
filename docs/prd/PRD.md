@@ -314,7 +314,7 @@
 #### 4.3.1 技术选型
 - **框架**: Next.js 16.x (App Router)
 - **样式**: Tailwind CSS
-- **数据库ORM**: Prisma
+- **数据库ORM**: sequelize
 - **富文本编辑**: MDX 或 Tiptap
 - **图片处理**: next/image 组件
 
@@ -484,7 +484,7 @@
 - 数据备份策略缺失
 
 **应对策略:**
-- 使用Prisma ORM防止SQL注入
+- 使用sequelize ORM防止SQL注入
 - 配置数据库连接池
 - 设置定时备份脚本
 

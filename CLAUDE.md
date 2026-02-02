@@ -104,6 +104,239 @@ npm run lint         # 运行 ESLint 检查
 - 属性声明顺序：推荐按布局（display, position） -> 盒模型（width, margin, padding） -> 文字（font, color） -> 视觉（background, border）的顺序书写
 - 避免过深嵌套：在预处理器（如Sass/Less）中，选择器嵌套不宜超过3层
 
+### Tailwind CSS 专业使用规范
+
+#### 核心原则
+Tailwind 是 utility-first 框架，但不意味着要在每个元素上堆砌大量类名。专业的使用方式是：**系统化思维 + 可维护性优先**。
+
+#### 1. 停止编写"Utility 小说"
+
+**❌ 不好的示例**（类名过多，难以维护）：
+```tsx
+<div className="bg-blue-500 text-white p-4 rounded-lg shadow-lg hover:bg-blue-600 transition duration-300 ease-in-out flex items-center justify-center gap-2 w-full max-w-sm mx-auto border border-blue-700" />
+```
+
+**✅ 专业做法**（使用 @apply 或组件抽象）：
+```css
+/* app/globals.css */
+@layer components {
+  .btn-primary {
+    @apply bg-primary text-background-dark px-8 py-3 rounded-full
+           font-bold tracking-wide hover:shadow-lg transition-shadow;
+  }
+}
+```
+
+```tsx
+<button className="btn-primary">Click Me</button>
+```
+
+#### 2. 善用 Design Token
+
+在 `tailwind.config.js` 中定义品牌色、间距、字体等设计系统，而不是零散地使用 utility class。
+
+**✅ 配置 Design Token**：
+```javascript
+// tailwind.config.js
+module.exports = {
+  theme: {
+    extend: {
+      colors: {
+        primary: '#D4A574',
+        'background-light': '#F8F6F2',
+        'background-dark': '#1e1914',
+        'text-light': '#8B6F47',
+        'text-dark': '#e0d5c6',
+      },
+      spacing: {
+        '18': '4.5rem',
+      },
+      fontSize: {
+        'article-title': ['2.5rem', { lineHeight: '1.2', fontWeight: '700' }],
+      },
+    },
+  },
+}
+```
+
+**✅ 使用 Design Token**：
+```tsx
+<div className="bg-primary text-background-dark" />
+```
+
+**好处**：当设计系统变更时，只需修改配置文件，而不是在 93 个组件中逐个查找替换。
+
+#### 3. 创建可复用的组件
+
+使用 React 组件封装样式，而不是到处复制粘贴类名。
+
+**✅ 创建 Button 组件**：
+```tsx
+// components/ui/Button.tsx
+import { cn } from '@/lib/utils';
+
+interface ButtonProps {
+  variant?: 'primary' | 'secondary' | 'outline';
+  size?: 'sm' | 'md' | 'lg';
+  children: React.ReactNode;
+  className?: string;
+}
+
+export function Button({
+  variant = 'primary',
+  size = 'md',
+  children,
+  className
+}: ButtonProps) {
+  return (
+    <button
+      className={cn(
+        'rounded-full font-bold tracking-wide transition-shadow',
+        {
+          'bg-primary text-background-dark hover:shadow-lg': variant === 'primary',
+          'bg-cta-light dark:bg-cta-dark text-white': variant === 'secondary',
+          'border-2 border-primary bg-transparent': variant === 'outline',
+        },
+        {
+          'px-4 py-2 text-sm': size === 'sm',
+          'px-8 py-3 text-base': size === 'md',
+          'px-12 py-4 text-lg': size === 'lg',
+        },
+        className
+      )}
+    >
+      {children}
+    </button>
+  );
+}
+```
+
+**✅ 使用组件**：
+```tsx
+<Button variant="primary" size="md">阅读我的故事</Button>
+```
+
+#### 4. 使用 cn 工具函数合并类名
+
+安装依赖：
+```bash
+npm install clsx tailwind-merge
+```
+
+创建工具函数：
+```typescript
+// lib/utils.ts
+import { clsx, type ClassValue } from 'clsx';
+import { twMerge } from 'tailwind-merge';
+
+export function cn(...inputs: ClassValue[]) {
+  return twMerge(clsx(inputs));
+}
+```
+
+**好处**：
+- `clsx`：条件类名处理
+- `twMerge`：智能合并 Tailwind 类名，避免冲突
+
+#### 5. 响应式设计要有规划
+
+**❌ 不好的示例**（随意使用响应式类名）：
+```tsx
+<p className="text-sm md:text-lg lg:text-base hover:underline hover:opacity-70 focus:text-xl">
+  Hello
+</p>
+```
+
+**✅ 好的示例**（有规划的响应式）：
+```tsx
+<p className="text-sm md:text-lg hover:underline focus:opacity-70">
+  Hello
+</p>
+```
+
+**✅ 网格布局的响应式**：
+```tsx
+<div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+  {/* 移动端1列，平板2列，桌面3列 */}
+</div>
+```
+
+#### 6. 在 globals.css 中定义组件类
+
+```css
+/* app/globals.css */
+@layer components {
+  /* 按钮组件 */
+  .btn-primary {
+    @apply px-8 py-3 bg-primary text-background-dark
+           rounded-full font-bold tracking-wide
+           hover:shadow-lg transition-shadow;
+  }
+
+  /* 文章卡片 */
+  .article-card {
+    @apply border-2 border-primary/50 rounded p-4
+           shadow-natural hover:-translate-y-1
+           hover:shadow-natural-hover transition-all duration-300
+           bg-background-light dark:bg-background-dark;
+  }
+
+  /* 输入框 */
+  .input-primary {
+    @apply h-10 rounded-full border-2 border-primary/50
+           bg-background-light dark:bg-background-dark
+           px-4 py-2 text-sm
+           placeholder-text-light/60 dark:placeholder-text-dark/60
+           focus:border-primary focus:outline-none focus:ring-1 focus:ring-primary;
+  }
+}
+```
+
+#### 7. 配置 Tailwind，不要对抗它
+
+如果发现自己在写大量自定义 CSS，可能是配置不够完善。
+
+**需要自定义动画？**
+```javascript
+// tailwind.config.js
+theme: {
+  extend: {
+    keyframes: {
+      fadeIn: {
+        '0%': { opacity: '0' },
+        '100%': { opacity: '1' },
+      }
+    },
+    animation: {
+      fadeIn: 'fadeIn 0.3s ease-in-out',
+    }
+  }
+}
+```
+
+**需要特定的 grid 布局？**
+```javascript
+theme: {
+  extend: {
+    gridTemplateColumns: {
+      'article': '1fr 300px',
+    }
+  }
+}
+```
+
+#### 最佳实践总结
+
+1. **整理类名**：超过 5 个类名考虑使用 @apply 或组件
+2. **善用配置**：在 config 中定义设计系统
+3. **抽离模式**：重复的样式组合提取为组件类
+4. **系统化思维**：用设计系统的思维写 Tailwind
+5. **保持一致性**：同类元素使用相同的样式模式
+
+**记住**：
+- 初学者的 Tailwind = 快速但混乱
+- 专业开发者的 Tailwind = 快速且可维护 🚀
+
 ### JavaScript/TypeScript
 - **变量声明**：优先使用 `const`，需要重新赋值时使用 `let`，避免使用 `var`
 - **类型判断**：使用 `===` 和 `!==` 进行严格比较
