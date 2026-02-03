@@ -173,4 +173,13 @@ export default defineConfig([
       'prettier.config.*', // Prettier 配置文件
     ],
   },
+
+  // === 枚举文件特殊规则 ===
+  {
+    files: ['**/enums.ts'],
+    rules: {
+      // 枚举成员是导出供外部使用的，不应被视为未使用
+      'no-unused-vars': 'off',
+    },
+  },
 ]);
