@@ -1,0 +1,60 @@
+@import 'tailwindcss';
+
+/* 亮色模式变量 */
+:root {
+  --background: #F8F6F2;
+  --foreground: #171717;
+  --primary: #D4A574;
+  --text-light: #8B6F47;
+  --text-dark: #e0d5c6;
+  --cta-light: #7A8B6E;
+  --cta-dark: #a0b599;
+  --background-light: #F8F6F2;
+  --background-dark: #1e1914;
+}
+
+/* 暗色模式变量 */
+@media (prefers-color-scheme: dark) {
+  :root {
+    --background: #1e1914;
+    --foreground: #e0d5c6;
+  }
+}
+
+/* Tailwind CSS v4 主题配置 */
+@theme inline {
+  /* 颜色系统 */
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --color-primary: var(--primary);
+  --color-text-light: var(--text-light);
+  --color-text-dark: var(--text-dark);
+  --color-cta-light: var(--cta-light);
+  --color-cta-dark: var(--cta-dark);
+  --color-background-light: var(--background-light);
+  --color-background-dark: var(--background-dark);
+
+  /* 字体 */
+  --font-sans: var(--font-geist-sans);
+  --font-mono: var(--font-geist-mono);
+
+  /* 阴影 */
+  --shadow-natural: 0 4px 10px rgba(139, 111, 71, 0.1);
+  --shadow-natural-hover: 0 8px 20px rgba(139, 111, 71, 0.15);
+}
+
+body {
+  background: var(--background);
+  color: var(--foreground);
+  font-family: var(--font-geist-sans), Arial, Helvetica, sans-serif;
+}
+
+/* 隐藏滚动条工具类 */
+.scrollbar-hide {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+
+.scrollbar-hide::-webkit-scrollbar {
+  display: none;
+}

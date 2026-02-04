@@ -14,13 +14,15 @@
   },
   "dependencies": {
     "cls-hooked": "^4.2.2",
+    "clsx": "^2.1.1",
     "log4js": "^6.9.1",
     "next": "16.0.1",
     "pg": "^8.18.0",
     "pg-hstore": "^2.3.4",
     "react": "19.2.0",
     "react-dom": "19.2.0",
-    "sequelize": "^6.37.7"
+    "sequelize": "^6.37.7",
+    "tailwind-merge": "^3.4.0"
   },
   "devDependencies": {
     "@playwright/test": "^1.58.1",
