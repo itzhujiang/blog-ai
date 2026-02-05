@@ -3,6 +3,7 @@ import { Geist, Geist_Mono } from 'next/font/google';
 import React from 'react';
 
 import { Header, Footer } from '@/components/layout';
+import { getSiteConfigSSR } from '@/utils/site-config';
 
 import './globals.css';
 
@@ -16,10 +17,20 @@ const geistMono = Geist_Mono({
   subsets: ['latin'],
 });
 
-export const metadata: Metadata = {
-  title: '暖木博客 - 暖木与阳光',
-  description: '一个探索科技、设计、生活及AI创作潜能的个人博客',
-};
+/**
+ * 动态生成页面元数据
+ * 从 site_settings 表获取网站标题和描述
+ */
+export async function generateMetadata(): Promise<Metadata> {
+  const siteConfig = await getSiteConfigSSR();
+  return {
+    title: siteConfig.siteTitle,
+    description: siteConfig.siteDescription,
+    other: {
+      'google-adsense-account': 'ca-pub-',
+    },
+  };
+}
 
 export default function RootLayout({
   children,
@@ -28,6 +39,10 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="zh">
+      <head>
+        <link rel="preconnect" href="https://fonts.googleapis.com" />
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
+      </head>
       <body className={`${geistSans.variable} ${geistMono.variable} antialiased`}>
         <div className="relative flex min-h-screen w-full flex-col">
           <div className="layout-container flex h-full grow flex-col items-center">

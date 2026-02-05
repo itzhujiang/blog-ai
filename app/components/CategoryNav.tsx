@@ -23,9 +23,9 @@ export function CategoryNav({ categories }: CategoryNavProps) {
   }
 
   return (
-    <section className="py-12">
-      <h2 className="mb-8 text-center text-2xl font-bold text-foreground">
-        探索分类
+    <section className="py-16 md:pb-24">
+      <h2 className="mb-8 text-center text-2xl font-bold tracking-tight text-text-light dark:text-text-dark sm:text-3xl">
+        文章分类
       </h2>
 
       <div className="flex flex-wrap items-center justify-center gap-4">
@@ -33,7 +33,7 @@ export function CategoryNav({ categories }: CategoryNavProps) {
           <Link
             key={category.id}
             href={`/articles?category=${category.slug}`}
-            className="rounded-full border-2 border-primary/50 px-5 py-2 text-sm font-medium text-foreground transition-all duration-300 hover:border-primary hover:bg-primary/10"
+            className="cursor-pointer rounded-full border-2 border-primary/50 bg-background-light dark:bg-background-dark px-6 py-2.5 text-sm font-semibold text-text-light dark:text-text-dark shadow-natural transition-all hover:bg-primary hover:text-white dark:hover:bg-primary/80 hover:shadow-natural-hover"
           >
             {category.name}
           </Link>

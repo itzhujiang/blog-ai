@@ -11,8 +11,8 @@ export function HeroSection() {
   return (
     <section className="py-16 sm:py-24">
       <div className="flex flex-col items-center gap-12 lg:flex-row lg:gap-16">
-        {/* 头像 */}
-        <div className="relative size-48 flex-shrink-0 overflow-hidden rounded-full shadow-natural lg:size-56">
+        {/* 头像 - 带白色边框 */}
+        <div className="relative size-48 flex-shrink-0 overflow-hidden rounded-full shadow-natural border-4 border-white dark:border-background-dark lg:size-56">
           <Image
             src="/images/avatar.jpg"
             alt="博主头像"
@@ -25,19 +25,15 @@ export function HeroSection() {
 
         {/* 文字内容 */}
         <div className="flex flex-col gap-6 text-center lg:text-left">
-          <h1 className="text-3xl font-bold text-foreground sm:text-4xl">
+          <h1 className="text-4xl font-extrabold leading-tight tracking-tight text-text-light dark:text-text-dark sm:text-5xl">
             欢迎来到我的空间
           </h1>
-          <p className="max-w-xl text-lg leading-relaxed text-text-light dark:text-text-dark">
-            我是木心，一个热爱科技与设计的创作者。在这里，我分享关于技术探索、
-            设计思考和生活感悟的文章，以及 AI 艺术创作的实验。
+          <p className="text-base font-normal leading-relaxed text-text-light/80 dark:text-text-dark/80 sm:text-lg">
+            一个探索科技、设计、生活及AI创作潜能的个人博客。欢迎来到我这片受&quot;木漏れ日&quot;启发的网络角落。
           </p>
-          <div className="flex justify-center gap-4 lg:justify-start">
+          <div className="flex justify-center lg:justify-start">
             <Link href="/about">
               <Button>阅读我的故事</Button>
-            </Link>
-            <Link href="/articles">
-              <Button variant="outline">浏览文章</Button>
             </Link>
           </div>
         </div>

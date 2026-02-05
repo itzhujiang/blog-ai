@@ -2,7 +2,7 @@
 
 const sensitivePatterns = [
   '.env',
-  '.git/',
+  '.git',
 ];
 
 let input = '';

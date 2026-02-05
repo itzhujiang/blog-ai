@@ -1,10 +1,5 @@
-import {
-  HeroSection,
-  LatestArticles,
-  CategoryNav,
-  AiGalleryPreview,
-} from './components';
-import type { ArticleItem, CategoryItem, GalleryItem } from './components';
+import { LatestArticles, CategoryNav, HeroSection } from './components';
+import type { ArticleItem, CategoryItem } from './components';
 
 // ISR: 每小时重新验证
 export const revalidate = 3600;
@@ -15,13 +10,26 @@ export const revalidate = 3600;
 async function getLatestArticles(): Promise<ArticleItem[]> {
   try {
     const { initAllModels } = await import('@/utils/models');
-    const { Article } = await initAllModels();
+    const { Article, ArticleCategory, Category } = await initAllModels();
 
     const articles = await Article.findAll({
       where: { status: 'published' },
       order: [['publishedAt', 'DESC']],
       limit: 6,
       attributes: ['id', 'title', 'slug', 'excerpt', 'publishedAt', 'thumbnailUrl'],
+      include: [
+        {
+          model: ArticleCategory,
+          as: 'articleCategories',
+          include: [
+            {
+              model: Category,
+              as: 'category',
+              attributes: ['name'],
+            },
+          ],
+        },
+      ],
     });
 
     return articles.map((article) => ({
@@ -31,6 +39,8 @@ async function getLatestArticles(): Promise<ArticleItem[]> {
       excerpt: article.excerpt,
       publishedAt: article.publishedAt,
       thumbnailUrl: article.thumbnailUrl,
+      // 获取第一个分类名称
+      categoryName: article.articleCategories?.[0]?.category?.name || undefined,
     }));
   } catch (error) {
     console.error('获取文章失败:', error);
@@ -63,17 +73,6 @@ async function getCategories(): Promise<CategoryItem[]> {
 }
 
 /**
- * AI 画廊静态数据（暂时使用占位数据）
- */
-const staticGalleryItems: GalleryItem[] = [
-  { id: 1, imageUrl: '/images/gallery/ai-art-1.jpg', alt: 'AI 艺术作品 1' },
-  { id: 2, imageUrl: '/images/gallery/ai-art-2.jpg', alt: 'AI 艺术作品 2' },
-  { id: 3, imageUrl: '/images/gallery/ai-art-3.jpg', alt: 'AI 艺术作品 3' },
-  { id: 4, imageUrl: '/images/gallery/ai-art-4.jpg', alt: 'AI 艺术作品 4' },
-  { id: 5, imageUrl: '/images/gallery/ai-art-5.jpg', alt: 'AI 艺术作品 5' },
-];
-
-/**
  * 首页组件
  */
 export default async function Home() {
@@ -87,7 +86,6 @@ export default async function Home() {
       <HeroSection />
       <LatestArticles articles={articles} />
       <CategoryNav categories={categories} />
-      <AiGalleryPreview items={staticGalleryItems} />
     </>
   );
 }

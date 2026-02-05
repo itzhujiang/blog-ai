@@ -29,12 +29,13 @@ npm-debug.log*
 yarn-debug.log*
 yarn-error.log*
 .pnpm-debug.log*
+.playwright-mcp
 
 # env files (can opt-in for committing if needed)
 .env
 
 # logs
-/logs
+logs
 
 # vercel
 .vercel
