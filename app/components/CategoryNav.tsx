@@ -7,6 +7,7 @@ export interface CategoryItem {
   id: number;
   name: string;
   slug: string;
+  articleCount?: number;
 }
 
 export interface CategoryNavProps {
@@ -36,6 +37,11 @@ export function CategoryNav({ categories }: CategoryNavProps) {
             className="cursor-pointer rounded-full border-2 border-primary/50 bg-background-light dark:bg-background-dark px-6 py-2.5 text-sm font-semibold text-text-light dark:text-text-dark shadow-natural transition-all hover:bg-primary hover:text-white dark:hover:bg-primary/80 hover:shadow-natural-hover"
           >
             {category.name}
+            {category.articleCount !== undefined && (
+              <span className="ml-1.5 text-xs opacity-70">
+                ({category.articleCount})
+              </span>
+            )}
           </Link>
         ))}
       </div>

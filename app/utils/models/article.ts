@@ -14,7 +14,6 @@ export interface ArticleAttributes {
   slug: string; // URL友好标识（用于SEO）
   filePath: string; // 服务端文件路径（Markdown文件路径）
   excerpt?: string | null; // 文章摘要
-  thumbnailUrl?: string | null; // 缩略图URL（文章列表展示用）
   authorName: string; // 作者名（默认：木心）
   readingTime: number; // 预计阅读时间（分钟）
   viewCount: number; // 浏览次数
@@ -30,7 +29,6 @@ export type ArticleCreationAttributes = Optional<
   ArticleAttributes,
   | 'id'
   | 'excerpt'
-  | 'thumbnailUrl'
   | 'readingTime'
   | 'viewCount'
   | 'status'
@@ -50,7 +48,6 @@ export class Article
   declare slug: string;
   declare filePath: string;
   declare excerpt: string | null;
-  declare thumbnailUrl: string | null;
   declare authorName: string;
   declare readingTime: number;
   declare viewCount: number;
@@ -59,6 +56,10 @@ export class Article
   declare createdAt: number | null;
   declare updatedAt: number | null;
   declare deletedAt: number | null;
+
+  // 关联属性（eager loading 时使用）
+  declare articleCategories?: ArticleCategory[];
+  declare articleMedias?: ArticleMedia[];
 
   // 关联
   declare static associations: {
@@ -98,11 +99,6 @@ export function initArticleModel(sequelize: Sequelize): typeof Article {
         type: DataTypes.TEXT,
         allowNull: true,
         comment: '文章摘要',
-      },
-      thumbnailUrl: {
-        type: DataTypes.STRING(500),
-        allowNull: true,
-        comment: '列表缩略图URL',
       },
       authorName: {
         type: DataTypes.STRING(100),

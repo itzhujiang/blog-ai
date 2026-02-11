@@ -1,8 +1,9 @@
 import Link from 'next/link';
 
-import { Input } from '@/components/ui';
+import { getSiteConfigSSR } from '@/utils/site-config';
 import { cn } from '@/utils/utils';
 
+import { HeaderSearchBar } from './HeaderSearchBar';
 import { Navigation } from './Navigation';
 
 export interface HeaderProps {
@@ -22,26 +23,9 @@ function LogoIcon() {
   );
 }
 
-function SearchIcon() {
-  return (
-    <svg
-      className="size-5"
-      fill="none"
-      stroke="currentColor"
-      strokeWidth={2}
-      viewBox="0 0 24 24"
-      xmlns="http://www.w3.org/2000/svg"
-    >
-      <path
-        strokeLinecap="round"
-        strokeLinejoin="round"
-        d="M21 21l-5.197-5.197m0 0A7.5 7.5 0 105.196 5.196a7.5 7.5 0 0010.607 10.607z"
-      />
-    </svg>
-  );
-}
+export async function Header({ className }: HeaderProps) {
+  const siteConfig = await getSiteConfigSSR();
 
-export function Header({ className }: HeaderProps) {
   return (
     <header
       className={cn(
@@ -54,7 +38,7 @@ export function Header({ className }: HeaderProps) {
       <Link href="/" className="flex items-center gap-4">
         <LogoIcon />
         <h2 className="text-xl font-bold tracking-tight text-text-light dark:text-text-dark">
-          暖木博客
+          {siteConfig.siteTitle}
         </h2>
       </Link>
 
@@ -62,12 +46,7 @@ export function Header({ className }: HeaderProps) {
       <Navigation />
 
       {/* Search */}
-      <Input
-        type="text"
-        placeholder="搜索..."
-        className="w-40"
-        icon={<SearchIcon />}
-      />
+      <HeaderSearchBar />
     </header>
   );
 }

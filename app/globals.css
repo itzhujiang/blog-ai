@@ -3,6 +3,8 @@
 
 @import 'tailwindcss';
 
+@plugin "@tailwindcss/typography";
+
 /* Material Symbols Outlined 图标基础样式 */
 .material-symbols-outlined {
   font-family: 'Material Symbols Outlined';
@@ -32,6 +34,11 @@
   --cta-dark: #a0b599;
   --background-light: #F8F6F2;
   --background-dark: #1e1914;
+  --wood-border: #C19A6B;
+  --off-white: #F3EFE9;
+  --wood-light: #EADFCC;
+  --wood-dark: #5a472b;
+  --highlight-bg: #FDF8E4;
 }
 
 /* 暗色模式变量 */
@@ -54,6 +61,11 @@
   --color-cta-dark: var(--cta-dark);
   --color-background-light: var(--background-light);
   --color-background-dark: var(--background-dark);
+  --color-wood-border: var(--wood-border);
+  --color-off-white: var(--off-white);
+  --color-wood-light: var(--wood-light);
+  --color-wood-dark: var(--wood-dark);
+  --color-highlight-bg: var(--highlight-bg);
 
   /* 字体 */
   --font-sans: var(--font-geist-sans);
@@ -78,4 +90,27 @@ body {
 
 .scrollbar-hide::-webkit-scrollbar {
   display: none;
+}
+
+/* 文章内容代码块样式 */
+.article-prose pre {
+  border-radius: 8px;
+  border: 1px solid rgba(212, 165, 116, 0.2);
+  background: #1a1510 !important;
+}
+
+.article-prose pre code {
+  font-size: 0.875rem;
+  background: transparent !important;
+}
+
+/* 暗色模式下 highlight.js 样式覆盖 */
+@media (prefers-color-scheme: dark) {
+  .article-prose pre {
+    background: #1a1510 !important;
+  }
+
+  .article-prose code {
+    background: rgba(212, 165, 116, 0.1);
+  }
 }

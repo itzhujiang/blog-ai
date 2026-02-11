@@ -1,6 +1,7 @@
 import { Model, DataTypes, Optional, Sequelize } from 'sequelize';
 
 import { ArticleMediaUsageLiteral } from './enums';
+import type { MediaFile } from './media-file';
 
 /**
  * 文章媒体关联属性接口
@@ -31,6 +32,9 @@ export class ArticleMedia
   declare usageType: ArticleMediaUsageLiteral;
   declare sortOrder: number;
   declare createdAt: number | null;
+
+  // 关联属性（eager loading 时使用）
+  declare media?: MediaFile;
 }
 
 // 初始化函数

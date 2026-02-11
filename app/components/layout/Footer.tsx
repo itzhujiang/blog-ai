@@ -1,5 +1,6 @@
 import Link from 'next/link';
 
+import { getSiteConfigSSR } from '@/utils/site-config';
 import { cn } from '@/utils/utils';
 
 export interface FooterProps {
@@ -63,7 +64,9 @@ const socialLinks = [
   { icon: InstagramIcon, href: '#', label: 'Instagram' },
 ];
 
-export function Footer({ className }: FooterProps) {
+export async function Footer({ className }: FooterProps) {
+  const siteConfig = await getSiteConfigSSR();
+
   return (
     <footer className={cn('border-t border-primary/30 py-12', className)}>
       <div className="grid grid-cols-1 gap-8 text-center md:grid-cols-2 md:text-left">
@@ -72,7 +75,7 @@ export function Footer({ className }: FooterProps) {
           <div className="flex items-center gap-4">
             <LogoIcon />
             <h2 className="text-xl font-bold tracking-tight text-text-light dark:text-text-dark">
-              暖木博客
+              {siteConfig.siteTitle}
             </h2>
           </div>
           <div className="flex gap-4">
@@ -119,7 +122,7 @@ export function Footer({ className }: FooterProps) {
         'mt-12 border-t border-primary/30 pt-8',
         'text-center text-sm text-text-light/60 dark:text-text-dark/60'
       )}>
-        <p>© 2024 暖木博客. 版权所有.</p>
+        <p>{siteConfig.footerCopyright}</p>
       </div>
     </footer>
   );

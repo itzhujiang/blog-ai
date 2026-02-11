@@ -42,16 +42,26 @@ export default function RootLayout({
       <head>
         <link rel="preconnect" href="https://fonts.googleapis.com" />
         <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
+        <link
+          href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@24,400,0,0"
+          rel="stylesheet"
+        />
       </head>
       <body className={`${geistSans.variable} ${geistMono.variable} antialiased`}>
-        <div className="relative flex min-h-screen w-full flex-col">
-          <div className="layout-container flex h-full grow flex-col items-center">
-            <div className="layout-content-container flex w-full max-w-5xl flex-col px-6 sm:px-8">
+        <div className="flex h-screen w-full flex-col">
+          <div className="flex flex-col items-center">
+            <div className="w-full max-w-5xl px-6 sm:px-8">
               <Header />
-              <main className="flex-grow">
-                {children}
-              </main>
-              <Footer />
+            </div>
+          </div>
+          <div className="flex-1 overflow-y-auto scrollbar-hide">
+            <div className="flex flex-col items-center">
+              <div className="w-full max-w-5xl px-6 sm:px-8">
+                <main>
+                  {children}
+                </main>
+                <Footer />
+              </div>
             </div>
           </div>
         </div>

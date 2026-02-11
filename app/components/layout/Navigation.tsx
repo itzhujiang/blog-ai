@@ -14,7 +14,7 @@ const navItems: NavItem[] = [
   { label: '首页', href: '/' },
   { label: '关于', href: '/about' },
   { label: '文章', href: '/articles' },
-  { label: 'AI作品展示', href: '/ai-gallery' },
+  // { label: 'AI作品展示', href: '/ai-gallery' },
 ];
 
 export interface NavigationProps {

@@ -68,14 +68,14 @@
 
 | 文件路径 | 操作类型 | 说明 |
 |---------|---------|-----|
-| `src/utils/utils.ts` | 新增 | cn 工具函数（clsx + tailwind-merge） |
-| `src/app/globals.css` | 修改 | 添加主题配置和组件类 |
-| `src/components/ui/Button.tsx` | 新增 | 按钮组件 |
-| `src/components/ui/Card.tsx` | 新增 | 卡片组件 |
-| `src/components/ui/Input.tsx` | 新增 | 输入框组件 |
-| `src/components/ui/Badge.tsx` | 新增 | 标签组件 |
-| `src/components/ui/Avatar.tsx` | 新增 | 头像组件 |
-| `src/components/ui/index.ts` | 新增 | UI 组件统一导出 |
+| `app/utils/utils.ts` | 新增 | cn 工具函数（clsx + tailwind-merge） |
+| `app/globals.css` | 修改 | 添加主题配置和组件类 |
+| `app/components/ui/Button.tsx` | 新增 | 按钮组件 |
+| `app/components/ui/Card.tsx` | 新增 | 卡片组件 |
+| `app/components/ui/Input.tsx` | 新增 | 输入框组件 |
+| `app/components/ui/Badge.tsx` | 新增 | 标签组件 |
+| `app/components/ui/Avatar.tsx` | 新增 | 头像组件 |
+| `app/components/ui/index.ts` | 新增 | UI 组件统一导出 |
 | `tailwind.config.ts` | 新增 | Tailwind 主题配置 |
 | `package.json` | 修改 | 添加 clsx 和 tailwind-merge 依赖 |
 
@@ -92,7 +92,7 @@ npm install clsx tailwind-merge
 创建类名合并工具函数，用于条件类名和 Tailwind 类名冲突处理：
 
 ```typescript
-// src/utils/utils.ts
+// app/utils/utils.ts
 import { clsx, type ClassValue } from 'clsx';
 import { twMerge } from 'tailwind-merge';
 
@@ -152,7 +152,7 @@ export default config;
 在 globals.css 中使用 @layer components 定义可复用的组件类：
 
 ```css
-/* src/app/globals.css */
+/* app/globals.css */
 @import 'tailwindcss';
 
 /* 主题变量 */
@@ -230,7 +230,7 @@ body {
 #### 4. Button 组件实现
 
 ```tsx
-// src/components/ui/Button.tsx
+// app/components/ui/Button.tsx
 import { cn } from '@/lib/utils';
 import { ButtonHTMLAttributes, forwardRef } from 'react';
 
@@ -274,7 +274,7 @@ export { Button };
 #### 5. Card 组件实现
 
 ```tsx
-// src/components/ui/Card.tsx
+// app/components/ui/Card.tsx
 import { cn } from '@/lib/utils';
 import { HTMLAttributes, forwardRef } from 'react';
 
@@ -311,7 +311,7 @@ export { Card };
 #### 6. Input 组件实现
 
 ```tsx
-// src/components/ui/Input.tsx
+// app/components/ui/Input.tsx
 import { cn } from '@/lib/utils';
 import { InputHTMLAttributes, forwardRef } from 'react';
 
@@ -354,7 +354,7 @@ export { Input };
 #### 7. Badge 组件实现
 
 ```tsx
-// src/components/ui/Badge.tsx
+// app/components/ui/Badge.tsx
 import { cn } from '@/lib/utils';
 import { HTMLAttributes, forwardRef } from 'react';
 
@@ -391,7 +391,7 @@ export { Badge };
 #### 8. Avatar 组件实现
 
 ```tsx
-// src/components/ui/Avatar.tsx
+// app/components/ui/Avatar.tsx
 import { cn } from '@/lib/utils';
 import Image from 'next/image';
 import { HTMLAttributes, forwardRef } from 'react';
@@ -448,7 +448,7 @@ export { Avatar };
 #### 9. 组件统一导出
 
 ```typescript
-// src/components/ui/index.ts
+// app/components/ui/index.ts
 export { Button } from './Button';
 export type { ButtonProps } from './Button';
 
@@ -478,7 +478,7 @@ Tailwind 配置 → globals.css 组件类 → UI 组件 → 页面使用
 ## 四、验收标准
 
 - [ ] clsx 和 tailwind-merge 依赖安装完成
-- [ ] src/utils/utils.ts 中的 cn 函数可正常使用
+- [ ] app/utils/utils.ts 中的 cn 函数可正常使用
 - [ ] tailwind.config.ts 主题配置完成，颜色与 UI 设计图一致
 - [ ] globals.css 中定义了组件类（btn-primary、article-card 等）
 - [ ] Button 组件支持 primary、secondary、outline 三种变体

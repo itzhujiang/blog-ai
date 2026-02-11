@@ -1,6 +1,8 @@
 import Image from 'next/image';
 import Link from 'next/link';
 
+import { getThumbnailUrl } from '@/utils/file-url';
+
 /**
  * 文章数据接口
  */
@@ -21,14 +23,15 @@ export interface LatestArticlesProps {
 /**
  * 格式化日期
  */
-function formatDate(timestamp: number | null): string {
+function formatDate(timestamp: number | string | null): string {
   if (!timestamp) return '';
-  const date = new Date(timestamp);
-  return date.toLocaleDateString('zh-CN', {
-    year: 'numeric',
-    month: '年',
-    day: '日',
-  });
+  const ms = typeof timestamp === 'string' ? parseInt(timestamp, 10) : timestamp;
+  if (isNaN(ms)) return '';
+  const date = new Date(ms);
+  const year = date.getFullYear();
+  const month = date.getMonth() + 1;
+  const day = date.getDate();
+  return `${year}年${month}月${day}日`;
 }
 
 /**
@@ -59,13 +62,13 @@ export function LatestArticles({ articles }: LatestArticlesProps) {
         {articles.map((article) => (
           <article
             key={article.id}
-            className="group flex flex-col md:flex-row gap-6 overflow-hidden rounded-xl border-2 border-primary/30 bg-white/40 dark:bg-background-dark/40 p-5 shadow-natural transition-all duration-300 hover:shadow-natural-hover hover:border-primary/60"
+            className="group relative flex flex-col md:flex-row gap-6 overflow-hidden rounded-xl border-2 border-primary/30 bg-white/40 dark:bg-background-dark/40 p-5 shadow-natural transition-all duration-300 hover:shadow-natural-hover hover:border-primary/60"
           >
             {/* 缩略图 */}
-            <div className="md:w-1/3 aspect-video md:aspect-auto h-48 md:h-60 rounded-lg overflow-hidden flex-shrink-0">
+            <div className="relative md:w-1/3 aspect-video md:aspect-auto h-48 md:h-60 rounded-lg overflow-hidden flex-shrink-0">
               {article.thumbnailUrl ? (
                 <Image
-                  src={article.thumbnailUrl}
+                  src={getThumbnailUrl(article.thumbnailUrl)}
                   alt={article.title}
                   fill
                   className="object-cover transition-transform duration-500 group-hover:scale-105"
@@ -89,7 +92,7 @@ export function LatestArticles({ articles }: LatestArticlesProps) {
 
               {/* 标题 */}
               <h3 className="text-xl md:text-2xl font-bold text-text-light dark:text-text-dark group-hover:text-primary transition-colors">
-                <Link href={`/articles/${article.slug}`}>{article.title}</Link>
+                <Link href={`/articles/${article.slug}`} className="after:absolute after:inset-0 after:content-['']">{article.title}</Link>
               </h3>
 
               {/* 摘要 */}
@@ -105,8 +108,8 @@ export function LatestArticles({ articles }: LatestArticlesProps) {
                   {formatDate(article.publishedAt)}
                 </time>
                 <Link
-                  href={`/articles/${article.slug}`}
-                  className="text-sm font-bold text-cta-light dark:text-cta-dark flex items-center gap-1 group/link"
+                  href="/articles"
+                  className="relative z-10 text-sm font-bold text-cta-light dark:text-cta-dark flex items-center gap-1 group/link"
                 >
                   阅读更多
                   <span className="material-symbols-outlined text-sm transition-transform group-hover/link:translate-x-1">

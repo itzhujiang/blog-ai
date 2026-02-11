@@ -1,5 +1,6 @@
 import cls from 'cls-hooked';
 import { Sequelize, type Dialect } from 'sequelize';
+import pg from 'pg';
 
 import { sqlLogger } from '../logger';
 
@@ -15,6 +16,7 @@ export const sequelize = new Sequelize(
     host: process.env.DB_HOST!,
     port: parseInt(process.env.DB_PORT || '5432', 10),
     dialect: (process.env.DB_DIALECT || 'postgres') as Dialect,
+    dialectModule: pg,
     logging: msg => {
       sqlLogger.debug(msg);
     },

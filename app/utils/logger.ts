@@ -11,7 +11,7 @@ const getCommonAppenders = (pathSeg: PathSeg) => {
     filename: path.resolve(process.cwd(), 'logs', pathSeg, 'logging.log'),
     maxLogSize: 1024 * 1024, // 配置文件的最大字节数
     keepFileExt: true, // 保证.log后缀名
-    daysToKeep: 3,
+    numBackups: 3,
     layout: {
       type: 'pattern',
       pattern: '%c [%d{yyyy-MM-dd hh:mm:ss}] [%p] : %m%n',

@@ -1,5 +1,7 @@
 import { Model, DataTypes, Optional, Sequelize } from 'sequelize';
 
+import type { Category } from './category';
+
 /**
  * 文章分类关联表属性接口
  */
@@ -20,6 +22,9 @@ export class ArticleCategory
   declare articleId: number;
   declare categoryId: number;
   declare createdAt: number | null;
+
+  // 关联属性（eager loading 时使用）
+  declare category?: Category;
 }
 
 // 初始化函数
