@@ -6,21 +6,51 @@
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "lint": "eslint"
+    "lint": "eslint",
+    "lint:fix": "eslint --fix",
+    "format": "prettier --write .",
+    "format:check": "prettier --check .",
+    "code-quality": "npm run lint && npm run format:check"
   },
   "dependencies": {
+    "@tailwindcss/typography": "^0.5.19",
+    "axios": "^1.13.4",
+    "cls-hooked": "^4.2.2",
+    "clsx": "^2.1.1",
+    "highlight.js": "^11.11.1",
+    "log4js": "^6.9.1",
+    "next": "16.0.1",
+    "pg": "^8.18.0",
+    "pg-hstore": "^2.3.4",
     "react": "19.2.0",
     "react-dom": "19.2.0",
-    "next": "16.0.1"
+    "react-markdown": "^10.1.0",
+    "rehype-highlight": "^7.0.2",
+    "remark-gfm": "^4.0.1",
+    "sequelize": "^6.37.7",
+    "svg-captcha": "^1.4.0",
+    "tailwind-merge": "^3.4.0"
   },
   "devDependencies": {
-    "typescript": "^5",
-    "@types/node": "^20",
+    "@playwright/test": "^1.58.1",
+    "@tailwindcss/postcss": "^4",
+    "@types/cls-hooked": "^4.3.9",
+    "@types/node": "^20.19.31",
+    "@types/pg": "^8.16.0",
     "@types/react": "^19",
     "@types/react-dom": "^19",
-    "@tailwindcss/postcss": "^4",
-    "tailwindcss": "^4",
+    "@typescript-eslint/eslint-plugin": "^8.48.0",
+    "@typescript-eslint/parser": "^8.48.0",
+    "baseline-browser-mapping": "^2.9.19",
     "eslint": "^9",
-    "eslint-config-next": "16.0.1"
+    "eslint-config-next": "16.0.1",
+    "eslint-config-prettier": "^10.1.8",
+    "eslint-plugin-import": "^2.32.0",
+    "eslint-plugin-jsx-a11y": "^6.10.2",
+    "eslint-plugin-prettier": "^5.5.4",
+    "eslint-plugin-react-hooks": "^7.0.1",
+    "prettier": "^3.7.1",
+    "tailwindcss": "^4",
+    "typescript": "^5"
   }
 }

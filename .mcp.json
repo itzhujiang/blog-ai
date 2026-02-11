@@ -1,0 +1,21 @@
+{
+  "mcpServers": {
+    "promptx": {
+      "command": "npx",
+      "args": ["-y", "@promptx/mcp-server"]
+    },
+    "playwright": {
+      "command": "npx",
+      "args": [
+        "@playwright/mcp@latest"
+      ]
+    },
+    "context7": {
+      "type": "http",
+      "url": "https://mcp.context7.com/mcp",
+      "headers": {
+        "CONTEXT7_API_KEY": "ctx7sk-9b8755de-a0f1-4f22-b756-fd4f9bb3e5f7"
+      }
+    }
+  }
+}

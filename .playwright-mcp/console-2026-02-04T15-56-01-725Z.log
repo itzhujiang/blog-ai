@@ -1,0 +1,56 @@
+[     108ms] [ERROR] Failed to load resource: the server responded with a status of 400 (Bad Request) @ http://localhost:3001/_next/image?url=%2Fimages%2Favatar.jpg&w=256&q=75:0
+[     161ms] [ERROR] Failed to load resource: the server responded with a status of 400 (Bad Request) @ http://localhost:3001/_next/image?url=%2Fimages%2Fgallery%2Fai-art-2.jpg&w=640&q=75:0
+[     202ms] [ERROR] Failed to load resource: the server responded with a status of 400 (Bad Request) @ http://localhost:3001/_next/image?url=%2Fimages%2Fgallery%2Fai-art-1.jpg&w=640&q=75:0
+[     245ms] [ERROR] Failed to load resource: the server responded with a status of 400 (Bad Request) @ http://localhost:3001/_next/image?url=%2Fimages%2Fgallery%2Fai-art-3.jpg&w=640&q=75:0
+[     266ms] [ERROR] Failed to load resource: the server responded with a status of 400 (Bad Request) @ http://localhost:3001/_next/image?url=%2Fimages%2Fgallery%2Fai-art-4.jpg&w=640&q=75:0
+[     275ms] [ERROR] %c%s%c 获取文章失败: background: #e6e6e6;background: light-dark(rgba(0,0,0,0.1), rgba(255,255,255,0.25));color: #000000;color: light-dark(#000000, #ffffff);border-radius: 2px  Server   Error: Please install pg package manually
+    at module evaluation (about://React/Server/D:%5C%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0%5Cproject%5Cblog-ai%5C.next%5Cdev%5Cserver%5Cchunks%5Cssr%5C%5Broot-of-the-server%5D__cd0c2fe7._.js?0:185:19)
+    at module evaluation (about://React/Server/D:%5C%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0%5Cproject%5Cblog-ai%5C.next%5Cdev%5Cserver%5Cchunks%5Cssr%5C%5Broot-of-the-server%5D__cd0c2fe7._.js?1:1224:154)
+    at module evaluation (about://React/Server/D:%5C%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0%5Cproject%5Cblog-ai%5C.next%5Cdev%5Cserver%5Cchunks%5Cssr%5C%5Broot-of-the-server%5D__cd0c2fe7._.js?2:1477:173)
+    at <anonymous> (about://React/Server/D:%5C%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0%5Cproject%5Cblog-ai%5C.next%5Cdev%5Cserver%5Cchunks%5Cssr%5Csrc_utils_models_index_ts_f1ee9582._.js?3:17:16)
+    at getLatestArticles (about://React/Server/D:%5C%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0%5Cproject%5Cblog-ai%5C.next%5Cdev%5Cserver%5Cchunks%5Cssr%5C%5Broot-of-the-server%5D__f0dc2201._.js?4:483:35)
+    at Function.all (<anonymous>:1:21)
+    at Home (about://React/Server/D:%5C%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0%5Cproject%5Cblog-ai%5C.next%5Cdev%5Cserver%5Cchunks%5Cssr%5C%5Broot-of-the-server%5D__f0dc2201._.js?5:577:36)
+    at resolveErrorDev (http://localhost:3001/_next/static/chunks/node_modules_next_dist_compiled_react-server-dom-turbopack_9212ccad._.js:1855:106)
+    at getOutlinedModel (http://localhost:3001/_next/static/chunks/node_modules_next_dist_compiled_react-server-dom-turbopack_9212ccad._.js:1406:28)
+    at parseModelString (http://localhost:3001/_next/static/chunks/node_modules_next_dist_compiled_react-server-dom-turbopack_9212ccad._.js:1520:50)
+    at Object.<anonymous> (http://localhost:3001/_next/static/chunks/node_modules_next_dist_compiled_react-server-dom-turbopack_9212ccad._.js:2448:51)
+    at JSON.parse (<anonymous>)
+    at initializeModelChunk (http://localhost:3001/_next/static/chunks/node_modules_next_dist_compiled_react-server-dom-turbopack_9212ccad._.js:1034:30)
+    at getOutlinedModel (http://localhost:3001/_next/static/chunks/node_modules_next_dist_compiled_react-server-dom-turbopack_9212ccad._.js:1344:17)
+    at parseModelString (http://localhost:3001/_next/static/chunks/node_modules_next_dist_compiled_react-server-dom-turbopack_9212ccad._.js:1574:50)
+    at Array.<anonymous> (http://localhost:3001/_next/static/chunks/node_modules_next_dist_compiled_react-server-dom-turbopack_9212ccad._.js:2448:51)
+    at JSON.parse (<anonymous>)
+    at initializeModelChunk (http://localhost:3001/_next/static/chunks/node_modules_next_dist_compiled_react-server-dom-turbopack_9212ccad._.js:1034:30)
+    at resolveConsoleEntry (http://localhost:3001/_next/static/chunks/node_modules_next_dist_compiled_react-server-dom-turbopack_9212ccad._.js:1981:96)
+    at processFullStringRow (http://localhost:3001/_next/static/chunks/node_modules_next_dist_compiled_react-server-dom-turbopack_9212ccad._.js:2382:17)
+    at processFullBinaryRow (http://localhost:3001/_next/static/chunks/node_modules_next_dist_compiled_react-server-dom-turbopack_9212ccad._.js:2322:9)
+    at processBinaryChunk (http://localhost:3001/_next/static/chunks/node_modules_next_dist_compiled_react-server-dom-turbopack_9212ccad._.js:2432:98)
+    at progress (http://localhost:3001/_next/static/chunks/node_modules_next_dist_compiled_react-server-dom-turbopack_9212ccad._.js:2601:13) @ http://localhost:3001/_next/static/chunks/node_modules_next_dist_4b2403f5._.js:3124
+[     275ms] [ERROR] %c%s%c 获取分类失败: background: #e6e6e6;background: light-dark(rgba(0,0,0,0.1), rgba(255,255,255,0.25));color: #000000;color: light-dark(#000000, #ffffff);border-radius: 2px  Server   Error: Please install pg package manually
+    at module evaluation (about://React/Server/D:%5C%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0%5Cproject%5Cblog-ai%5C.next%5Cdev%5Cserver%5Cchunks%5Cssr%5C%5Broot-of-the-server%5D__cd0c2fe7._.js?0:185:19)
+    at module evaluation (about://React/Server/D:%5C%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0%5Cproject%5Cblog-ai%5C.next%5Cdev%5Cserver%5Cchunks%5Cssr%5C%5Broot-of-the-server%5D__cd0c2fe7._.js?1:1224:154)
+    at module evaluation (about://React/Server/D:%5C%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0%5Cproject%5Cblog-ai%5C.next%5Cdev%5Cserver%5Cchunks%5Cssr%5C%5Broot-of-the-server%5D__cd0c2fe7._.js?2:1477:173)
+    at <anonymous> (about://React/Server/D:%5C%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0%5Cproject%5Cblog-ai%5C.next%5Cdev%5Cserver%5Cchunks%5Cssr%5Csrc_utils_models_index_ts_f1ee9582._.js?3:17:16)
+    at getLatestArticles (about://React/Server/D:%5C%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0%5Cproject%5Cblog-ai%5C.next%5Cdev%5Cserver%5Cchunks%5Cssr%5C%5Broot-of-the-server%5D__f0dc2201._.js?4:483:35)
+    at Function.all (<anonymous>:1:21)
+    at Home (about://React/Server/D:%5C%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0%5Cproject%5Cblog-ai%5C.next%5Cdev%5Cserver%5Cchunks%5Cssr%5C%5Broot-of-the-server%5D__f0dc2201._.js?5:577:36)
+    at resolveErrorDev (http://localhost:3001/_next/static/chunks/node_modules_next_dist_compiled_react-server-dom-turbopack_9212ccad._.js:1855:106)
+    at getOutlinedModel (http://localhost:3001/_next/static/chunks/node_modules_next_dist_compiled_react-server-dom-turbopack_9212ccad._.js:1406:28)
+    at parseModelString (http://localhost:3001/_next/static/chunks/node_modules_next_dist_compiled_react-server-dom-turbopack_9212ccad._.js:1520:50)
+    at Object.<anonymous> (http://localhost:3001/_next/static/chunks/node_modules_next_dist_compiled_react-server-dom-turbopack_9212ccad._.js:2448:51)
+    at JSON.parse (<anonymous>)
+    at initializeModelChunk (http://localhost:3001/_next/static/chunks/node_modules_next_dist_compiled_react-server-dom-turbopack_9212ccad._.js:1034:30)
+    at getOutlinedModel (http://localhost:3001/_next/static/chunks/node_modules_next_dist_compiled_react-server-dom-turbopack_9212ccad._.js:1344:17)
+    at parseModelString (http://localhost:3001/_next/static/chunks/node_modules_next_dist_compiled_react-server-dom-turbopack_9212ccad._.js:1574:50)
+    at Array.<anonymous> (http://localhost:3001/_next/static/chunks/node_modules_next_dist_compiled_react-server-dom-turbopack_9212ccad._.js:2448:51)
+    at JSON.parse (<anonymous>)
+    at initializeModelChunk (http://localhost:3001/_next/static/chunks/node_modules_next_dist_compiled_react-server-dom-turbopack_9212ccad._.js:1034:30)
+    at resolveConsoleEntry (http://localhost:3001/_next/static/chunks/node_modules_next_dist_compiled_react-server-dom-turbopack_9212ccad._.js:1981:96)
+    at processFullStringRow (http://localhost:3001/_next/static/chunks/node_modules_next_dist_compiled_react-server-dom-turbopack_9212ccad._.js:2382:17)
+    at processFullBinaryRow (http://localhost:3001/_next/static/chunks/node_modules_next_dist_compiled_react-server-dom-turbopack_9212ccad._.js:2322:9)
+    at processBinaryChunk (http://localhost:3001/_next/static/chunks/node_modules_next_dist_compiled_react-server-dom-turbopack_9212ccad._.js:2432:98)
+    at progress (http://localhost:3001/_next/static/chunks/node_modules_next_dist_compiled_react-server-dom-turbopack_9212ccad._.js:2601:13) @ http://localhost:3001/_next/static/chunks/node_modules_next_dist_4b2403f5._.js:3124
+[     298ms] [ERROR] Failed to load resource: the server responded with a status of 400 (Bad Request) @ http://localhost:3001/_next/image?url=%2Fimages%2Fgallery%2Fai-art-5.jpg&w=640&q=75:0
+[   40762ms] [ERROR] Failed to load resource: the server responded with a status of 404 (Not Found) @ http://localhost:3001/about?_rsc=vusbg:0
+[   40800ms] [ERROR] Failed to load resource: the server responded with a status of 404 (Not Found) @ http://localhost:3001/about:0

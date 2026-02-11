@@ -1,0 +1,566 @@
+<!doctype html>
+<html class="light" lang="zh">
+  <head>
+    <meta charset="utf-8" />
+    <meta content="width=device-width, initial-scale=1.0" name="viewport" />
+    <title>关于我 - 暖木博客</title>
+    <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+    <link href="https://fonts.googleapis.com" rel="preconnect" />
+    <link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect" />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Nunito:ital,wght@0,200..1000;1,200..1000&amp;family=Noto+Sans+SC:wght@300;400;500;700&amp;display=swap"
+      rel="stylesheet"
+    />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200"
+      rel="stylesheet"
+    />
+    <script>
+      tailwind.config = {
+        darkMode: 'class',
+        theme: {
+          extend: {
+            colors: {
+              primary: '#D4A574',
+              'background-light': '#F8F6F2',
+              'background-dark': '#1e1914',
+              'text-light': '#8B6F47',
+              'text-dark': '#e0d5c6',
+              'cta-light': '#7A8B6E',
+              'cta-dark': '#a0b599',
+            },
+            fontFamily: {
+              display: ['Nunito', 'Noto Sans SC', 'sans-serif'],
+            },
+            borderRadius: {
+              DEFAULT: '8px',
+              lg: '12px',
+              xl: '16px',
+              full: '9999px',
+            },
+            boxShadow: {
+              natural: '0 4px 10px rgba(139, 111, 71, 0.1)',
+              'natural-hover': '0 8px 20px rgba(139, 111, 71, 0.15)',
+            },
+            lineHeight: {
+              loose: '1.8',
+            },
+          },
+        },
+      };
+    </script>
+    <style>
+      .material-symbols-outlined {
+        font-variation-settings:
+          'FILL' 0,
+          'wght' 400,
+          'GRAD' 0,
+          'opsz' 24;
+      }
+    </style>
+  </head>
+  <body
+    class="bg-background-light dark:bg-background-dark font-display text-text-light dark:text-text-dark"
+  >
+    <div class="relative flex min-h-screen w-full flex-col">
+      <div class="layout-container flex h-full grow flex-col items-center">
+        <div class="layout-content-container flex w-full max-w-5xl flex-col px-6 sm:px-8">
+          <header
+            class="flex items-center justify-between whitespace-nowrap border-b border-primary/30 py-4"
+          >
+            <div class="flex items-center gap-4">
+              <div class="size-6 text-cta-light dark:text-cta-dark">
+                <svg fill="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                  <path
+                    d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z"
+                  ></path>
+                </svg>
+              </div>
+              <h2 class="text-xl font-bold tracking-tight text-text-light dark:text-text-dark">
+                暖木博客
+              </h2>
+            </div>
+            <div class="hidden items-center gap-8 md:flex">
+              <a
+                class="text-sm font-medium transition-colors hover:text-cta-light dark:hover:text-cta-dark"
+                href="#"
+                >首页</a
+              >
+              <a
+                class="text-sm font-medium transition-colors hover:text-cta-light dark:hover:text-cta-dark"
+                href="#"
+                >关于</a
+              >
+              <a
+                class="text-sm font-medium transition-colors hover:text-cta-light dark:hover:text-cta-dark"
+                href="#"
+                >文章</a
+              >
+              <a
+                class="text-sm font-medium transition-colors hover:text-cta-light dark:hover:text-cta-dark"
+                href="#"
+                >AI作品展示</a
+              >
+            </div>
+            <div class="relative">
+              <input
+                class="h-10 w-40 rounded-full border-2 border-primary/50 bg-background-light dark:bg-background-dark py-2 pl-4 pr-10 text-sm placeholder-text-light/60 dark:placeholder-text-dark/60 focus:border-primary focus:outline-none focus:ring-1 focus:ring-primary"
+                placeholder="搜索..."
+                type="text"
+              />
+              <span
+                class="material-symbols-outlined absolute right-3 top-1/2 -translate-y-1/2 text-text-light/70 dark:text-text-dark/70"
+                >search</span
+              >
+            </div>
+          </header>
+          <main class="w-full flex-grow py-8 md:py-16">
+            <div class="mx-auto max-w-[1200px] space-y-16 md:space-y-24">
+              <section class="text-center">
+                <h1
+                  class="text-4xl font-extrabold tracking-tight text-wood-dark dark:text-text-dark sm:text-5xl"
+                >
+                  关于我
+                </h1>
+                <p class="mt-4 text-lg text-text-light/80 dark:text-text-dark/80">
+                  认识一下，这是我的数字家园
+                </p>
+                <div class="mx-auto mt-6 h-px w-20 bg-wood-border/50"></div>
+              </section>
+              <section class="个人信息展示区域">
+                <div class="grid grid-cols-1 items-center gap-12 md:grid-cols-3 md:gap-16">
+                  <div class="flex flex-col items-center md:items-start md:col-span-1">
+                    <div class="relative transition-transform duration-300 hover:scale-105">
+                      <img
+                        alt="博主个人照片"
+                        class="h-48 w-48 rounded-full border-8 border-wood-light object-cover shadow-natural dark:border-primary/30"
+                        src="https://lh3.googleusercontent.com/aida-public/AB6AXuBsiL-EPXnncMp3G7ZWdgCkk6KJt7Bz-aCxQGBPh6WghOyCQo3GJHqRlLliDNGc9clQ7SxSkDgI4TG6M-6QmIHN5cTrq6tkUeoOoVVyPXkZX9NJx_xCD3RzLqfiOcUDriEDUouBVxde-Z6y5DmvFt8PSM7653s13Ji3NwSCfOeRbhg97_UA-t52WdXbOrLATadwNWbSR8FVIKn3BcYKirGH6o8jpWnQUMVYahwxWhosnR7CZoaHtrmntHQWVGX-tN3wdGGZvkV08H3p"
+                      />
+                    </div>
+                    <h2 class="mt-6 text-3xl font-bold text-wood-dark dark:text-text-dark">木心</h2>
+                    <p class="mt-2 text-text-light/80 dark:text-text-dark/80">
+                      前端开发者 &amp; UI设计师
+                    </p>
+                    <div class="mt-4 flex flex-col items-center gap-2 md:items-start">
+                      <span
+                        class="rounded-full bg-primary/20 px-4 py-1.5 text-sm font-medium text-text-light transition-shadow duration-300 hover:shadow-md dark:bg-primary/30 dark:text-text-dark"
+                        >热爱学习的技术人</span
+                      >
+                      <span
+                        class="rounded-full bg-primary/20 px-4 py-1.5 text-sm font-medium text-text-light transition-shadow duration-300 hover:shadow-md dark:bg-primary/30 dark:text-text-dark"
+                        >AI创作探索者</span
+                      >
+                    </div>
+                  </div>
+                  <div class="md:col-span-2">
+                    <h3 class="text-3xl font-semibold text-wood-dark dark:text-text-dark">
+                      很高兴认识你
+                    </h3>
+                    <div
+                      class="mt-4 space-y-4 text-base leading-loose text-text-light dark:text-text-dark/90"
+                    >
+                      <p>
+                        你好，我是木心，一位对技术充满热情的前端开发者，也是一位沉迷于创造美好数字体验的设计师。这个博客是我记录学习、分享思考、展示创意的个人空间。我希望通过文字和代码，与你分享我对这个世界的好奇与热爱。
+                      </p>
+                      <p>
+                        我的技术栈主要围绕现代前端生态，从 React、Vue 到
+                        Svelte，我都乐于探索和实践。我坚信，优秀的代码不仅要功能强大，更要优雅、易读。除了代码，我也对用户界面和体验设计抱有浓厚兴趣，追求像素级的完美和流畅的交互，力求让技术以最友好的方式服务于人。
+                      </p>
+                      <p>
+                        工作之余，我是一个生活的热爱者。我喜欢在清晨的阳光中慢跑，也喜欢在午后的咖啡馆里阅读。摄影是我的另一大爱好，用镜头捕捉光影和故事，是我观察世界的方式。我相信，对生活的热爱是创造力的源泉。
+                      </p>
+                      <p>
+                        建立这个博客，初衷是打造一个属于自己的“数字客厅”。在这里，没有KPI，没有截止日期，只有纯粹的分享和交流。我希望这里的内容能对你有所启发，也欢迎你随时留言，与我一同探讨技术的边界，分享生活的美好。
+                      </p>
+                    </div>
+                  </div>
+                </div>
+              </section>
+              <section
+                class="技能专长区域 rounded-xl bg-off-white dark:bg-background-dark/50 p-8 md:p-12 shadow-natural"
+              >
+                <h2 class="mb-8 text-center text-3xl font-bold text-wood-dark dark:text-text-dark">
+                  技能与专长
+                </h2>
+                <div class="grid grid-cols-1 gap-10 sm:grid-cols-2 lg:grid-cols-3">
+                  <div class="space-y-6">
+                    <h3 class="text-xl font-semibold text-text-light dark:text-text-dark/90">
+                      前端开发
+                    </h3>
+                    <div class="space-y-4">
+                      <div class="transition-transform duration-300 hover:-translate-y-1">
+                        <p class="font-medium">React &amp; Next.js</p>
+                        <div class="mt-1 h-2 rounded-full bg-primary/20 dark:bg-primary/30">
+                          <div
+                            class="h-2 rounded-full bg-wood-light dark:bg-primary/70"
+                            style="width: 90%"
+                          ></div>
+                        </div>
+                      </div>
+                      <div class="transition-transform duration-300 hover:-translate-y-1">
+                        <p class="font-medium">Vue &amp; Nuxt.js</p>
+                        <div class="mt-1 h-2 rounded-full bg-primary/20 dark:bg-primary/30">
+                          <div
+                            class="h-2 rounded-full bg-wood-light dark:bg-primary/70"
+                            style="width: 85%"
+                          ></div>
+                        </div>
+                      </div>
+                      <div class="transition-transform duration-300 hover:-translate-y-1">
+                        <p class="font-medium">Tailwind CSS</p>
+                        <div class="mt-1 h-2 rounded-full bg-primary/20 dark:bg-primary/30">
+                          <div
+                            class="h-2 rounded-full bg-wood-light dark:bg-primary/70"
+                            style="width: 95%"
+                          ></div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="space-y-6">
+                    <h3 class="text-xl font-semibold text-text-light dark:text-text-dark/90">
+                      UI/UX 设计
+                    </h3>
+                    <div class="space-y-4">
+                      <div class="transition-transform duration-300 hover:-translate-y-1">
+                        <p class="font-medium">Figma</p>
+                        <div class="mt-1 h-2 rounded-full bg-primary/20 dark:bg-primary/30">
+                          <div
+                            class="h-2 rounded-full bg-wood-light dark:bg-primary/70"
+                            style="width: 90%"
+                          ></div>
+                        </div>
+                      </div>
+                      <div class="transition-transform duration-300 hover:-translate-y-1">
+                        <p class="font-medium">用户研究</p>
+                        <div class="mt-1 h-2 rounded-full bg-primary/20 dark:bg-primary/30">
+                          <div
+                            class="h-2 rounded-full bg-wood-light dark:bg-primary/70"
+                            style="width: 75%"
+                          ></div>
+                        </div>
+                      </div>
+                      <div class="transition-transform duration-300 hover:-translate-y-1">
+                        <p class="font-medium">原型设计</p>
+                        <div class="mt-1 h-2 rounded-full bg-primary/20 dark:bg-primary/30">
+                          <div
+                            class="h-2 rounded-full bg-wood-light dark:bg-primary/70"
+                            style="width: 85%"
+                          ></div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="space-y-6">
+                    <h3 class="text-xl font-semibold text-text-light dark:text-text-dark/90">
+                      其他技能
+                    </h3>
+                    <div class="space-y-4">
+                      <div class="transition-transform duration-300 hover:-translate-y-1">
+                        <p class="font-medium">Node.js</p>
+                        <div class="mt-1 h-2 rounded-full bg-primary/20 dark:bg-primary/30">
+                          <div
+                            class="h-2 rounded-full bg-wood-light dark:bg-primary/70"
+                            style="width: 70%"
+                          ></div>
+                        </div>
+                      </div>
+                      <div class="transition-transform duration-300 hover:-translate-y-1">
+                        <p class="font-medium">摄影</p>
+                        <div class="mt-1 h-2 rounded-full bg-primary/20 dark:bg-primary/30">
+                          <div
+                            class="h-2 rounded-full bg-wood-light dark:bg-primary/70"
+                            style="width: 80%"
+                          ></div>
+                        </div>
+                      </div>
+                      <div class="transition-transform duration-300 hover:-translate-y-1">
+                        <p class="font-medium">写作</p>
+                        <div class="mt-1 h-2 rounded-full bg-primary/20 dark:bg-primary/30">
+                          <div
+                            class="h-2 rounded-full bg-wood-light dark:bg-primary/70"
+                            style="width: 88%"
+                          ></div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </section>
+              <section class="时间线区域">
+                <h2 class="mb-12 text-center text-3xl font-bold text-wood-dark dark:text-text-dark">
+                  成长足迹
+                </h2>
+                <div class="relative mx-auto max-w-2xl pl-8">
+                  <div
+                    class="absolute left-10 top-0 h-full w-0.5 bg-wood-light dark:bg-primary/30"
+                  ></div>
+                  <div class="relative mb-12 transition-all duration-300 hover:pl-2">
+                    <div
+                      class="absolute -left-2 top-0 flex h-8 w-8 items-center justify-center rounded-full bg-wood-light text-wood-dark dark:bg-primary/50 dark:text-text-dark"
+                    >
+                      23
+                    </div>
+                    <div
+                      class="ml-12 rounded-xl border border-primary/20 bg-background-light p-6 shadow-natural transition-shadow duration-300 hover:shadow-natural-hover dark:border-primary/30 dark:bg-background-dark/50"
+                    >
+                      <h3 class="text-lg font-semibold text-wood-dark dark:text-text-dark">
+                        开启博客之旅
+                      </h3>
+                      <p class="mt-1 text-sm text-text-light/80 dark:text-text-dark/80">
+                        创建“暖木博客”，记录技术与生活。
+                      </p>
+                    </div>
+                  </div>
+                  <div class="relative mb-12 transition-all duration-300 hover:pl-2">
+                    <div
+                      class="absolute -left-1.5 top-0 flex h-7 w-7 items-center justify-center rounded-full bg-wood-light text-wood-dark dark:bg-primary/50 dark:text-text-dark"
+                    >
+                      22
+                    </div>
+                    <div
+                      class="ml-12 rounded-xl border border-primary/20 bg-background-light p-6 shadow-natural transition-shadow duration-300 hover:shadow-natural-hover dark:border-primary/30 dark:bg-background-dark/50"
+                    >
+                      <h3 class="text-lg font-semibold text-wood-dark dark:text-text-dark">
+                        首次参与开源项目
+                      </h3>
+                      <p class="mt-1 text-sm text-text-light/80 dark:text-text-dark/80">
+                        为一个小众UI库贡献了代码。
+                      </p>
+                    </div>
+                  </div>
+                  <div class="relative mb-12 transition-all duration-300 hover:pl-2">
+                    <div
+                      class="absolute -left-4 top-0 flex h-12 w-12 items-center justify-center rounded-full bg-wood-light text-xl font-bold text-wood-dark dark:bg-primary/50 dark:text-text-dark"
+                    >
+                      21
+                    </div>
+                    <div
+                      class="ml-12 rounded-xl border border-primary/20 bg-background-light p-6 shadow-natural transition-shadow duration-300 hover:shadow-natural-hover dark:border-primary/30 dark:bg-background-dark/50"
+                    >
+                      <h3 class="text-lg font-semibold text-wood-dark dark:text-text-dark">
+                        毕业 &amp; 第一份工作
+                      </h3>
+                      <p class="mt-1 text-sm text-text-light/80 dark:text-text-dark/80">
+                        作为前端开发工程师，正式踏入职场。
+                      </p>
+                    </div>
+                  </div>
+                  <div class="relative transition-all duration-300 hover:pl-2">
+                    <div
+                      class="absolute -left-0.5 top-0 flex h-5 w-5 items-center justify-center rounded-full bg-wood-light text-xs text-wood-dark dark:bg-primary/50 dark:text-text-dark"
+                    >
+                      18
+                    </div>
+                    <div
+                      class="ml-12 rounded-xl border border-primary/20 bg-background-light p-6 shadow-natural transition-shadow duration-300 hover:shadow-natural-hover dark:border-primary/30 dark:bg-background-dark/50"
+                    >
+                      <h3 class="text-lg font-semibold text-wood-dark dark:text-text-dark">
+                        写下第一行代码
+                      </h3>
+                      <p class="mt-1 text-sm text-text-light/80 dark:text-text-dark/80">
+                        Hello World! 开启了对编程世界的探索。
+                      </p>
+                    </div>
+                  </div>
+                </div>
+              </section>
+              <section class="联系方式区域 text-center">
+                <h2 class="mb-8 text-3xl font-bold text-wood-dark dark:text-text-dark">与我联系</h2>
+                <div class="grid grid-cols-1 gap-8 sm:grid-cols-2 lg:grid-cols-3">
+                  <div
+                    class="flex flex-col items-center rounded-xl bg-off-white dark:bg-background-dark/50 p-6 shadow-natural transition-transform duration-300 hover:scale-105 hover:shadow-natural-hover"
+                  >
+                    <span
+                      class="material-symbols-outlined text-4xl text-cta-light dark:text-cta-dark"
+                      >mail</span
+                    >
+                    <h3 class="mt-4 text-lg font-semibold">电子邮件</h3>
+                    <p class="text-text-light/80 dark:text-text-dark/80">hello@mouxin.blog</p>
+                  </div>
+                  <div
+                    class="flex flex-col items-center rounded-xl bg-off-white dark:bg-background-dark/50 p-6 shadow-natural transition-transform duration-300 hover:scale-105 hover:shadow-natural-hover"
+                  >
+                    <span
+                      class="material-symbols-outlined text-4xl text-cta-light dark:text-cta-dark"
+                      >code</span
+                    >
+                    <h3 class="mt-4 text-lg font-semibold">GitHub</h3>
+                    <p class="text-text-light/80 dark:text-text-dark/80">@mouxin-dev</p>
+                  </div>
+                  <div
+                    class="flex flex-col items-center rounded-xl bg-off-white dark:bg-background-dark/50 p-6 shadow-natural transition-transform duration-300 hover:scale-105 hover:shadow-natural-hover sm:col-span-2 lg:col-span-1"
+                  >
+                    <span
+                      class="material-symbols-outlined text-4xl text-cta-light dark:text-cta-dark"
+                      >chat</span
+                    >
+                    <h3 class="mt-4 text-lg font-semibold">微信</h3>
+                    <p class="text-text-light/80 dark:text-text-dark/80">
+                      mouxin_chat (请备注来意)
+                    </p>
+                  </div>
+                </div>
+                <div class="mt-8 flex justify-center space-x-4">
+                  <a
+                    aria-label="Twitter"
+                    class="group flex h-12 w-12 items-center justify-center rounded-full bg-off-white text-text-light shadow-natural transition-all duration-300 hover:bg-[#1DA1F2] hover:text-white dark:bg-background-dark/50 dark:text-text-dark dark:hover:bg-[#1DA1F2]"
+                    href="#"
+                    ><svg class="h-6 w-6" fill="currentColor" viewBox="0 0 24 24">
+                      <path
+                        d="M8.29 20.251c7.547 0 11.675-6.253 11.675-11.675 0-.178 0-.355-.012-.53A8.348 8.348 0 0022 5.92a8.19 8.19 0 01-2.357.646 4.118 4.118 0 001.804-2.27 8.224 8.224 0 01-2.605.996 4.107 4.107 0 00-6.993 3.743 11.65 11.65 0 01-8.457-4.287 4.106 4.106 0 001.27 5.477A4.072 4.072 0 012.8 9.71v.052a4.105 4.105 0 003.292 4.022 4.095 4.095 0 01-1.853.07 4.108 4.108 0 003.834 2.85A8.233 8.233 0 012 18.407a11.616 11.616 0 006.29 1.84"
+                      ></path></svg
+                  ></a>
+                  <a
+                    aria-label="Dribbble"
+                    class="group flex h-12 w-12 items-center justify-center rounded-full bg-off-white text-text-light shadow-natural transition-all duration-300 hover:bg-[#EA4C89] hover:text-white dark:bg-background-dark/50 dark:text-text-dark dark:hover:bg-[#EA4C89]"
+                    href="#"
+                    ><svg class="h-6 w-6" fill="currentColor" viewBox="0 0 24 24">
+                      <path
+                        d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10c5.51 0 10-4.48 10-10S17.51 2 12 2zm6.62 14.54c-1.37-2.9-4.14-5.35-7.55-6.8-2.07.2-4.04.88-5.74 1.9.11-.64.29-1.29.54-1.92.74-2.01 2.2-3.83 4.1-5.18 2.4-1.68 5.23-2.5 7.9-2.3.1.28.18.57.25.86-1.9.22-3.81.79-5.55 1.68-1.55.8-2.9 1.95-3.95 3.33-.2.25-.4.51-.58.79.9-.17 1.83-.26 2.76-.26 3.01 0 5.8.98 8.1 2.68.12.33.22.67.29 1.01z"
+                      ></path></svg
+                  ></a>
+                  <a
+                    aria-label="Instagram"
+                    class="group flex h-12 w-12 items-center justify-center rounded-full bg-off-white text-text-light shadow-natural transition-all duration-300 hover:bg-gradient-to-bl from-indigo-500 via-purple-500 to-pink-500 hover:text-white dark:bg-background-dark/50 dark:text-text-dark dark:hover:bg-gradient-to-bl"
+                    href="#"
+                    ><svg class="h-6 w-6" fill="currentColor" viewBox="0 0 24 24">
+                      <path
+                        clip-rule="evenodd"
+                        d="M12 2c2.715 0 3.056.012 4.122.06 1.065.048 1.791.218 2.427.465a4.902 4.902 0 011.772 1.153 4.902 4.902 0 011.153 1.772c.247.636.416 1.363.465 2.427.048 1.066.06 1.407.06 4.122s-.012 3.056-.06 4.122c-.049 1.064-.218 1.791-.465 2.427a4.902 4.902 0 01-1.153 1.772 4.902 4.902 0 01-1.772 1.153c-.636.247-1.363.416-2.427.465-1.066.048-1.407.06-4.122.06s-3.056-.012-4.122-.06c-1.064-.049-1.791-.218-2.427-.465a4.902 4.902 0 01-1.772-1.153 4.902 4.902 0 01-1.153-1.772c-.247-.636-.416-1.363-.465-2.427-.048-1.066-.06-1.407-.06-4.122s.012-3.056.06-4.122c.049-1.065.218-1.791.465-2.427a4.902 4.902 0 011.153-1.772A4.902 4.902 0 015.45 2.525c.636-.247 1.363.416 2.427.465C8.944 2.012 9.285 2 12 2zm0 1.441c-2.66 0-2.992.01-4.043.058-.975.045-1.504.207-1.857.344-.467.182-.86.399-1.249.789-.389.389-.607.782-.789 1.249-.137.353-.3.882-.344 1.857-.048 1.051-.058 1.383-.058 4.043s.01 2.992.058 4.043c.045.975.207 1.504.344 1.857.182.466.399.86.789 1.249.389.389.782.607 1.249.789.353.137.882.3 1.857.344 1.051.048 1.383.058 4.043.058s2.992-.01 4.043-.058c.975-.045 1.504-.207 1.857-.344.467-.182.86-.399 1.249-.789.389-.389.607-.782.789-1.249.137-.353.3-.882-.344-1.857.048-1.051.058-1.383.058-4.043s-.01-2.992-.058-4.043c-.045-.975-.207-1.504-.344-1.857a3.097 3.097 0 00-.789-1.249 3.097 3.097 0 00-1.249-.789c-.353-.137-.882-.3-1.857-.344-1.051-.048-1.383-.058-4.043-.058zM12 6.865a5.135 5.135 0 100 10.27 5.135 5.135 0 000-10.27zm0 8.468a3.333 3.333 0 110-6.666 3.333 3.333 0 010 6.666zm5.338-9.87a1.262 1.262 0 100 2.524 1.262 1.262 0 000-2.524z"
+                        fill-rule="evenodd"
+                      ></path></svg
+                  ></a>
+                </div>
+              </section>
+              <section class="最新动态区域">
+                <h2 class="mb-8 text-center text-3xl font-bold text-wood-dark dark:text-text-dark">
+                  最新动态
+                </h2>
+                <div
+                  class="mx-auto max-w-2xl rounded-xl border border-primary/20 bg-background-light p-6 shadow-natural dark:border-primary/30 dark:bg-background-dark/50"
+                >
+                  <ul class="divide-y divide-primary/20 dark:divide-primary/30">
+                    <li class="py-4">
+                      <div class="flex items-center justify-between">
+                        <p>
+                          发布了新文章：<a
+                            class="text-cta-light hover:underline dark:text-cta-dark"
+                            href="#"
+                            >《探索Tailwind CSS的JIT模式》</a
+                          >
+                        </p>
+                        <span class="text-sm text-text-light/60 dark:text-text-dark/60">2天前</span>
+                      </div>
+                    </li>
+                    <li class="py-4">
+                      <div class="flex items-center justify-between">
+                        <p>更新了我的AI作品集</p>
+                        <span class="text-sm text-text-light/60 dark:text-text-dark/60">5天前</span>
+                      </div>
+                    </li>
+                    <li class="py-4">
+                      <div class="flex items-center justify-between">
+                        <p>在GitHub上Star了一个有趣的项目</p>
+                        <span class="text-sm text-text-light/60 dark:text-text-dark/60">1周前</span>
+                      </div>
+                    </li>
+                  </ul>
+                  <div class="mt-6 text-center">
+                    <a
+                      class="font-semibold text-cta-light transition-colors hover:text-cta-light/80 dark:text-cta-dark dark:hover:text-cta-dark/80"
+                      href="#"
+                      >查看更多动态 →</a
+                    >
+                  </div>
+                </div>
+              </section>
+            </div>
+          </main>
+          <footer class="border-t border-primary/30 py-12">
+            <div class="grid grid-cols-1 gap-8 text-center md:grid-cols-2 md:text-left">
+              <div class="flex flex-col items-center gap-4 md:items-start">
+                <div class="flex items-center gap-4">
+                  <div class="size-6 text-cta-light dark:text-cta-dark">
+                    <svg fill="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                      <path
+                        d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z"
+                      ></path>
+                    </svg>
+                  </div>
+                  <h2 class="text-xl font-bold tracking-tight text-text-light dark:text-text-dark">
+                    暖木博客
+                  </h2>
+                </div>
+                <div class="flex gap-4">
+                  <a
+                    class="text-text-light/80 transition-colors hover:text-cta-light dark:text-text-dark/80 dark:hover:text-cta-dark"
+                    href="#"
+                  >
+                    <svg aria-hidden="true" class="h-6 w-6" fill="currentColor" viewBox="0 0 24 24">
+                      <path
+                        clip-rule="evenodd"
+                        d="M22 12c0-5.523-4.477-10-10-10S2 6.477 2 12c0 4.991 3.657 9.128 8.438 9.878v-6.987h-2.54V12h2.54V9.797c0-2.506 1.492-3.89 3.777-3.89 1.094 0 2.238.195 2.238.195v2.46h-1.26c-1.243 0-1.63.771-1.63 1.562V12h2.773l-.443 2.89h-2.33v6.988C18.343 21.128 22 16.991 22 12z"
+                        fill-rule="evenodd"
+                      ></path>
+                    </svg>
+                  </a>
+                  <a
+                    class="text-text-light/80 transition-colors hover:text-cta-light dark:text-text-dark/80 dark:hover:text-cta-dark"
+                    href="#"
+                  >
+                    <svg aria-hidden="true" class="h-6 w-6" fill="currentColor" viewBox="0 0 24 24">
+                      <path
+                        d="M8.29 20.251c7.547 0 11.675-6.253 11.675-11.675 0-.178 0-.355-.012-.53A8.348 8.348 0 0022 5.92a8.19 8.19 0 01-2.357.646 4.118 4.118 0 001.804-2.27 8.224 8.224 0 01-2.605.996 4.107 4.107 0 00-6.993 3.743 11.65 11.65 0 01-8.457-4.287 4.106 4.106 0 001.27 5.477A4.072 4.072 0 012.8 9.71v.052a4.105 4.105 0 003.292 4.022 4.095 4.095 0 01-1.853.07 4.108 4.108 0 003.834 2.85A8.233 8.233 0 012 18.407a11.616 11.616 0 006.29 1.84"
+                      ></path>
+                    </svg>
+                  </a>
+                  <a
+                    class="text-text-light/80 transition-colors hover:text-cta-light dark:text-text-dark/80 dark:hover:text-cta-dark"
+                    href="#"
+                  >
+                    <svg aria-hidden="true" class="h-6 w-6" fill="currentColor" viewBox="0 0 24 24">
+                      <path
+                        clip-rule="evenodd"
+                        d="M12.315 2c2.43 0 2.784.013 3.808.06 1.064.049 1.791.218 2.427.465a4.902 4.902 0 011.772 1.153 4.902 4.902 0 011.153 1.772c.247.636.416 1.363.465 2.427.048 1.024.06 1.378.06 3.808s-.012 2.784-.06 3.808c-.049 1.064-.218 1.791-.465 2.427a4.902 4.902 0 01-1.153 1.772 4.902 4.902 0 01-1.772 1.153c-.636.247-1.363.416-2.427.465-1.024.048-1.378.06-3.808.06s-2.784-.012-3.808-.06c-1.064-.049-1.791-.218-2.427-.465a4.902 4.902 0 01-1.772-1.153 4.902 4.902 0 01-1.153-1.772c-.247-.636-.416-1.363-.465-2.427-.048-1.024-.06-1.378-.06-3.808s.012-2.784.06-3.808c.049-1.064.218-1.791.465-2.427a4.902 4.902 0 011.153-1.772A4.902 4.902 0 016.345 2.525c.636-.247 1.363-.416 2.427-.465C9.793 2.013 10.147 2 12.315 2h.001zm-1.04 2.265c-2.456 0-2.784.011-3.807.058-.975.045-1.504.207-1.857.344-.467.182-.86.399-1.249.789-.389.389-.607.782-.789 1.249-.137.353-.3.882-.344 1.857-.047 1.023-.058 1.351-.058 3.807s.011 2.784.058 3.807c.045.975.207 1.504.344 1.857.182.466.399.86.789 1.249.389.389.782.607 1.249.789.353.137.882.3 1.857.344 1.023.047 1.351.058 3.807.058s2.784-.011 3.807-.058c.975-.045 1.504-.207 1.857-.344.467-.182.86-.399 1.249-.789.389-.389.607-.782.789-1.249.137-.353.3-.882-.344-1.857.047-1.023.058-1.351.058-3.807s-.011-2.784-.058-3.807c-.045-.975-.207-1.504-.344-1.857a3.097 3.097 0 00-.789-1.249 3.097 3.097 0 00-1.249-.789c-.353-.137-.882-.3-1.857-.344-1.023-.047-1.351-.058-3.807-.058zM12 6.865a5.135 5.135 0 100 10.27 5.135 5.135 0 000-10.27zm0 8.468a3.333 3.333 0 110-6.666 3.333 3.333 0 010 6.666zm5.338-9.87a1.262 1.262 0 100 2.524 1.262 1.262 0 000-2.524z"
+                        fill-rule="evenodd"
+                      ></path>
+                    </svg>
+                  </a>
+                </div>
+              </div>
+              <div class="flex flex-col items-center gap-4 md:items-start">
+                <h3 class="font-bold text-text-light dark:text-text-dark">链接</h3>
+                <a
+                  class="text-sm text-text-light/80 transition-colors hover:text-cta-light dark:text-text-dark/80 dark:hover:text-cta-dark"
+                  href="#"
+                  >关于</a
+                >
+                <a
+                  class="text-sm text-text-light/80 transition-colors hover:text-cta-light dark:text-text-dark/80 dark:hover:text-cta-dark"
+                  href="#"
+                  >文章</a
+                >
+                <a
+                  class="text-sm text-text-light/80 transition-colors hover:text-cta-light dark:text-text-dark/80 dark:hover:text-cta-dark"
+                  href="#"
+                  >隐私政策</a
+                >
+              </div>
+            </div>
+            <div
+              class="mt-12 border-t border-primary/30 pt-8 text-center text-sm text-text-light/60 dark:text-text-dark/60"
+            >
+              <p>© 2024 暖木博客. 版权所有.</p>
+            </div>
+          </footer>
+        </div>
+      </div>
+      <button
+        class="fixed bottom-8 right-8 z-40 flex h-12 w-12 items-center justify-center rounded-full bg-primary/80 text-white shadow-lg backdrop-blur-sm transition-all duration-300 hover:bg-primary hover:shadow-xl dark:bg-primary/70 dark:hover:bg-primary"
+      >
+        <span class="material-symbols-outlined">arrow_upward</span>
+      </button>
+    </div>
+  </body>
+</html>

@@ -1,0 +1,425 @@
+<!doctype html>
+<html class="light" lang="zh">
+  <head>
+    <meta charset="utf-8" />
+    <meta content="width=device-width, initial-scale=1.0" name="viewport" />
+    <title>搜索结果 - 暖木博客</title>
+    <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+    <link href="https://fonts.googleapis.com" rel="preconnect" />
+    <link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect" />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Nunito:ital,wght@0,200..1000;1,200..1000&amp;family=Noto+Sans+SC:wght@300;400;500;700&amp;display=swap"
+      rel="stylesheet"
+    />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200"
+      rel="stylesheet"
+    />
+    <script>
+      tailwind.config = {
+        darkMode: 'class',
+        theme: {
+          extend: {
+            colors: {
+              primary: '#D4A574',
+              'background-light': '#F8F6F2',
+              'background-dark': '#1e1914',
+              'text-light': '#6b4f2c',
+              'text-dark': '#e0d5c6',
+              'cta-light': '#7A8B6E',
+              'cta-dark': '#a0b599',
+              'wood-border': '#C19A6B',
+              'quote-bg': '#F3EFE9',
+              'code-bg': '#FBFBFB',
+              'wood-light': '#EADFCC',
+              'wood-dark': '#5a472b',
+              'off-white': '#F3EFE9',
+              'highlight-bg': '#FDF8E4',
+              'purple-hue': '#8a7e9a',
+              'purple-bg': '#e9e6ed',
+              'purple-border': '#c9c1d2',
+              'purple-dark': '#5c526f',
+              'tool-midjourney': '#6e8b6e',
+              'tool-sd': '#a099b5',
+              'tool-runway': '#b5a099',
+              'tool-sora': '#99b5a0',
+            },
+            fontFamily: {
+              display: ['Nunito', 'Noto Sans SC', 'sans-serif'],
+            },
+            borderRadius: {
+              DEFAULT: '8px',
+              lg: '12px',
+              xl: '16px',
+              full: '9999px',
+            },
+            boxShadow: {
+              natural: '0 4px 10px rgba(139, 111, 71, 0.1)',
+              'natural-hover': '0 8px 20px rgba(139, 111, 71, 0.15)',
+            },
+            lineHeight: {
+              loose: '1.8',
+            },
+          },
+        },
+      };
+    </script>
+    <style>
+      .material-symbols-outlined {
+        font-variation-settings:
+          'FILL' 0,
+          'wght' 400,
+          'GRAD' 0,
+          'opsz' 24;
+      }
+    </style>
+  </head>
+  <body
+    class="bg-background-light dark:bg-background-dark font-display text-text-light dark:text-text-dark"
+  >
+    <div class="relative flex min-h-screen w-full flex-col">
+      <div class="layout-container flex h-full grow flex-col items-center">
+        <div class="layout-content-container flex w-full max-w-5xl flex-col px-6 sm:px-8">
+          <header
+            class="flex items-center justify-between whitespace-nowrap border-b border-primary/30 py-4"
+          >
+            <div class="flex items-center gap-4">
+              <div class="size-6 text-cta-light dark:text-cta-dark">
+                <svg fill="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                  <path
+                    d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z"
+                  ></path>
+                </svg>
+              </div>
+              <h2 class="text-xl font-bold tracking-tight text-text-light dark:text-text-dark">
+                暖木博客
+              </h2>
+            </div>
+            <div class="hidden items-center gap-8 md:flex">
+              <a
+                class="text-sm font-medium transition-colors hover:text-cta-light dark:hover:text-cta-dark"
+                href="#"
+                >首页</a
+              >
+              <a
+                class="text-sm font-medium transition-colors hover:text-cta-light dark:hover:text-cta-dark"
+                href="#"
+                >关于</a
+              >
+              <a
+                class="text-sm font-medium transition-colors hover:text-cta-light dark:hover:text-cta-dark"
+                href="#"
+                >文章</a
+              >
+              <a
+                class="text-sm font-medium transition-colors hover:text-cta-light dark:hover:text-cta-dark"
+                href="#"
+                >AI作品展示</a
+              >
+            </div>
+            <div class="relative">
+              <input
+                class="h-10 w-40 rounded-full border-2 border-primary/50 bg-background-light dark:bg-background-dark py-2 pl-4 pr-10 text-sm placeholder-text-light/60 dark:placeholder-text-dark/60 focus:border-primary focus:outline-none focus:ring-1 focus:ring-primary"
+                placeholder="搜索..."
+                type="text"
+              />
+              <span
+                class="material-symbols-outlined absolute right-3 top-1/2 -translate-y-1/2 text-text-light/70 dark:text-text-dark/70"
+                >search</span
+              >
+            </div>
+          </header>
+          <main class="w-full flex-grow py-8 md:py-16">
+            <div class="mx-auto max-w-[1200px] space-y-12">
+              <section class="space-y-6">
+                <div class="relative flex items-center gap-4">
+                  <input
+                    class="h-14 w-full rounded-full border-2 border-wood-border bg-off-white py-3 pl-6 pr-14 text-lg text-wood-dark placeholder-text-light/60 shadow-natural focus:border-primary focus:outline-none focus:ring-2 focus:ring-primary/50 dark:bg-wood-dark/30 dark:text-text-dark dark:placeholder-text-dark/60"
+                    placeholder="搜索博客内容..."
+                    type="text"
+                    value="MUJI风格"
+                  />
+                  <button
+                    class="absolute right-40 top-1/2 -translate-y-1/2 text-text-light/50 transition-colors hover:text-text-light dark:text-text-dark/50 dark:hover:text-text-dark"
+                  >
+                    <span class="material-symbols-outlined">close</span>
+                  </button>
+                  <button
+                    class="h-14 shrink-0 rounded-full bg-wood-light px-8 text-lg font-bold text-wood-dark shadow-natural transition-colors hover:bg-primary/80 dark:bg-primary/60 dark:text-background-dark dark:hover:bg-primary/80"
+                  >
+                    搜索
+                  </button>
+                </div>
+                <div class="flex flex-wrap items-center gap-x-6 gap-y-3 px-4">
+                  <button
+                    class="rounded-full bg-wood-light px-4 py-1.5 text-sm font-medium text-wood-dark shadow-sm dark:bg-primary/50 dark:text-text-dark"
+                  >
+                    全部内容
+                  </button>
+                  <button
+                    class="rounded-full px-4 py-1.5 text-sm font-medium text-text-light/80 transition-colors hover:bg-off-white dark:text-text-dark/80 dark:hover:bg-wood-dark/30"
+                  >
+                    文章
+                  </button>
+                  <button
+                    class="rounded-full px-4 py-1.5 text-sm font-medium text-text-light/80 transition-colors hover:bg-off-white dark:text-text-dark/80 dark:hover:bg-wood-dark/30"
+                  >
+                    AI作品
+                  </button>
+                </div>
+              </section>
+              <section class="space-y-8">
+                <div
+                  class="flex flex-col gap-4 rounded-xl bg-off-white/70 p-4 shadow-sm dark:bg-background-dark/50 sm:flex-row sm:items-center sm:justify-between"
+                >
+                  <p class="text-sm text-text-light/90 dark:text-text-dark/90">
+                    找到 15 个与 "<span
+                      class="rounded bg-highlight-bg px-1.5 py-0.5 font-semibold text-wood-dark dark:bg-primary/20 dark:text-text-dark"
+                      >MUJI风格</span
+                    >" 相关的结果
+                    <span class="ml-2 text-text-light/60 dark:text-text-dark/60"
+                      >(用时 0.3 秒)</span
+                    >
+                  </p>
+                  <div class="flex flex-wrap items-center gap-4">
+                    <div
+                      class="flex items-center gap-2 rounded-lg bg-background-light p-2 text-sm shadow-sm dark:bg-background-dark/70"
+                    >
+                      <span class="font-medium text-text-light/90 dark:text-text-dark/90"
+                        >内容类型筛选:</span
+                      >
+                      <button
+                        class="flex items-center gap-1 rounded-md bg-cta-light/20 px-2 py-1 text-cta-light transition-colors hover:bg-cta-light/30 dark:bg-cta-dark/20 dark:text-cta-dark dark:hover:bg-cta-dark/30"
+                      >
+                        <span class="material-symbols-outlined !text-[16px]">article</span>
+                        <span>文章 <span class="text-xs opacity-70">(8)</span></span>
+                      </button>
+                      <button
+                        class="flex items-center gap-1 rounded-md bg-purple-bg px-2 py-1 text-purple-dark transition-colors hover:bg-purple-bg/70 dark:bg-purple-dark/30 dark:text-purple-hue dark:hover:bg-purple-dark/40"
+                      >
+                        <span class="material-symbols-outlined !text-[16px]">palette</span>
+                        <span>AI作品 <span class="text-xs opacity-70">(6)</span></span>
+                      </button>
+                    </div>
+                    <div class="relative">
+                      <select
+                        class="w-full appearance-none rounded-md border-primary/50 bg-background-light py-2 pl-3 pr-8 text-sm text-text-light focus:border-primary focus:outline-none focus:ring-1 focus:ring-primary dark:border-primary/40 dark:bg-background-dark dark:text-text-dark"
+                      >
+                        <option>时间不限</option>
+                        <option>最近一周</option>
+                        <option>最近一月</option>
+                        <option>最近一年</option>
+                      </select>
+                      <span
+                        class="material-symbols-outlined pointer-events-none absolute right-2 top-1/2 -translate-y-1/2 text-text-light/70 dark:text-text-dark/70"
+                        >expand_more</span
+                      >
+                    </div>
+                    <div class="relative">
+                      <select
+                        class="w-full appearance-none rounded-md border-primary/50 bg-background-light py-2 pl-3 pr-8 text-sm text-text-light focus:border-primary focus:outline-none focus:ring-1 focus:ring-primary dark:border-primary/40 dark:bg-background-dark dark:text-text-dark"
+                      >
+                        <option>相关度排序</option>
+                        <option>最新发布</option>
+                        <option>最多评论</option>
+                      </select>
+                      <span
+                        class="material-symbols-outlined pointer-events-none absolute right-2 top-1/2 -translate-y-1/2 text-text-light/70 dark:text-text-dark/70"
+                        >expand_more</span
+                      >
+                    </div>
+                  </div>
+                </div>
+                <div class="space-y-8">
+                  <div
+                    class="flex flex-col gap-6 rounded-xl border-2 border-wood-border/50 bg-off-white p-6 shadow-natural transition-shadow hover:shadow-natural-hover dark:bg-wood-dark/20 sm:flex-row"
+                  >
+                    <img
+                      alt="Article thumbnail"
+                      class="h-40 w-full rounded-lg object-cover sm:h-auto sm:w-52"
+                      src="https://lh3.googleusercontent.com/aida-public/AB6AXuBjhSoBWKOqeSFzbaCUh3XeSjpxCNx7y_o3KUn3mQ_ed3V2HUt7ZqPzlXjnJH2rK4RcaHfcKVI9P--IimOdmQQ7qVzNsJJCMh8gP741fedWDtlHkbWAMy9yMZbGrGIBNmLHvo8GDpq7l_1_K_6Em4-mtF2D1YqxK_kC5_YY3KuPz8VPrZ6GCP9J8soinhJ9YV56JKgOFBXW9BIzvWM1aI0Lmo_JzlxJVMQR8mz9UYZcx53iRFHKqx0_PKz1gH8tuNaUubVEZIQNYUcq"
+                    />
+                    <div class="flex flex-col justify-between">
+                      <div>
+                        <span
+                          class="mb-2 inline-block rounded bg-cta-light/20 px-2 py-0.5 text-xs font-medium text-cta-light dark:bg-cta-dark/20 dark:text-cta-dark"
+                          >文章</span
+                        >
+                        <h3 class="text-xl font-bold text-wood-dark dark:text-text-dark">
+                          如何打造一个<mark class="bg-highlight-bg px-1 dark:bg-primary/20"
+                            >MUJI风格</mark
+                          >的舒适家
+                        </h3>
+                        <p class="mt-2 text-text-light/80 dark:text-text-dark/80 line-clamp-2">
+                          在这篇文章中，我们将探讨如何通过简约的设计、自然的材质和精心的收纳，将您的家变成一个充满禅意和舒适感的<mark
+                            class="bg-highlight-bg px-1 dark:bg-primary/20"
+                            >MUJI风格</mark
+                          >空间。
+                        </p>
+                      </div>
+                      <div
+                        class="mt-4 flex items-center gap-4 text-sm text-text-light/70 dark:text-text-dark/70"
+                      >
+                        <span>2024-03-15</span>
+                      </div>
+                    </div>
+                  </div>
+                  <div
+                    class="flex flex-col gap-6 rounded-xl border-2 border-wood-border/50 bg-off-white p-6 shadow-natural transition-shadow hover:shadow-natural-hover dark:bg-wood-dark/20 sm:flex-row"
+                  >
+                    <img
+                      alt="AI work thumbnail"
+                      class="h-40 w-full rounded-lg object-cover sm:h-auto sm:w-52"
+                      src="https://lh3.googleusercontent.com/aida-public/AB6AXuC6ga57F73cnvT53j2LsmEVMPfX8OLNQ-xw7LTyuKvPMHZ08INlzRU4K4DUs76WGvxNjgQWy8-TnnEFELSWgjejMry1Lbv1wbNerMMHJgjqXcj92Tl9WXZYkdqYX8Fq_Ng8KKh6-xA8QN4AXdi55xXIbNuBMXu3h1fOhunPxe0p7bxLKgmbZvAleOtiUhXC5toaxp0Pib7LVYU_SrHFcTBgrRvMoOGa6FQlvP9Z5vtZvtPlSWzUXbjZ_WEgtc0JbmKKMs8etTG2P7kP"
+                    />
+                    <div class="flex flex-col justify-between">
+                      <div>
+                        <span
+                          class="mb-2 inline-block rounded bg-purple-bg px-2 py-0.5 text-xs font-medium text-purple-dark dark:bg-purple-dark/40 dark:text-purple-hue"
+                          >AI作品</span
+                        >
+                        <h3 class="text-xl font-bold text-wood-dark dark:text-text-dark">
+                          AI生成的<mark class="bg-highlight-bg px-1 dark:bg-primary/20"
+                            >MUJI风格</mark
+                          >室内设计
+                        </h3>
+                        <p class="mt-2 text-text-light/80 dark:text-text-dark/80">
+                          一组由Midjourney生成的<mark
+                            class="bg-highlight-bg px-1 dark:bg-primary/20"
+                            >MUJI风格</mark
+                          >室内设计图，展示了AI在创造温馨、自然家居美学方面的潜力。
+                        </p>
+                      </div>
+                      <div
+                        class="mt-4 flex items-center gap-4 text-sm text-text-light/70 dark:text-text-dark/70"
+                      >
+                        <span>图片</span>
+                        <span>·</span>
+                        <span>2024-04-28</span>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </section>
+              <div class="flex items-center justify-center gap-2 pt-8">
+                <button
+                  class="flex size-10 items-center justify-center rounded-full text-text-light/60 transition-colors hover:bg-primary/20 dark:text-text-dark/60 dark:hover:bg-primary/30"
+                >
+                  <span class="material-symbols-outlined text-xl">chevron_left</span>
+                </button>
+                <button
+                  class="flex size-10 items-center justify-center rounded-full bg-[#E9DBCB] font-bold text-text-light transition-colors hover:bg-primary/30 dark:bg-[#5a472b] dark:text-text-dark dark:hover:bg-primary/40"
+                >
+                  1
+                </button>
+                <button
+                  class="flex size-10 items-center justify-center rounded-full font-bold text-text-light/80 transition-colors hover:bg-primary/20 dark:text-text-dark/80 dark:hover:bg-primary/30"
+                >
+                  2
+                </button>
+                <button
+                  class="flex size-10 items-center justify-center rounded-full font-bold text-text-light/80 transition-colors hover:bg-primary/20 dark:text-text-dark/80 dark:hover:bg-primary/30"
+                >
+                  3
+                </button>
+                <span class="text-text-light/60 dark:text-text-dark/60">...</span>
+                <button
+                  class="flex size-10 items-center justify-center rounded-full font-bold text-text-light/80 transition-colors hover:bg-primary/20 dark:text-text-dark/80 dark:hover:bg-primary/30"
+                >
+                  8
+                </button>
+                <button
+                  class="flex size-10 items-center justify-center rounded-full text-text-light/60 transition-colors hover:bg-primary/20 dark:text-text-dark/60 dark:hover:bg-primary/30"
+                >
+                  <span class="material-symbols-outlined text-xl">chevron_right</span>
+                </button>
+              </div>
+            </div>
+          </main>
+          <footer class="border-t border-primary/30 py-12">
+            <div class="grid grid-cols-1 gap-8 text-center md:grid-cols-2 md:text-left">
+              <div class="flex flex-col items-center gap-4 md:items-start">
+                <div class="flex items-center gap-4">
+                  <div class="size-6 text-cta-light dark:text-cta-dark">
+                    <svg fill="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                      <path
+                        d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z"
+                      ></path>
+                    </svg>
+                  </div>
+                  <h2 class="text-xl font-bold tracking-tight text-text-light dark:text-text-dark">
+                    暖木博客
+                  </h2>
+                </div>
+                <div class="flex gap-4">
+                  <a
+                    class="text-text-light/80 transition-colors hover:text-cta-light dark:text-text-dark/80 dark:hover:text-cta-dark"
+                    href="#"
+                  >
+                    <svg aria-hidden="true" class="h-6 w-6" fill="currentColor" viewBox="0 0 24 24">
+                      <path
+                        clip-rule="evenodd"
+                        d="M22 12c0-5.523-4.477-10-10-10S2 6.477 2 12c0 4.991 3.657 9.128 8.438 9.878v-6.987h-2.54V12h2.54V9.797c0-2.506 1.492-3.89 3.777-3.89 1.094 0 2.238.195 2.238.195v2.46h-1.26c-1.243 0-1.63.771-1.63 1.562V12h2.773l-.443 2.89h-2.33v6.988C18.343 21.128 22 16.991 22 12z"
+                        fill-rule="evenodd"
+                      ></path>
+                    </svg>
+                  </a>
+                  <a
+                    class="text-text-light/80 transition-colors hover:text-cta-light dark:text-text-dark/80 dark:hover:text-cta-dark"
+                    href="#"
+                  >
+                    <svg aria-hidden="true" class="h-6 w-6" fill="currentColor" viewBox="0 0 24 24">
+                      <path
+                        d="M8.29 20.251c7.547 0 11.675-6.253 11.675-11.675 0-.178 0-.355-.012-.53A8.348 8.348 0 0022 5.92a8.19 8.19 0 01-2.357.646 4.118 4.118 0 001.804-2.27 8.224 8.224 0 01-2.605.996 4.107 4.107 0 00-6.993 3.743 11.65 11.65 0 01-8.457-4.287 4.106 4.106 0 001.27 5.477A4.072 4.072 0 012.8 9.71v.052a4.105 4.105 0 003.292 4.022 4.095 4.095 0 01-1.853.07 4.108 4.108 0 003.834 2.85A8.233 8.233 0 012 18.407a11.616 11.616 0 006.29 1.84"
+                      ></path>
+                    </svg>
+                  </a>
+                  <a
+                    class="text-text-light/80 transition-colors hover:text-cta-light dark:text-text-dark/80 dark:hover:text-cta-dark"
+                    href="#"
+                  >
+                    <svg aria-hidden="true" class="h-6 w-6" fill="currentColor" viewBox="0 0 24 24">
+                      <path
+                        clip-rule="evenodd"
+                        d="M12.315 2c2.43 0 2.784.013 3.808.06 1.064.049 1.791.218 2.427.465a4.902 4.902 0 011.772 1.153 4.902 4.902 0 011.153 1.772c.247.636.416 1.363.465 2.427.048 1.024.06 1.378.06 3.808s-.012 2.784-.06 3.808c-.049 1.064-.218 1.791-.465 2.427a4.902 4.902 0 01-1.153 1.772 4.902 4.902 0 01-1.772 1.153c-.636.247-1.363.416-2.427.465-1.024.048-1.378.06-3.808.06s-2.784-.012-3.808-.06c-1.064-.049-1.791-.218-2.427-.465a4.902 4.902 0 01-1.772-1.153 4.902 4.902 0 01-1.153-1.772c-.247-.636-.416-1.363-.465-2.427-.048-1.024-.06-1.378-.06-3.808s.012-2.784.06-3.808c.049-1.064.218-1.791.465-2.427a4.902 4.902 0 011.153-1.772A4.902 4.902 0 016.345 2.525c.636-.247 1.363-.416 2.427-.465C9.793 2.013 10.147 2 12.315 2h.001zm-1.04 2.265c-2.456 0-2.784.011-3.807.058-.975.045-1.504.207-1.857.344-.467.182-.86.399-1.249.789-.389.389-.607.782-.789 1.249-.137.353-.3.882-.344 1.857-.047 1.023-.058 1.351-.058 3.807s.011 2.784.058 3.807c.045.975.207 1.504.344 1.857.182.466.399.86.789 1.249.389.389.782.607 1.249.789.353.137.882.3 1.857.344 1.023.047 1.351.058 3.807.058s2.784-.011 3.807-.058c.975-.045 1.504-.207 1.857-.344.467-.182.86-.399 1.249-.789.389-.389.607-.782.789-1.249.137-.353.3-.882-.344-1.857.047-1.023.058-1.351-.058-3.807s-.011-2.784-.058-3.807c-.045-.975-.207-1.504-.344-1.857a3.097 3.097 0 00-.789-1.249 3.097 3.097 0 00-1.249-.789c-.353-.137-.882-.3-1.857-.344-1.023-.047-1.351-.058-3.807-.058zM12 6.865a5.135 5.135 0 100 10.27 5.135 5.135 0 000-10.27zm0 8.468a3.333 3.333 0 110-6.666 3.333 3.333 0 010 6.666zm5.338-9.87a1.262 1.262 0 100 2.524 1.262 1.262 0 000-2.524z"
+                        fill-rule="evenodd"
+                      ></path>
+                    </svg>
+                  </a>
+                </div>
+              </div>
+              <div class="flex flex-col items-center gap-4 md:items-start">
+                <h3 class="font-bold text-text-light dark:text-text-dark">链接</h3>
+                <a
+                  class="text-sm text-text-light/80 transition-colors hover:text-cta-light dark:text-text-dark/80 dark:hover:text-cta-dark"
+                  href="#"
+                  >关于</a
+                >
+                <a
+                  class="text-sm text-text-light/80 transition-colors hover:text-cta-light dark:text-text-dark/80 dark:hover:text-cta-dark"
+                  href="#"
+                  >文章</a
+                >
+                <a
+                  class="text-sm text-text-light/80 transition-colors hover:text-cta-light dark:text-text-dark/80 dark:hover:text-cta-dark"
+                  href="#"
+                  >隐私政策</a
+                >
+              </div>
+            </div>
+            <div
+              class="mt-12 border-t border-primary/30 pt-8 text-center text-sm text-text-light/60 dark:text-text-dark/60"
+            >
+              <p>© 2024 暖木博客. 版权所有.</p>
+            </div>
+          </footer>
+        </div>
+      </div>
+      <button
+        class="fixed bottom-8 right-8 z-40 flex h-12 w-12 items-center justify-center rounded-full bg-primary/80 text-white shadow-lg backdrop-blur-sm transition-all duration-300 hover:bg-primary hover:shadow-xl dark:bg-primary/70 dark:hover:bg-primary"
+      >
+        <span class="material-symbols-outlined">arrow_upward</span>
+      </button>
+    </div>
+  </body>
+</html>

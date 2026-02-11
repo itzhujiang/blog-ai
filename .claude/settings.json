@@ -1,0 +1,21 @@
+{
+  "enableAllProjectMcpServers": true,
+  "enabledMcpjsonServers": [
+    "promptx",
+    "playwright",
+    "context7"
+  ],
+  "hooks": {
+    "PreToolUse": [
+      {
+        "matcher": "Edit|Write",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "node .claude/hooks/file-permissions.js"
+          }
+        ]
+      }
+    ]
+  }
+}
