@@ -2,14 +2,20 @@
 
 import { useState } from 'react';
 
-import PhoneDialog from './PhoneDialog';
+import { PhoneDialog } from './PhoneDialog';
 
 export default function AiChat() {
   const [isAiChatVisible, setVisible] = useState(false);
+  const [isPhoneDialogVisible, setPhoneDialogVisible] = useState(false);
 
+  /**
+   * 点击显示AI聊天窗口时，先进行数据校验，如果校验通过则显示窗口，否则提示用户进行手机号验证
+   */
   const onVisibleClick = () => {
     if (!isAiChatVisible) {
       console.log('数据校验');
+      setPhoneDialogVisible(true);
+      return;
     }
     setVisible(!isAiChatVisible);
   };
@@ -17,7 +23,7 @@ export default function AiChat() {
   return (
     <div className="absolute bottom-10 right-10 flex flex-col items-end">
       {
-        isAiChatVisible ? <div className="w-80 sm:w-96 flex flex-col overflow-hidden rounded-xl border border-primary/20 bg-background-light shadow-natural-hover dark:bg-background-dark md:w-[400px] mb-5">
+        isAiChatVisible ? <div className="w-80 z-50 sm:w-96 flex flex-col overflow-hidden rounded-xl border border-primary/20 bg-background-light shadow-natural-hover dark:bg-background-dark md:w-[400px] mb-5">
           <div className="flex items-center justify-between bg-primary/10 p-4 border-b border-primary/20">
             <div className="flex items-center gap-2">
               <span className="material-symbols-outlined text-primary">smart_toy</span>
@@ -46,7 +52,7 @@ export default function AiChat() {
       <button className="flex h-14 w-14 items-center justify-center rounded-full bg-primary text-white shadow-natural hover:shadow-natural-hover transition-all duration-300 hover:scale-105 active:scale-95 cursor-pointer" onClick={onVisibleClick}>
         <span className="material-symbols-outlined !text-3xl">chat_bubble</span>
       </button>
-      <PhoneDialog></PhoneDialog>
+      <PhoneDialog visible={isPhoneDialogVisible} onClose={() => setPhoneDialogVisible(false)}></PhoneDialog>
     </div>
   );
 }

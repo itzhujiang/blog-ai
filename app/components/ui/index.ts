@@ -19,5 +19,5 @@ export { Avatar } from './Avatar';
 export type { AvatarProps } from './Avatar';
 
 // Modal
-export { Modal } from './Modal';
-export type { ModalProps } from './Modal';
+export { Modal, ModalContainer } from './Modal';
+export type { ModalProps, ModalContainerProps } from './Modal';
