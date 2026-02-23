@@ -4,12 +4,7 @@ export type { ButtonProps } from './Button';
 
 // Card
 export { Card, CardHeader, CardContent, CardFooter } from './Card';
-export type {
-  CardProps,
-  CardHeaderProps,
-  CardContentProps,
-  CardFooterProps,
-} from './Card';
+export type { CardProps, CardHeaderProps, CardContentProps, CardFooterProps } from './Card';
 
 // Input
 export { Input } from './Input';
@@ -22,3 +17,7 @@ export type { BadgeProps } from './Badge';
 // Avatar
 export { Avatar } from './Avatar';
 export type { AvatarProps } from './Avatar';
+
+// Modal
+export { Modal } from './Modal';
+export type { ModalProps } from './Modal';

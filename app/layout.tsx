@@ -2,6 +2,7 @@ import type { Metadata } from 'next';
 import { Geist, Geist_Mono } from 'next/font/google';
 import React from 'react';
 
+import AiChat from '@/components/AiChat';
 import { Header, Footer } from '@/components/layout';
 import { getSiteConfigSSR } from '@/utils/site-config';
 
@@ -63,6 +64,9 @@ export default function RootLayout({
                 <Footer />
               </div>
             </div>
+          </div>
+          <div>
+            <AiChat></AiChat>
           </div>
         </div>
       </body>
