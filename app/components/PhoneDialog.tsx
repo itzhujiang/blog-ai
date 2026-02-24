@@ -1,6 +1,6 @@
 'use client';
 
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 
 import { useCountdown } from '@/utils/hook';
 
@@ -24,8 +24,17 @@ export function PhoneDialog({ visible = false, onClose }: PhoneDialogProps) {
     code: ''
   });
   const [countdown, isSending, startCountdown, clearCountdown] = useCountdown();
-  
-  useEffect(() => clearCountdown, [clearCountdown, visible]);
+  const [prevVisible, setPrevVisible] = useState(visible);
+
+  // 渲染期状态调整：仅在弹窗从关闭→打开时重置表单
+  if (visible && !prevVisible) {
+    setFormData({ phone: '', code: '' });
+    clearCountdown();
+  }
+  if (visible !== prevVisible) {
+    setPrevVisible(visible);
+  }
+
   /**
    * 发送验证码点击事件
    */
@@ -33,6 +42,10 @@ export function PhoneDialog({ visible = false, onClose }: PhoneDialogProps) {
     if (!isSending) {
       if (!formData.phone) {
         showMessage({ type: 'error', message: '请输入手机号' });
+        return;
+      }
+      if (!/^[1](([3-9][0-9]))[0-9]{8}$/.test(formData.phone)) {
+        showMessage({ type: 'error', message: '请输入正确的手机号' });
         return;
       }
       startCountdown(60);
@@ -53,7 +66,7 @@ export function PhoneDialog({ visible = false, onClose }: PhoneDialogProps) {
             <h2 className='text-muji-brown dark:text-slate-100 text-2xl font-bold tracking-tight'>手机号验证</h2>
             <p className='text-muji-taupe dark:text-slate-400 text-sm mt-2'>因: AI服务需要消耗token，使用的是我的账户，无法随意供人使用，需要手机验证</p>
           </div>
-          <form className='space-y-5'>
+          <form className='space-y-5' >
             <div className='space-y-1.5'>
               <label className='text-muji-brown dark:text-slate-200 text-sm font-medium ml-1'>手机号</label>
               <div className='relative flex items-center mt-1'>
@@ -62,6 +75,7 @@ export function PhoneDialog({ visible = false, onClose }: PhoneDialogProps) {
                   icon={<span className="text-muji-taupe dark:text-primary/60 material-symbols-outlined text-[24px]">smartphone</span>}
                   placeholder='请输入手机号'
                   value={formData.phone}
+                  maxLength={11}
                   onChange={(e) => setFormData({ ...formData, phone: e.target.value })}
                 />
                 <button 
