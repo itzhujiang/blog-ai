@@ -5,6 +5,7 @@
 import axios from 'axios';
 
 import { getFileUrl } from '@/utils/file-url';
+import { defaultLogger } from '@/utils/logger';
 
 import type { AboutPageData } from '../about/types';
 
@@ -62,7 +63,7 @@ export async function getAboutPageData(): Promise<AboutPageData | null> {
         });
         introContent = response.data;
       } catch (err) {
-        console.error('获取关于我内容文件失败:', err);
+        defaultLogger.error('获取关于我内容文件失败:', err);
       }
     }
 
@@ -78,7 +79,7 @@ export async function getAboutPageData(): Promise<AboutPageData | null> {
       socialLinks: page.socialLinks as AboutPageData['socialLinks'],
     };
   } catch (error) {
-    console.error('获取关于我页面数据失败:', error);
+    defaultLogger.error('获取关于我页面数据失败:', error);
     return null;
   }
 }

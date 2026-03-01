@@ -6,8 +6,9 @@
 
 import { NextRequest, NextResponse } from 'next/server';
 
-import { verifyCaptcha } from '@/utils/captcha';
 import { getCommentsByArticleId, createComment } from '@/services';
+import { verifyCaptcha } from '@/utils/captcha';
+import { apiLogger, defaultLogger } from '@/utils/logger';
 
 export async function GET(request: NextRequest) {
   try {
@@ -15,6 +16,8 @@ export async function GET(request: NextRequest) {
       request.nextUrl.searchParams.get('articleId') || '',
       10,
     );
+
+    apiLogger.info(`[GET /api/comments] articleId=${articleId}`);
 
     if (!articleId || isNaN(articleId)) {
       return NextResponse.json(
@@ -30,7 +33,7 @@ export async function GET(request: NextRequest) {
       { headers: { 'Cache-Control': 'no-store' } },
     );
   } catch (error) {
-    console.error('获取评论失败:', error);
+    defaultLogger.error('获取评论失败:', error);
     return NextResponse.json(
       { error: '获取评论失败' },
       { status: 500 },
@@ -41,6 +44,8 @@ export async function GET(request: NextRequest) {
 export async function POST(request: NextRequest) {
   try {
     const body = await request.json();
+
+    apiLogger.info(`[POST /api/comments] articleId=${body.articleId}, authorName=${body.authorName}`);
 
     // 验证码校验
     const captchaResult = verifyCaptcha(
@@ -91,7 +96,7 @@ export async function POST(request: NextRequest) {
       { status: 201 },
     );
   } catch (error) {
-    console.error('发表评论失败:', error);
+    defaultLogger.error('发表评论失败:', error);
     return NextResponse.json(
       { error: '发表评论失败' },
       { status: 500 },

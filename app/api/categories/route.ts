@@ -7,9 +7,12 @@
 import { NextResponse } from 'next/server';
 
 import { getCategoriesWithCount } from '@/services';
+import { apiLogger, defaultLogger } from '@/utils/logger';
 
 export async function GET() {
   try {
+    apiLogger.info('[GET /api/categories]');
+
     const categories = await getCategoriesWithCount();
 
     return NextResponse.json(
@@ -22,7 +25,7 @@ export async function GET() {
       },
     );
   } catch (error) {
-    console.error('获取分类失败:', error);
+    defaultLogger.error('获取分类失败:', error);
     return NextResponse.json(
       { error: '获取分类失败' },
       { status: 500 },

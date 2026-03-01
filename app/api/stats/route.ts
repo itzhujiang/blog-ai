@@ -7,6 +7,7 @@
 import { NextRequest, NextResponse } from 'next/server';
 
 import { getArticleStats, incrementViewCount } from '@/services';
+import { apiLogger, defaultLogger } from '@/utils/logger';
 
 const MAX_IDS = 50;
 
@@ -17,6 +18,8 @@ export async function GET(request: NextRequest) {
       .split(',')
       .map((s) => parseInt(s.trim(), 10))
       .filter((n) => !isNaN(n) && n > 0);
+
+    apiLogger.info(`[GET /api/stats] ids=${idsParam}, count=${ids.length}`);
 
     if (ids.length === 0) {
       return NextResponse.json(
@@ -39,7 +42,7 @@ export async function GET(request: NextRequest) {
       { headers: { 'Cache-Control': 'no-store' } },
     );
   } catch (error) {
-    console.error('获取统计数据失败:', error);
+    defaultLogger.error('获取统计数据失败:', error);
     return NextResponse.json(
       { error: '获取统计数据失败' },
       { status: 500 },
@@ -51,6 +54,8 @@ export async function POST(request: NextRequest) {
   try {
     const body = await request.json();
     const articleId = Number(body.articleId);
+
+    apiLogger.info(`[POST /api/stats] articleId=${articleId}`);
 
     if (!articleId || isNaN(articleId)) {
       return NextResponse.json(
@@ -73,7 +78,7 @@ export async function POST(request: NextRequest) {
       { headers: { 'Cache-Control': 'no-store' } },
     );
   } catch (error) {
-    console.error('更新阅读量失败:', error);
+    defaultLogger.error('更新阅读量失败:', error);
     return NextResponse.json(
       { error: '更新阅读量失败' },
       { status: 500 },

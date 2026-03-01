@@ -1,6 +1,9 @@
 'use client';
 
+import type { AxiosError } from 'axios';
 import React, { useCallback, useEffect, useState } from 'react';
+
+import { http } from '@/utils/http';
 
 import type { CaptchaResponse, CommentPostBody } from '../types';
 
@@ -31,9 +34,7 @@ export function CommentForm({
 
   const fetchCaptcha = useCallback(async () => {
     try {
-      const res = await fetch('/api/captcha');
-      if (!res.ok) return;
-      const data: CaptchaResponse = await res.json();
+      const data = await http.get<CaptchaResponse>('/captcha');
       setCaptchaSvg(data.svg);
       setCaptchaToken(data.token);
       setCaptchaAnswer('');
@@ -77,16 +78,7 @@ export function CommentForm({
       const trimmedEmail = authorEmail.trim();
       if (trimmedEmail) body.authorEmail = trimmedEmail;
 
-      const res = await fetch('/api/comments', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(body),
-      });
-
-      if (!res.ok) {
-        const data = await res.json();
-        throw new Error(data.error || '提交失败');
-      }
+      await http.post('/comments', body);
 
       setAuthorName('');
       setAuthorEmail('');
@@ -98,7 +90,9 @@ export function CommentForm({
 
       setTimeout(() => setSuccess(''), 3000);
     } catch (err) {
-      setError(err instanceof Error ? err.message : '提交失败，请重试');
+      const axiosErr = err as AxiosError<{ error?: string }>;
+      const message = axiosErr.response?.data?.error || '提交失败，请重试';
+      setError(message);
       fetchCaptcha();
     } finally {
       setSubmitting(false);

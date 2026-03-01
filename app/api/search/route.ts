@@ -8,6 +8,7 @@ import { NextRequest, NextResponse } from 'next/server';
 
 import { searchArticles, logSearch } from '@/services';
 import type { SearchSortType } from '@/services';
+import { apiLogger, defaultLogger } from '@/utils/logger';
 
 const PAGE_SIZE = 10;
 
@@ -17,6 +18,8 @@ export async function GET(request: NextRequest) {
     const rawQuery = (searchParams.get('q') || '').trim().slice(0, 100);
     const page = Math.max(1, parseInt(searchParams.get('page') || '1', 10) || 1);
     const sort = (searchParams.get('sort') || 'relevance') as SearchSortType;
+
+    apiLogger.info(`[GET /api/search] q=${rawQuery}, page=${page}, sort=${sort}`);
 
     if (!rawQuery) {
       return NextResponse.json(
@@ -46,7 +49,7 @@ export async function GET(request: NextRequest) {
       },
     );
   } catch (error) {
-    console.error('搜索失败:', error);
+    defaultLogger.error('搜索失败:', error);
     return NextResponse.json(
       { error: '搜索失败' },
       { status: 500 },

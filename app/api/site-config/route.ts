@@ -6,6 +6,7 @@
 
 import { NextResponse } from 'next/server';
 
+import { apiLogger, defaultLogger } from '@/utils/logger';
 import { SiteSetting } from '@/utils/models';
 
 const DEFAULT_SITE_CONFIG = {
@@ -15,6 +16,8 @@ const DEFAULT_SITE_CONFIG = {
 
 export async function GET() {
   try {
+    apiLogger.info('[GET /api/site-config]');
+
     // 并行获取标题和描述
     const [titleSetting, descriptionSetting] = await Promise.all([
       SiteSetting.findOne({
@@ -36,7 +39,7 @@ export async function GET() {
       },
     });
   } catch (error) {
-    console.error('获取网站配置失败:', error);
+    defaultLogger.error('获取网站配置失败:', error);
     return NextResponse.json(
       {
         success: false,

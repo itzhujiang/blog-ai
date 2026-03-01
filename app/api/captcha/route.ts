@@ -6,9 +6,12 @@
 import { NextResponse } from 'next/server';
 
 import { generateCaptcha } from '@/utils/captcha';
+import { apiLogger, defaultLogger } from '@/utils/logger';
 
 export async function GET() {
   try {
+    apiLogger.info('[GET /api/captcha]');
+
     const { svg, token } = generateCaptcha();
 
     return NextResponse.json(
@@ -16,7 +19,7 @@ export async function GET() {
       { headers: { 'Cache-Control': 'no-store' } },
     );
   } catch (error) {
-    console.error('生成验证码失败:', error);
+    defaultLogger.error('生成验证码失败:', error);
     return NextResponse.json(
       { error: '生成验证码失败' },
       { status: 500 },

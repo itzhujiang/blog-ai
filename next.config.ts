@@ -12,7 +12,7 @@ const nextConfig: NextConfig = {
     remotePatterns: [
       {
         protocol: 'http',
-        hostname: '192.168.2.106',
+        hostname: 'localhost',
         port: '8089',
         pathname: '/**',
       },
@@ -35,6 +35,15 @@ const nextConfig: NextConfig = {
           },
         ],
       },
+    ];
+  },
+  // 转发 ai请求到后端服务
+  rewrites: async () => {
+    return [
+      {
+        source: '/api/ai/:path*',
+        destination: `${process.env.AI_BASE_URL}/:path*`, // 移除 /api/ai，避免路径重复
+      }
     ];
   },
 };

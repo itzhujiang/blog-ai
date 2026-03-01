@@ -7,8 +7,10 @@
  * - paths 为需要刷新的路径数组，每项以 / 开头，最多 20 个
  */
 
-import { NextRequest, NextResponse } from 'next/server';
 import { revalidatePath } from 'next/cache';
+import { NextRequest, NextResponse } from 'next/server';
+
+import { apiLogger, defaultLogger } from '@/utils/logger';
 
 const MAX_PATHS = 20;
 
@@ -16,6 +18,8 @@ export async function POST(request: NextRequest) {
   try {
     const body = await request.json();
     const { secret, paths } = body;
+
+    apiLogger.info(`[POST /api/revalidate] paths count=${paths?.length || 0}`);
 
     // 验证密钥
     const expectedSecret = process.env.REVALIDATION_SECRET;
@@ -62,7 +66,7 @@ export async function POST(request: NextRequest) {
       paths,
     });
   } catch (error) {
-    console.error('Revalidation 失败:', error);
+    defaultLogger.error('Revalidation 失败:', error);
     return NextResponse.json(
       { error: 'Revalidation 失败' },
       { status: 500 },

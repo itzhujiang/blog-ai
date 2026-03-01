@@ -11,7 +11,7 @@ import { Sequelize } from 'sequelize';
 export function commentCountAttribute(): [
   ReturnType<typeof Sequelize.literal>,
   string,
-] {
+  ] {
   return [
     Sequelize.literal(
       '(SELECT COUNT(*) FROM comments'

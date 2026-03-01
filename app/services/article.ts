@@ -5,7 +5,12 @@
 import axios from 'axios';
 import { Sequelize } from 'sequelize';
 
+import type { ArticleItem } from '@/components/LatestArticles';
 import { getArticleFileUrl } from '@/utils/file-url';
+import { defaultLogger } from '@/utils/logger';
+
+import type { ArticleDetail } from '../articles/[slug]/types';
+import type { ArticleListItem, CategoryTag, SortType } from '../articles/types';
 
 import {
   commentCountAttribute,
@@ -15,9 +20,6 @@ import {
 } from './helpers';
 
 // 复用已有类型
-import type { ArticleItem } from '@/components/LatestArticles';
-import type { ArticleListItem, CategoryTag, SortType } from '../articles/types';
-import type { ArticleDetail } from '../articles/[slug]/types';
 
 /**
  * 获取最新文章（首页用）
@@ -72,7 +74,7 @@ export async function getLatestArticles(
       categoryName: article.articleCategories?.[0]?.category?.name || undefined,
     }));
   } catch (error) {
-    console.error('获取文章失败:', error);
+    defaultLogger.error('获取文章失败:', error);
     return [];
   }
 }
@@ -169,7 +171,7 @@ export async function getArticles(
 
     return { articles, total: count };
   } catch (error) {
-    console.error('获取文章列表失败:', error);
+    defaultLogger.error('获取文章列表失败:', error);
     return { articles: [], total: 0 };
   }
 }
@@ -229,7 +231,7 @@ export async function getArticleBySlug(
         const response = await axios.get<string>(fileUrl, { timeout: 10000 });
         content = response.data;
       } catch (err) {
-        console.error('获取文章内容文件失败:', err);
+        defaultLogger.error('获取文章内容文件失败:', err);
       }
     }
 
@@ -248,7 +250,7 @@ export async function getArticleBySlug(
       content,
     };
   } catch (error) {
-    console.error('获取文章详情失败:', error);
+    defaultLogger.error('获取文章详情失败:', error);
     return null;
   }
 }

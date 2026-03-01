@@ -2,6 +2,8 @@
 
 import { useEffect, useState } from 'react';
 
+import { http } from '@/utils/http';
+
 import type { ArticleListItem } from '../types';
 
 import { ArticleCard } from './ArticleCard';
@@ -25,8 +27,7 @@ export function ArticleListClient({ articles }: ArticleListClientProps) {
     let cancelled = false;
     const ids = articles.map((a) => a.id).join(',');
 
-    fetch(`/api/stats?ids=${ids}`)
-      .then((res) => res.json())
+    http.get<{ stats?: Record<string, { viewCount: number }> }>('/stats', { params: { ids } })
       .then((data) => {
         if (!cancelled && data.stats) {
           const map: Record<number, { viewCount: number }> = {};

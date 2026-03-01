@@ -4,7 +4,7 @@
  */
 
 // 后端服务的基础 URL
-const BACKEND_BASE_URL = process.env.BACKEND_BASE_URL || 'http://192.168.2.106:8089';
+const BACKEND_BASE_URL = process.env.BACKEND_BASE_URL || '';
 
 /**
  * 将数据库中的相对路径转换为完整的 URL

@@ -5,6 +5,7 @@
  */
 
 import crypto from 'crypto';
+
 import svgCaptcha from 'svg-captcha';
 
 const CAPTCHA_EXPIRE_MS = 5 * 60 * 1000; // 5 分钟

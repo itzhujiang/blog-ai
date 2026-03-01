@@ -4,6 +4,10 @@
 
 import { Op, Sequelize } from 'sequelize';
 
+import { defaultLogger } from '@/utils/logger';
+
+import type { SearchResultItem } from '../search/types';
+
 import {
   commentCountAttribute,
   getVirtualInt,
@@ -12,7 +16,6 @@ import {
   escapeLikePattern,
 } from './helpers';
 
-import type { SearchResultItem } from '../search/types';
 
 export type SearchSortType = 'relevance' | 'latest' | 'comments';
 
@@ -97,7 +100,7 @@ export async function searchArticles(
 
     return { articles, total: count };
   } catch (error) {
-    console.error('搜索失败:', error);
+    defaultLogger.error('搜索失败:', error);
     return { articles: [], total: 0 };
   }
 }

@@ -1,8 +1,9 @@
 'use client';
 
-import { useState } from 'react';
+import React, { useState } from 'react';
 
 import { useCountdown } from '@/utils/hook';
+import { http } from '@/utils/http';
 
 import { showMessage } from '../utils/utils';
 
@@ -52,6 +53,29 @@ export function PhoneDialog({ visible = false, onClose }: PhoneDialogProps) {
     }
   };
 
+  const onLoginSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!formData.phone) {
+      showMessage({ type: 'error', message: '请输入手机号' });
+      return;
+    }
+    if (!/^[1](([3-9][0-9]))[0-9]{8}$/.test(formData.phone)) {
+      showMessage({ type: 'error', message: '请输入正确的手机号' });
+      return;
+    }
+    if (!formData.code) {
+      showMessage({ type: 'error', message: '请输入验证码' });
+      return;
+    }
+    const res = await http.post('/api/ai/ai-user/aiLogin', {
+      phone: formData.phone,
+      code: formData.code
+    });
+    console.log('res', res);
+    
+    
+  };
+
   return (
     <Modal visible={visible}>
       <ModalContainer>
@@ -66,7 +90,7 @@ export function PhoneDialog({ visible = false, onClose }: PhoneDialogProps) {
             <h2 className='text-muji-brown dark:text-slate-100 text-2xl font-bold tracking-tight'>手机号验证</h2>
             <p className='text-muji-taupe dark:text-slate-400 text-sm mt-2'>因: AI服务需要消耗token，使用的是我的账户，无法随意供人使用，需要手机验证</p>
           </div>
-          <form className='space-y-5' >
+          <form className='space-y-5' onSubmit={(e) => onLoginSubmit(e)}>
             <div className='space-y-1.5'>
               <label className='text-muji-brown dark:text-slate-200 text-sm font-medium ml-1'>手机号</label>
               <div className='relative flex items-center mt-1'>

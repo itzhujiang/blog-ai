@@ -2,6 +2,8 @@
 
 import { useEffect, useState } from 'react';
 
+import { http } from '@/utils/http';
+
 import type { ArticleStatsData } from '../types';
 
 export interface ArticleStatsProps {
@@ -18,17 +20,12 @@ export function ArticleStats({ articleId }: ArticleStatsProps) {
   useEffect(() => {
     let cancelled = false;
 
-    fetch('/api/stats', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ articleId }),
-    })
-      .then((res) => res.json())
+    http.post<{ viewCount?: number; readingTime?: number }>('/stats', { articleId })
       .then((data) => {
         if (!cancelled && data.viewCount !== undefined) {
           setStats({
             viewCount: data.viewCount,
-            readingTime: data.readingTime,
+            readingTime: data.readingTime ?? 0,
           });
         }
       })

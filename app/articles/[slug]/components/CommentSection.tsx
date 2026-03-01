@@ -2,6 +2,8 @@
 
 import { useCallback, useEffect, useState } from 'react';
 
+import { http } from '@/utils/http';
+
 import type { CommentItem as CommentItemType } from '../types';
 
 import { CommentForm } from './CommentForm';
@@ -48,9 +50,10 @@ export function CommentSection({ articleId }: CommentSectionProps) {
   const fetchComments = useCallback(async () => {
     try {
       setError('');
-      const res = await fetch(`/api/comments?articleId=${articleId}`);
-      if (!res.ok) throw new Error('加载失败');
-      const data = await res.json();
+      const data = await http.get<{
+        comments: Omit<CommentItemType, 'replies'>[];
+        total: number;
+      }>('/comments', { params: { articleId } });
       const tree = buildCommentTree(data.comments);
       setComments(tree);
       setTotal(data.total);

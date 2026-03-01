@@ -1,8 +1,8 @@
 import type { Metadata } from 'next';
 import { notFound } from 'next/navigation';
 
-import { getThumbnailUrl } from '@/utils/file-url';
 import { getArticleBySlug } from '@/services';
+import { getThumbnailUrl } from '@/utils/file-url';
 
 import {
   Breadcrumb,

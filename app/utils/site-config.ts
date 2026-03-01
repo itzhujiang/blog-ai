@@ -4,6 +4,8 @@
  * 客户端组件使用 /api/site-config 端点
  */
 
+import { defaultLogger } from './logger';
+
 /**
  * 网站配置项类型
  */
@@ -61,7 +63,7 @@ export async function getSiteConfigSSR(): Promise<SiteConfig> {
       footerCopyright: copyrightSetting?.settingValue || DEFAULT_SITE_CONFIG.footerCopyright,
     };
   } catch (error) {
-    console.error('获取网站配置失败:', error);
+    defaultLogger.error('获取网站配置失败:', error);
     return DEFAULT_SITE_CONFIG;
   }
 }
