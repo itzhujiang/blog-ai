@@ -20,7 +20,7 @@ export function ArticleStats({ articleId }: ArticleStatsProps) {
   useEffect(() => {
     let cancelled = false;
 
-    http.post<{ viewCount?: number; readingTime?: number }>('/stats', { articleId })
+    http.post<{ viewCount?: number; readingTime?: number }>('api/stats', { articleId })
       .then((data) => {
         if (!cancelled && data.viewCount !== undefined) {
           setStats({

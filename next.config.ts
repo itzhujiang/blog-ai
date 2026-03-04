@@ -42,7 +42,11 @@ const nextConfig: NextConfig = {
     return [
       {
         source: '/api/ai/:path*',
-        destination: `${process.env.AI_BASE_URL}/:path*`, // 移除 /api/ai，避免路径重复
+        destination: `${process.env.AI_BASE_URL}/api/ai/:path*`,
+      },
+      {
+        source: '/api/tool/:path*',
+        destination: `${process.env.AI_BASE_URL}/api/tool/:path*`,
       }
     ];
   },

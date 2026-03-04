@@ -8,6 +8,8 @@ import axios, {
   type AxiosRequestConfig,
 } from 'axios';
 
+import { showMessage } from '@/utils/utils';
+
 /**
  * 响应拦截器已提取 response.data，
  * 重新声明接口让 TS 知道返回值是 T 而非 AxiosResponse<T>
@@ -20,33 +22,87 @@ interface Http extends AxiosInstance {
   delete<T = unknown>(_url: string, _config?: AxiosRequestConfig): Promise<T>;
 }
 
-const instance = axios.create({
-  baseURL: process.env.NEXT_PUBLIC_API_URL || '',
-  timeout: 10000,
-  headers: {
-    'Content-Type': 'application/json',
-  },
-});
+type ResponseFormatType = 'arr' | 'obj';
 
-// 请求拦截器
-instance.interceptors.request.use(
-  (config) => {
-    // 可以添加认证 token 等
-    return config;
-  },
-  (error) => {
-    return Promise.reject(error);
-  }
-);
+type ResponseType<T, C extends ResponseFormatType = 'arr'> = {
+  code: 200 | 401 | 500;
+  data: {
+    data: C extends 'arr' ? Array<T> : T;
+    pagination: {
+      page: number;
+      size: number;
+      total: number;
+    };
+  } | null;
+  msg: string;
+};
 
-// 响应拦截器
-instance.interceptors.response.use(
-  (response) => response.data,
-  (error) => {
-    // 客户端环境，使用 console.error
-    console.error('请求失败:', error.message);
-    return Promise.reject(error);
-  }
-);
+type AiHttp = Omit<AxiosInstance, 'get' | 'post' | 'put' | 'delete'> & {
+  get<T = null, D = null, C extends ResponseFormatType = 'arr'>(
+    _url: string,
+    _config?: AxiosRequestConfig<T>
+  ): Promise<ResponseType<D, C>>;
+  post<T = null, D = null, C extends ResponseFormatType = 'arr'>(
+    _url: string,
+    _data?: T,
+    _config?: AxiosRequestConfig
+  ): Promise<ResponseType<D, C>>;
+  put<T = null, D = null, C extends ResponseFormatType = 'arr'>(
+    _url: string,
+    _data?: T,
+    _config?: AxiosRequestConfig
+  ): Promise<ResponseType<D, C>>;
+  delete<T = null, D = null, C extends ResponseFormatType = 'arr'>(
+    _url: string,
+    _config?: AxiosRequestConfig<T>
+  ): Promise<ResponseType<D, C>>;
+};
 
-export const http = instance as Http;
+type Server = 'ai' | '';
+
+const instance = <T extends Server>(server: T) => {
+  const request = axios.create({
+    baseURL: process.env.NEXT_PUBLIC_API_URL || '',
+    timeout: 10000,
+    headers: {
+      'Content-Type': 'application/json',
+    },
+  });
+
+  // 请求拦截器
+  request.interceptors.request.use(
+    (config) => {
+      // 可以添加认证 token 等
+      return config;
+    },
+    (error) => {
+      return Promise.reject(error);
+    }
+  );
+
+  // 响应拦截器
+  request.interceptors.response.use(
+    (response) => response.data,
+    (error) => {
+      if (server === 'ai') {
+        if (error.response.status === 500) {
+          showMessage({
+            message: '服务器异常',
+            type: 'error',
+          });
+        }
+        if (error.response.status === 401) {
+          showMessage({
+            message: '权限不通，请重新登录',
+            type: 'error',
+          });
+        }
+      }
+      return Promise.reject(error);
+    }
+  );
+  return request as T extends 'ai' ? AiHttp : Http;
+};
+
+export const http = instance('');
+export const aiHttp = instance('ai');

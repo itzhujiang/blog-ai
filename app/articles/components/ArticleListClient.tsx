@@ -27,7 +27,7 @@ export function ArticleListClient({ articles }: ArticleListClientProps) {
     let cancelled = false;
     const ids = articles.map((a) => a.id).join(',');
 
-    http.get<{ stats?: Record<string, { viewCount: number }> }>('/stats', { params: { ids } })
+    http.get<{ stats?: Record<string, { viewCount: number }> }>('api/stats', { params: { ids } })
       .then((data) => {
         if (!cancelled && data.stats) {
           const map: Record<number, { viewCount: number }> = {};

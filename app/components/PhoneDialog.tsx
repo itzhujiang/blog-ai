@@ -3,7 +3,7 @@
 import React, { useState } from 'react';
 
 import { useCountdown } from '@/utils/hook';
-import { http } from '@/utils/http';
+import { aiHttp } from '@/utils/http';
 
 import { showMessage } from '../utils/utils';
 
@@ -39,7 +39,7 @@ export function PhoneDialog({ visible = false, onClose }: PhoneDialogProps) {
   /**
    * 发送验证码点击事件
    */
-  const onSendCodeClick = () => {
+  const onSendCodeClick = async () => {
     if (!isSending) {
       if (!formData.phone) {
         showMessage({ type: 'error', message: '请输入手机号' });
@@ -49,7 +49,21 @@ export function PhoneDialog({ visible = false, onClose }: PhoneDialogProps) {
         showMessage({ type: 'error', message: '请输入正确的手机号' });
         return;
       }
-      startCountdown(60);
+      const res = await aiHttp.post('/api/tool/code/sendPhoneCode', {
+        phone: formData.phone
+      });
+      if (res.code === 200) {
+        startCountdown(60);
+        showMessage({
+          message: res.msg,
+          type: 'success'
+        });
+      } else {
+        showMessage({
+          message: res.msg,
+          type: 'error'
+        });
+      }
     }
   };
 
@@ -67,11 +81,22 @@ export function PhoneDialog({ visible = false, onClose }: PhoneDialogProps) {
       showMessage({ type: 'error', message: '请输入验证码' });
       return;
     }
-    const res = await http.post('/api/ai/ai-user/aiLogin', {
+    const res = await aiHttp.post('/api/ai/ai-user/aiLogin', {
       phone: formData.phone,
       code: formData.code
     });
-    console.log('res', res);
+    if (res.code === 200) {
+      showMessage({
+        message: res.msg,
+        type: 'success'
+      });
+      onClose && onClose();
+    } else {
+      showMessage({
+        message: res.msg,
+        type: 'error'
+      });
+    }
     
     
   };
