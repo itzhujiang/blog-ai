@@ -1,29 +1,133 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useActionState } from 'react';
 
-import { PhoneDialog } from './PhoneDialog';
+import aiEventSource from '@/app/utils/chatEventSource';
+import { SessionListResponseType } from '@/requests/index';
+
+import { ChatMessage } from '../utils/types';
+import { showMessage } from '../utils/utils';
+
+import AiDialogue from './AiDialogue';
+import AiSessionList from './AiSessionList';
+
 
 export default function AiChat() {
   const [isAiChatVisible, setVisible] = useState(false);
-  const [isPhoneDialogVisible, setPhoneDialogVisible] = useState(false);
+  const [_state, formAction, isPending] = useActionState(submitAction, '');
+  const [messages, setMessages] = useState<ChatMessage[]>([]);
+  const [sessionList, setSessionList] = useState<SessionListResponseType[]>([]);
+  const [tab, setTab] = useState<1 | 2>(1);
+  const [param, setParam] = useState({
+    page: 1,
+    size: 10,
+  });
+  const [isLoading, setLoading] = useState(false);
+  const [terminate, setTerminate] = useState(false);
+  const [sessionId, setSessionId] = useState(0); // 当前选中的会话id
+
+  /**
+   * 提交
+   * @param previousState
+   * @param formData
+   * @returns
+   */
+  async function submitAction(previousState: string, formData: FormData) {
+    const message = formData.get('message');
+    if (!message) {
+      showMessage({
+        message: '请输入消息',
+        type: 'error'
+      });
+      return '';
+    }
+    await aiEventSource.sendMessage(message!.toString());
+    return '';
+  };
+
+  /**
+   * 处理消息
+   */
+  const handleMessage = () => {
+    aiEventSource.onUpdateMessage = (msg) => {
+      setMessages([
+        ...messages,
+        ...msg
+      ]);
+    };
+  };
+
+  const handleSession = () => {
+    aiEventSource.onUpdateSession = (session) => {
+      setSessionList([
+        ...sessionList,
+        ...session
+      ]);
+    };
+  };
 
   /**
    * 点击显示AI聊天窗口时，先进行数据校验，如果校验通过则显示窗口，否则提示用户进行手机号验证
    */
-  const onVisibleClick = () => {
-    if (!isAiChatVisible) {
-      console.log('数据校验');
-      setPhoneDialogVisible(true);
+  const onVisibleClick = async () => {
+    setVisible(!isAiChatVisible);
+    handleMessage();
+    handleSession();
+    aiEventSource.resetMessages();
+    aiEventSource.createConnection();
+  };
+  /**
+   * 滚动触发获取Session列表
+   * @returns 
+   */
+  const onSessionScoll = async () => {
+    if (isLoading || terminate) {
       return;
     }
-    setVisible(!isAiChatVisible);
+    setLoading(true);
+    const res = await aiEventSource.getSessionList({
+      page: param.page, size: param.size, sort: 'DESC'
+    }).catch(err => {
+      console.log('err', err);
+    });
+    setParam({
+      ...param,
+      page: param.page + 1
+    });
+    if (res?.data?.pagination.total || 0 <= sessionList.length) {
+      setTerminate(true);
+    }
+    setLoading(false);
   };
 
+  /**
+   * 列表、聊天切换
+   */
+  const onTabSwitchClcik = async (tab: 1 | 2 = 1) => {
+    if (tab === 2) {
+      setParam({
+        ...param,
+        page: 0
+      });
+      aiEventSource.resetSessionList();
+    }
+    setTab(tab);
+  };
+
+  /**
+   * 点击选择对应的会话
+   * @param id 
+   */
+  const onSelectSessionClick = (id: number) => {
+    setSessionId(id);
+  };
+
+  
   return (
-    <div className="absolute bottom-10 right-10 flex flex-col items-end">
-      {
-        isAiChatVisible ? <div className="w-80 z-50 sm:w-96 flex flex-col overflow-hidden rounded-xl border border-primary/20 bg-background-light shadow-natural-hover dark:bg-background-dark md:w-[400px] mb-5">
+    <div className="absolute bottom-10 right-10 flex flex-col items-end z-30">
+      { isAiChatVisible ?
+        <div className="z-50 w-full max-w-[90vw] h-[70vh] flex flex-col overflow-hidden rounded-xl border border-primary/20 bg-background-light shadow-natural-hover dark:bg-background-dark sm:w-96 sm:h-[500px] md:w-[500px] md:h-[600px] mb-5">
+          {/* 头部 */}
           <div className="flex items-center justify-between bg-primary/10 p-4 border-b border-primary/20">
             <div className="flex items-center gap-2">
               <span className="material-symbols-outlined text-primary">smart_toy</span>
@@ -33,26 +137,44 @@ export default function AiChat() {
               <span className="material-symbols-outlined">close</span>
             </button>
           </div>
-          <div className="h-80 overflow-y-auto p-4 flex flex-col gap-4">
 
+          {/* Tab 功能区 */}
+          <div className="flex items-center gap-1 p-2 bg-background-light/50 dark:bg-background-dark/50 border-b border-primary/10">
+            <button
+              className={`flex items-center justify-center gap-1.5 px-4 py-2 rounded-lg transition-all cursor-pointer flex-1 ${
+                tab === 1
+                  ? 'bg-primary/20 text-primary dark:bg-primary/30 dark:text-primary'
+                  : 'text-text-light/70 dark:text-text-dark/70 hover:bg-primary/10'
+              }`}
+              onClick={() => onTabSwitchClcik(1)}
+            >
+              <span className='material-symbols-outlined !text-lg'>forum</span>
+              <span className="text-sm font-medium">聊天</span>
+            </button>
+
+            <button
+              className={`flex items-center justify-center gap-1.5 px-4 py-2 rounded-lg transition-all cursor-pointer flex-1 ${
+                tab === 2
+                  ? 'bg-primary/20 text-primary dark:bg-primary/30 dark:text-primary'
+                  : 'text-text-light/70 dark:text-text-dark/70 hover:bg-primary/10'
+              }`}
+              onClick={() => onTabSwitchClcik(2)}
+            >
+              <span className='material-symbols-outlined !text-lg'>history</span>
+              <span className="text-sm font-medium">历史</span>
+            </button>
           </div>
-          <div className="p-4 border-t border-primary/10">
-            <div className="relative">
-              <form className="flex items-center">
-                <input className="w-full rounded-full border-primary/30 bg-background-light py-2 pl-4 pr-10 text-sm focus:border-primary focus:ring-1 focus:ring-primary dark:bg-background-dark dark:border-primary/50" placeholder="请输入消息" type="text"></input>
-                <button className="absolute right-2 flex size-8 items-center justify-center rounded-full bg-primary text-white hover:bg-primary/90 transition-colors">
-                  <span className="material-symbols-outlined !text-sm">send</span>
-                </button>
-              </form>
-            </div>  
-          </div>
-        </div> : ''
-      }
-      
+
+          {/* 内容区 */}
+          {
+            tab === 1 ? <AiDialogue formAction={formAction} isPending={isPending} messageList={messages}></AiDialogue> :  <AiSessionList sessionList={sessionList} onSessionPullUp={onSessionScoll} isLoading={isLoading} sessionId={sessionId} onSelectSessionClick={onSelectSessionClick}></AiSessionList>
+          }
+        </div>
+        : '' }
+
       <button className="flex h-14 w-14 items-center justify-center rounded-full bg-primary text-white shadow-natural hover:shadow-natural-hover transition-all duration-300 hover:scale-105 active:scale-95 cursor-pointer" onClick={onVisibleClick}>
         <span className="material-symbols-outlined !text-3xl">chat_bubble</span>
       </button>
-      <PhoneDialog visible={isPhoneDialogVisible} onClose={() => setPhoneDialogVisible(false)}></PhoneDialog>
     </div>
   );
 }

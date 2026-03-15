@@ -3,8 +3,10 @@ import Link from 'next/link';
 import type { ReactNode } from 'react';
 
 import { getThumbnailUrl } from '@/utils/file-url';
+import { formatDate } from '@/utils/utils';
 
 import type { SearchResultItem } from '../types';
+
 
 export interface SearchResultCardProps {
   article: SearchResultItem;
@@ -33,16 +35,6 @@ function highlightKeyword(text: string, keyword: string): ReactNode[] {
   );
 }
 
-/**
- * 格式化日期时间戳
- */
-function formatDate(timestamp: number | string | null): string {
-  if (!timestamp) return '';
-  const ms = typeof timestamp === 'string' ? parseInt(timestamp, 10) : timestamp;
-  if (isNaN(ms)) return '';
-  const date = new Date(ms);
-  return `${date.getFullYear()}年${date.getMonth() + 1}月${date.getDate()}日`;
-}
 
 /**
  * 搜索结果卡片

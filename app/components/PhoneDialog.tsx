@@ -1,40 +1,44 @@
 'use client';
 
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 
+import aiEventSource from '@/app/utils/chatEventSource';
+import { userInfoStore } from '@/store/index';
+import eventEmitter from '@/utils/eventEmitter';
 import { useCountdown } from '@/utils/hook';
-import { aiHttp } from '@/utils/http';
+
 
 import { showMessage } from '../utils/utils';
 
 import { Modal, ModalContainer, Input, Button } from './ui';
 
-
-export interface PhoneDialogProps {
-  /** 是否展示 */
-  visible?: boolean;
-  /** 点击关闭 */
-  onClose?: () => void;
-}
+import { getUserInfo, login, sendPhoneCode } from '@/requests/index';
 
 
-export function PhoneDialog({ visible = false, onClose }: PhoneDialogProps) {
-  
+export default function PhoneDialog() {
+  const { setUserInfo } = userInfoStore();
+
   const [formData, setFormData] = useState({
     phone: '',
     code: ''
   });
   const [countdown, isSending, startCountdown, clearCountdown] = useCountdown();
-  const [prevVisible, setPrevVisible] = useState(visible);
+  const [visible, setVisible] = useState(false);
+  const [isChat, setIsChat] = useState(false);
 
-  // 渲染期状态调整：仅在弹窗从关闭→打开时重置表单
-  if (visible && !prevVisible) {
+  useEffect(() => {
+    const handleUnAuth = (isChat: boolean = false) => {
+      setVisible(true);
+      setIsChat(isChat);
+    };
+    eventEmitter.on('API:UN_AUTH', handleUnAuth);
+  }, []);
+
+  const onClose = () => {
+    setVisible(false);
     setFormData({ phone: '', code: '' });
     clearCountdown();
-  }
-  if (visible !== prevVisible) {
-    setPrevVisible(visible);
-  }
+  };
 
   /**
    * 发送验证码点击事件
@@ -49,7 +53,7 @@ export function PhoneDialog({ visible = false, onClose }: PhoneDialogProps) {
         showMessage({ type: 'error', message: '请输入正确的手机号' });
         return;
       }
-      const res = await aiHttp.post('/api/tool/code/sendPhoneCode', {
+      const res = await sendPhoneCode({
         phone: formData.phone
       });
       if (res.code === 200) {
@@ -81,16 +85,29 @@ export function PhoneDialog({ visible = false, onClose }: PhoneDialogProps) {
       showMessage({ type: 'error', message: '请输入验证码' });
       return;
     }
-    const res = await aiHttp.post('/api/ai/ai-user/aiLogin', {
-      phone: formData.phone,
-      code: formData.code
-    });
+    const res = await login(formData);
     if (res.code === 200) {
+      const result = await getUserInfo();
+      if (result.code !== 200) {
+        showMessage({
+          message: res.msg,
+          type: 'error'
+        });
+        return;
+      }
+      if (isChat) {
+        aiEventSource.createConnection();
+      }
+      setUserInfo({
+        id: result.data?.data.id,
+        phone: result.data?.data.phone,
+        isLogin: true,
+      });
       showMessage({
         message: res.msg,
         type: 'success'
       });
-      onClose && onClose();
+      onClose();
     } else {
       showMessage({
         message: res.msg,

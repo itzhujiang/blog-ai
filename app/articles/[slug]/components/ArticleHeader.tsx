@@ -2,6 +2,7 @@ import Image from 'next/image';
 import Link from 'next/link';
 
 import { getThumbnailUrl } from '@/utils/file-url';
+import { formatDate } from '@/utils/utils';
 
 import type { ArticleDetail } from '../types';
 
@@ -9,21 +10,6 @@ export interface ArticleHeaderProps {
   article: ArticleDetail;
 }
 
-/**
- * 格式化日期时间戳
- */
-function formatDate(timestamp: number | string | null): string {
-  if (!timestamp) return '';
-  const ms = typeof timestamp === 'string'
-    ? parseInt(timestamp, 10)
-    : timestamp;
-  if (isNaN(ms)) return '';
-  const date = new Date(ms);
-  const year = date.getFullYear();
-  const month = date.getMonth() + 1;
-  const day = date.getDate();
-  return `${year}年${month}月${day}日`;
-}
 
 /**
  * 文章头部组件：头图 + 标题 + 元信息（服务端组件）

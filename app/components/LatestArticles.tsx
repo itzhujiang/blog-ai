@@ -3,6 +3,8 @@ import Link from 'next/link';
 
 import { getThumbnailUrl } from '@/utils/file-url';
 
+import { formatDate } from '../utils/utils';
+
 /**
  * 文章数据接口
  */
@@ -20,19 +22,6 @@ export interface LatestArticlesProps {
   articles: ArticleItem[];
 }
 
-/**
- * 格式化日期
- */
-function formatDate(timestamp: number | string | null): string {
-  if (!timestamp) return '';
-  const ms = typeof timestamp === 'string' ? parseInt(timestamp, 10) : timestamp;
-  if (isNaN(ms)) return '';
-  const date = new Date(ms);
-  const year = date.getFullYear();
-  const month = date.getMonth() + 1;
-  const day = date.getDate();
-  return `${year}年${month}月${day}日`;
-}
 
 /**
  * 最新文章列表组件

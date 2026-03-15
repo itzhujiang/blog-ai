@@ -56,3 +56,6 @@ export interface ArticleStatsData {
   viewCount: number;
   readingTime: number;
 }
+
+export type { SubmitCommentResult } from '@/actions/comments';
+

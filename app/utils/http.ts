@@ -8,6 +8,7 @@ import axios, {
   type AxiosRequestConfig,
 } from 'axios';
 
+import eventEmitter from '@/utils/eventEmitter';
 import { showMessage } from '@/utils/utils';
 
 /**
@@ -24,7 +25,7 @@ interface Http extends AxiosInstance {
 
 type ResponseFormatType = 'arr' | 'obj';
 
-type ResponseType<T, C extends ResponseFormatType = 'arr'> = {
+export type ResponseType<T, C extends ResponseFormatType = 'arr'> = {
   code: 200 | 401 | 500;
   data: {
     data: C extends 'arr' ? Array<T> : T;
@@ -92,10 +93,13 @@ const instance = <T extends Server>(server: T) => {
           });
         }
         if (error.response.status === 401) {
+          console.log('error.response', error.response.config.url);
+
           showMessage({
             message: '权限不通，请重新登录',
             type: 'error',
           });
+          eventEmitter.emit('API:UN_AUTH', error.response.config.url === '/api/ai/ai-chat/chat' && 'chat');
         }
       }
       return Promise.reject(error);

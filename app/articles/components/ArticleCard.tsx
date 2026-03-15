@@ -1,6 +1,7 @@
 import Image from 'next/image';
 import Link from 'next/link';
 
+import { formatDate } from '@/app/utils/utils';
 import { getThumbnailUrl } from '@/utils/file-url';
 
 import type { ArticleListItem } from '../types';
@@ -8,20 +9,6 @@ import type { ArticleListItem } from '../types';
 export interface ArticleCardProps {
   article: ArticleListItem;
   viewCount?: number;
-}
-
-/**
- * 格式化日期时间戳
- */
-function formatDate(timestamp: number | string | null): string {
-  if (!timestamp) return '';
-  const ms = typeof timestamp === 'string' ? parseInt(timestamp, 10) : timestamp;
-  if (isNaN(ms)) return '';
-  const date = new Date(ms);
-  const year = date.getFullYear();
-  const month = date.getMonth() + 1;
-  const day = date.getDate();
-  return `${year}年${month}月${day}日`;
 }
 
 /**

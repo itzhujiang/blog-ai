@@ -4,6 +4,7 @@ import React from 'react';
 
 import AiChat from '@/components/AiChat';
 import { Header, Footer } from '@/components/layout';
+import PhoneDialog from '@/components/PhoneDialog';
 import { getSiteConfigSSR } from '@/utils/site-config';
 
 import './globals.css';
@@ -67,6 +68,7 @@ export default function RootLayout({
           </div>
           <div>
             <AiChat></AiChat>
+            <PhoneDialog></PhoneDialog>
           </div>
         </div>
       </body>

@@ -91,3 +91,43 @@ export const showMessage = (options: ShowMessageOptions) => {
     }, { once: true });
   }, duration);
 };
+
+/**
+ * 格式化日期时间
+ * @param timestamp 时间戳（毫秒）或时间戳字符串
+ * @param format 格式字符串，支持：
+ *   - 'YYYY年MM月DD日' (默认)
+ *   - 'YYYY-MM-DD'
+ *   - 'YYYY-MM-DD HH:mm:ss'
+ *   - 'YYYY.MM.DD'
+ * @returns 格式化后的日期字符串
+ */
+export const formatDate = (timestamp: number | string | null, format = 'YYYY年MM月DD日'): string => {
+  if (!timestamp) return '';
+
+  const ms = typeof timestamp === 'string'
+    ? parseInt(timestamp, 10)
+    : timestamp;
+
+  if (isNaN(ms)) return '';
+
+  const date = new Date(ms);
+  const year = date.getFullYear();
+  const month = date.getMonth() + 1;
+  const day = date.getDate();
+  const hours = date.getHours();
+  const minutes = date.getMinutes();
+  const seconds = date.getSeconds();
+
+  // 补零函数
+  const pad = (num: number): string => num.toString().padStart(2, '0');
+
+  // 替换格式字符串中的占位符
+  return format
+    .replace('YYYY', year.toString())
+    .replace('MM', pad(month))
+    .replace('DD', pad(day))
+    .replace('HH', pad(hours))
+    .replace('mm', pad(minutes))
+    .replace('ss', pad(seconds));
+};

@@ -53,7 +53,7 @@ export function CommentSection({ articleId }: CommentSectionProps) {
       const data = await http.get<{
         comments: Omit<CommentItemType, 'replies'>[];
         total: number;
-      }>('/comments', { params: { articleId } });
+      }>('/api/comments', { params: { articleId } });
       const tree = buildCommentTree(data.comments);
       setComments(tree);
       setTotal(data.total);

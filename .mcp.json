@@ -1,9 +1,5 @@
 {
   "mcpServers": {
-    "promptx": {
-      "command": "npx",
-      "args": ["-y", "@promptx/mcp-server"]
-    },
     "playwright": {
       "command": "npx",
       "args": [

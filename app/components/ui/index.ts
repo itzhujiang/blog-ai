@@ -21,3 +21,7 @@ export type { AvatarProps } from './Avatar';
 // Modal
 export { Modal, ModalContainer } from './Modal';
 export type { ModalProps, ModalContainerProps } from './Modal';
+
+// Loading
+export { Loading } from './Loading';
+export type { LoadingProps } from './Loading';

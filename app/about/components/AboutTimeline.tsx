@@ -1,20 +1,14 @@
 /**
  * 关于我页面 - 成长足迹时间线
  */
+import { formatDate } from '@/utils/utils';
+
 import type { AboutTimelineItem } from '../types';
 
 interface AboutTimelineProps {
   timeline: AboutTimelineItem[] | null;
 }
 
-/** 将时间戳格式化为 YYYY.MM.DD */
-function formatDate(timestamp: number): string {
-  const date = new Date(timestamp);
-  const y = date.getFullYear();
-  const m = String(date.getMonth() + 1).padStart(2, '0');
-  const d = String(date.getDate()).padStart(2, '0');
-  return `${y}.${m}.${d}`;
-}
 
 export default function AboutTimeline({ timeline }: AboutTimelineProps) {
   if (!timeline || timeline.length === 0) return null;
@@ -36,7 +30,7 @@ export default function AboutTimeline({ timeline }: AboutTimelineProps) {
               className={`relative transition-all duration-300 hover:pl-2 ${index < sorted.length - 1 ? 'mb-10' : ''}`}
             >
               <span className="mb-1 block text-xs font-medium text-text-light/70 dark:text-text-dark/70">
-                {formatDate(item.timestamp)}
+                {formatDate(item.timestamp, 'YYYY.MM.DD')}
               </span>
               <div className="absolute left-1 top-6 z-10 h-3 w-3 rounded-full bg-primary" />
               <div className="ml-8 rounded-xl border border-primary/20 bg-background-light p-6 shadow-natural transition-shadow duration-300 hover:shadow-natural-hover dark:border-primary/30 dark:bg-background-dark/50">
