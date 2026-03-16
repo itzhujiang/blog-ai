@@ -123,6 +123,16 @@ export async function Footer({ className }: FooterProps) {
         'text-center text-sm text-text-light/60 dark:text-text-dark/60'
       )}>
         <p>{siteConfig.footerCopyright}</p>
+        <p className="mt-2">
+          <a
+            href="https://beian.miit.gov.cn/"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="hover:text-cta-light dark:hover:text-cta-dark transition-colors"
+          >
+            豫ICP备2026009051号
+          </a>
+        </p>
       </div>
     </footer>
   );
