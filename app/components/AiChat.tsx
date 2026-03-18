@@ -1,11 +1,9 @@
 'use client';
-
 import { useState, useActionState } from 'react';
 
-import aiEventSource from '@/app/utils/chatEventSource';
-import { SessionListResponseType } from '@/requests/index';
+import { MessageListRequestType, SessionListResponseType } from '@/requests/index';
+import aiEventSource, { ChatMessage } from '@/utils/chatEventSource';
 
-import { ChatMessage } from '../utils/types';
 import { showMessage } from '../utils/utils';
 
 import AiDialogue from './AiDialogue';
@@ -18,14 +16,25 @@ export default function AiChat() {
   const [messages, setMessages] = useState<ChatMessage[]>([]);
   const [sessionList, setSessionList] = useState<SessionListResponseType[]>([]);
   const [tab, setTab] = useState<1 | 2>(1);
-  const [param, setParam] = useState({
+  const [sessionParam, setSessionParam] = useState({
     page: 1,
     size: 10,
   });
-  const [isLoading, setLoading] = useState(false);
-  const [terminate, setTerminate] = useState(false);
-  const [sessionId, setSessionId] = useState(0); // 当前选中的会话id
+  const [isSessionLoading, setSessionLoading] = useState(false);
+  const [isMessageLoading, setMessageLoading] = useState(false);
+  const [sessiionTerminate, setSessionTerminate] = useState(false);
+  const [messageTerminate, setMessageTerminate] = useState(false);
+  const [messageParam, setMessageParam] = useState<{
+    page: number,
+    size: number,
+    sessionId?: number
+  }>({
+    page: 1,
+    size: 10,
+    sessionId: undefined
+  }); // 当前选中的会话id
 
+  
   /**
    * 提交
    * @param previousState
@@ -75,29 +84,61 @@ export default function AiChat() {
     handleSession();
     aiEventSource.resetMessages();
     aiEventSource.createConnection();
+    await onSessionScoll();
   };
   /**
    * 滚动触发获取Session列表
    * @returns 
    */
   const onSessionScoll = async () => {
-    if (isLoading || terminate) {
+    if (isSessionLoading || sessiionTerminate) {
       return;
     }
-    setLoading(true);
+    setSessionLoading(true);
     const res = await aiEventSource.getSessionList({
-      page: param.page, size: param.size, sort: 'DESC'
+      page: sessionParam.page, size: sessionParam.size, sort: 'DESC'
     }).catch(err => {
       console.log('err', err);
     });
-    setParam({
-      ...param,
-      page: param.page + 1
+    setSessionParam({
+      ...sessionParam,
+      page: sessionParam.page + 1
     });
-    if (res?.data?.pagination.total || 0 <= sessionList.length) {
-      setTerminate(true);
+    if (res?.data?.pagination.total && res.data.pagination.total >= sessionList.length) {
+      setSessionTerminate(true);
     }
-    setLoading(false);
+    setSessionLoading(false);
+  };
+
+  /**
+   * 获取信息列表
+   * @param params 
+   * @returns 
+   */
+  const getMessageList = async (params: MessageListRequestType) => {
+    if (isMessageLoading || messageTerminate || !messageParam.sessionId) {
+      return;
+    }
+    setMessageLoading(false);
+    const res = await aiEventSource.getMessages(params).catch(err => {
+      console.log('err', err);
+    });
+    setMessageParam({
+      ...messageParam,
+      page: messageParam.page + 1,
+    });
+    if (res?.data?.pagination.total &&  res.data.pagination.total >= messages.length) {
+      setMessageTerminate(true);
+    }
+    setMessageLoading(false);
+  };
+
+  /**
+   * 消息列表滚动
+   * @returns 
+   */
+  const onMessageScoll = async () => {
+    getMessageList(messageParam);
   };
 
   /**
@@ -105,8 +146,8 @@ export default function AiChat() {
    */
   const onTabSwitchClcik = async (tab: 1 | 2 = 1) => {
     if (tab === 2) {
-      setParam({
-        ...param,
+      setSessionParam({
+        ...sessionParam,
         page: 0
       });
       aiEventSource.resetSessionList();
@@ -119,7 +160,13 @@ export default function AiChat() {
    * @param id 
    */
   const onSelectSessionClick = (id: number) => {
-    setSessionId(id);
+    setMessageParam({
+      page: 1,
+      size: 10,
+      sessionId: id
+    });
+    setMessageTerminate(false);
+    setTab(1);
   };
 
   
@@ -165,9 +212,8 @@ export default function AiChat() {
             </button>
           </div>
 
-          {/* 内容区 */}
           {
-            tab === 1 ? <AiDialogue formAction={formAction} isPending={isPending} messageList={messages}></AiDialogue> :  <AiSessionList sessionList={sessionList} onSessionPullUp={onSessionScoll} isLoading={isLoading} sessionId={sessionId} onSelectSessionClick={onSelectSessionClick}></AiSessionList>
+            tab === 1 ? <AiDialogue formAction={formAction} isPending={isPending} isLoading={isMessageLoading} messageList={messages} onMessagePullUp={onMessageScoll}></AiDialogue> :  <AiSessionList sessionList={sessionList} onSessionPullUp={onSessionScoll} isLoading={isSessionLoading} sessionId={massageParam.sessionId} onSelectSessionClick={onSelectSessionClick}></AiSessionList>
           }
         </div>
         : '' }

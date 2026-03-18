@@ -1,6 +1,7 @@
 import { aiHttp } from '@/utils/http';
 
-import { AiChatMessageRoleType, AiChatMessageType } from '../utils/types';
+import { AiChatMessageRoleType } from '../utils/chatEventSource';
+import { AiChatMessageType } from '../utils/types';
 
 export type ParamType = {
     /** 页码 */
@@ -45,9 +46,9 @@ export type MessageListRequestType = {
   id?: number;
   /** 排序 */
   sort?: 'ASC' | 'DESC'
-}
+} & ParamType
 
-type MessagesResponseType = {
+export type MessagesResponseType = {
   /** 消息id */
   id: number;
   /** 服务id */
@@ -64,19 +65,15 @@ type MessagesResponseType = {
   createdAt: number;
 }
 
+
 /**
  * 获取消息列表
- * @param param0
+ * @param param
  * @returns 
  */
-export const getMessageList = async ({ id, page = 1, size = 10, sort = 'ASC' }: ParamType & MessageListRequestType) => 
+export const getMessageList = async ( params: MessageListRequestType) => 
   await aiHttp.get<MessageListRequestType, MessagesResponseType, 'arr'>('/api/ai/ai-chat/getMessages', {
-    params: {
-      id,
-      page,
-      size,
-      sort
-    }
+    params
   });
 
 type SendMessageRequestType = {

@@ -82,6 +82,38 @@ body {
   font-family: var(--font-geist-sans), Arial, Helvetica, sans-serif;
 }
 
+/* 全局滚动条样式 */
+* {
+  scrollbar-width: thin;
+  scrollbar-color: rgba(212, 165, 116, 0.7) rgba(193, 154, 107, 0.12);
+}
+
+*::-webkit-scrollbar {
+  width: 10px;
+  height: 10px;
+}
+
+*::-webkit-scrollbar-track {
+  border-radius: 9999px;
+  background: rgba(193, 154, 107, 0.12);
+}
+
+*::-webkit-scrollbar-thumb {
+  border: 2px solid transparent;
+  border-radius: 9999px;
+  background: linear-gradient(180deg, rgba(212, 165, 116, 0.9) 0%, rgba(193, 154, 107, 0.88) 100%);
+  background-clip: padding-box;
+}
+
+*::-webkit-scrollbar-thumb:hover {
+  background: linear-gradient(180deg, rgba(212, 165, 116, 1) 0%, rgba(139, 111, 71, 0.95) 100%);
+  background-clip: padding-box;
+}
+
+*::-webkit-scrollbar-corner {
+  background: transparent;
+}
+
 /* 隐藏滚动条工具类 */
 .scrollbar-hide {
   -ms-overflow-style: none;

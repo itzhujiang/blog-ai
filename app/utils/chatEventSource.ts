@@ -1,20 +1,50 @@
+import { getMessageList, getSessionList, MessageListRequestType, ParamType, sendMessage, SessionListRequestType, SessionListResponseType } from '@/requests/index';
 import { aiHttp } from '@/utils/http';
 import { showMessage } from '@/utils/utils';
 
-import { ChatMessage, MessageType } from './types';
+/**
+ * 消息发送者类型
+ */
+export type AiChatMessageRoleType = 'user' | 'assistant' | 'system'
 
-import { getMessageList, getSessionList, ParamType, sendMessage, SessionListRequestType, SessionListResponseType } from '@/requests/index';
+export type MessageType = 'chunk' | 'done' | 'typing' | 'overall'
+
+
+/**
+ * AI 聊天消息
+ */
+export interface ChatMessage {
+  /** 客户端 ID */
+  localId?: string;
+  /** 服务端id */
+  serverId: string;
+  /** 消息内容 */
+  content?: string;
+  /** 发送者角色 */
+  role: AiChatMessageRoleType;
+  /** 创建时间 */
+  createdAt: number;
+  /** 消息状态 sending: 信息传输中，success：成功，fail: 失败 */
+  status: 'sending' | 'success' | 'fail',
+
+}
+
 /**
  * SSE 服务端推送的数据格式
  */
 export interface SSEMessage {
-  /** 消息类型 */
-  type: MessageType;
-  /** 消息内容（流式传输的文本片段） */
-  content?: string;
-  /** 服务端信息 ID */
+  /** 服务端id */
   serverId: string;
-  createdAt?: number;
+  /** 消息内容 */
+  content?: string;
+  /** 发送者角色 */
+  role: AiChatMessageRoleType;
+  /** 创建时间 */
+  createdAt: number;
+  /** 会话id */
+  sessionId: number;
+  /** 消息类型 */
+  msgType: MessageType;
 }
 
 
@@ -111,12 +141,12 @@ class SSE {
   private handleMessage(data: string) {
     console.log('data', data);
     const msg = JSON.parse(data) as SSEMessage;
-    switch (msg.type) {
+    switch (msg.msgType) {
       // 连接时信息
-      case 'connected':
+      case 'overall':
         const connectedMsg = [{
           serverId: msg.serverId,
-          role: 'system' as const,
+          role: msg.role,
           status: 'success' as const,
           content: msg.content,
           createdAt: msg.createdAt!
@@ -127,7 +157,7 @@ class SSE {
       case 'typing':
         const typingMsg = [{
           serverId: msg.serverId,
-          role: 'assistant' as const,
+          role:  msg.role,
           content: '',
           status: 'sending' as const,
           createdAt: msg.createdAt!
@@ -317,7 +347,12 @@ class SSE {
    * 获取会话信息
    * @param id 会话id
    */
-  async getMessages(id?: number, page: number = 1, size: number = 10, sort: 'ASC' | 'DESC' = 'ASC') {
+  async getMessages({
+    id,
+    page = 1,
+    size = 10,
+    sort = 'DESC'
+  }: MessageListRequestType) {
     const res = await getMessageList({
       id,
       page,
@@ -336,6 +371,7 @@ class SSE {
         };
       });
       result && this.setMessageList('push', result);
+      return res;
     } else {
       showMessage({
         message: res.msg,
@@ -348,14 +384,14 @@ class SSE {
    * 重置会话列表
    */
   resetSessionList() {
-    this.setMessageList('reset');
+    this.setSessionList([]);
   }
 
   /**
    * 重置消息列表
    */
   resetMessages() {
-    this.setSessionList([]);
+    this.setMessageList('reset');
   }
 
 };

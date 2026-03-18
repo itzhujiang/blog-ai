@@ -16,7 +16,7 @@ interface AiSessionListProps {
   /** 是否加载中 */
   isLoading: boolean,
   /** 当前选中的会话id */
-  sessionId: number,
+  sessionId?: number,
   /** 选中会话事件 */
   onSelectSessionClick: (_id: number) => void
 }
@@ -31,7 +31,7 @@ export default function AiSessionList({ sessionList, onSessionPullUp, isLoading 
   };
 
   return (
-    <div className='flex flex-col h-full w-full'>
+    <div className='flex flex-col h-full min-h-0 w-full'>
       <div className="flex-1 custom-scrollbar  overflow-y-auto p-4 flex flex-col gap-3 relative w-full" onScroll={(e) => onSessionScroll(e)} ref={scrollContainerRef}>
         
         {
