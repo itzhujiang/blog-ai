@@ -181,6 +181,7 @@ export async function getArticleBySlug(
   slug: string,
 ): Promise<ArticleDetail | null> {
   try {
+    const normalizedSlug = decodeURIComponent(slug);
     const { initAllModels } = await import('@/utils/models');
     const {
       Article, ArticleCategory, Category,
@@ -188,7 +189,7 @@ export async function getArticleBySlug(
     } = await initAllModels();
 
     const article = await Article.findOne({
-      where: { slug, status: 'published' },
+      where: { slug: normalizedSlug, status: 'published' },
       attributes: {
         include: [commentCountAttribute()],
       },

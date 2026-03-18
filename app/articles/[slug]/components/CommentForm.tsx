@@ -21,6 +21,7 @@ export function CommentForm({
 }: CommentFormProps) {
   const [authorName, setAuthorName] = useState('');
   const [authorEmail, setAuthorEmail] = useState('');
+  const [authorPhone, setAuthorPhone] = useState('');
   const [content, setContent] = useState('');
   const [submitting, setSubmitting] = useState(false);
   const [error, setError] = useState('');
@@ -76,6 +77,8 @@ export function CommentForm({
       if (parentId) body.parentId = parentId;
       const trimmedEmail = authorEmail.trim();
       if (trimmedEmail) body.authorEmail = trimmedEmail;
+      const trimmedPhone = authorPhone.trim();
+      if (trimmedPhone) body.authorPhone = trimmedPhone;
 
       const res = await fetch('/api/comments', {
         method: 'POST',
@@ -90,6 +93,7 @@ export function CommentForm({
 
       setAuthorName('');
       setAuthorEmail('');
+      setAuthorPhone('');
       setContent('');
       setCaptchaAnswer('');
       setSuccess('评论已提交，等待审核');
@@ -138,6 +142,19 @@ export function CommentForm({
             placeholder-text-light/60 dark:placeholder-text-dark/60
             focus:border-primary focus:outline-none focus:ring-1 focus:ring-primary
             transition"
+        />
+        <input
+          type="tel"
+          placeholder="手机号（选填）"
+          value={authorPhone}
+          onChange={(e) => setAuthorPhone(e.target.value)}
+          maxLength={255}
+          className={`h-10 rounded-lg border border-primary/30
+            bg-background-light dark:bg-background-dark/50
+            px-4 text-sm
+            placeholder-text-light/60 dark:placeholder-text-dark/60
+            focus:border-primary focus:outline-none focus:ring-1 focus:ring-primary
+            transition ${isReply ? '' : 'sm:col-span-2'}`}
         />
         <textarea
           placeholder="写下你的想法..."

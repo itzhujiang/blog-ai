@@ -6,8 +6,8 @@
 
 import { NextRequest, NextResponse } from 'next/server';
 
-import { verifyCaptcha } from '@/utils/captcha';
 import { getCommentsByArticleId, createComment } from '@/services';
+import { verifyCaptcha } from '@/utils/captcha';
 
 export async function GET(request: NextRequest) {
   try {
@@ -59,6 +59,9 @@ export async function POST(request: NextRequest) {
     const authorEmail = body.authorEmail
       ? String(body.authorEmail).trim().slice(0, 255)
       : null;
+    const authorPhone = body.authorPhone
+      ? String(body.authorPhone).trim().slice(0, 255)
+      : null;
     const content = String(body.content || '').trim().slice(0, 2000);
     const parentId = body.parentId ? Number(body.parentId) : null;
 
@@ -79,6 +82,7 @@ export async function POST(request: NextRequest) {
       parentId,
       authorName,
       authorEmail,
+      authorPhone,
       content,
       authorIp: ip,
     });

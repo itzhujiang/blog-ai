@@ -2,7 +2,7 @@
  * 分类服务
  */
 
-import { Sequelize } from 'sequelize';
+import { literal } from 'sequelize';
 
 import { getVirtualInt } from './helpers';
 
@@ -28,13 +28,14 @@ export async function getCategoriesWithCount(): Promise<CategoryWithCount[]> {
         'name',
         'slug',
         [
-          Sequelize.literal(
-            '(SELECT COUNT(*) FROM article_categories ac'
-            + ' JOIN articles a ON ac.article_id = a.id'
-            + ' WHERE ac.category_id = "c".id'
-            + ' AND a.status = \'published\''
-            + ' AND a.deleted_at IS NULL)'
-          ),
+          literal(`(
+            SELECT COUNT(*)
+            FROM article_categories ac
+            JOIN articles a ON ac.article_id = a.id
+            WHERE ac.category_id = "c".id
+              AND a.status = 'published'
+              AND a.deleted_at IS NULL
+          )`),
           'articleCount',
         ],
       ],

@@ -42,6 +42,7 @@ export interface CommentPostBody {
   parentId?: number | null;
   authorName: string;
   authorEmail?: string;
+  authorPhone?: string;
   content: string;
   captchaToken: string;
   captchaAnswer: string;

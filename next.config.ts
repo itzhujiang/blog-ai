@@ -20,11 +20,19 @@ const nextConfig: NextConfig = {
         protocol: 'http',
         hostname: 'localhost',
         port: '8089',
-        pathname: '/**',
+        pathname: '**',
       },
     ],
   },
-
+  // 转发 ai请求到后端服务
+  rewrites: async () => {
+    return [
+      {
+        source: '/uploads/:path*',
+        destination: `${process.env.BACKEND_BASE_URL}/uploads/:path*`,
+      },
+    ];
+  },
   // 预连接第三方资源
   async headers() {
     return [
