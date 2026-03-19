@@ -12,6 +12,7 @@ export interface CommentAttributes {
   parentId?: number | null; // 父评论ID（用于嵌套回复，null表示顶级评论）
   authorName: string; // 访客姓名
   authorEmail?: string | null; // 访客邮箱
+  authorPhone?: string | null; // 访客手机号
   authorUrl?: string | null; // 访客网站
   authorIp?: string | null; // IP地址（用于防垃圾评论）
   content: string; // 评论内容
@@ -27,6 +28,7 @@ export type CommentCreationAttributes = Optional<
   | 'id'
   | 'parentId'
   | 'authorEmail'
+  | 'authorPhone'
   | 'authorUrl'
   | 'authorIp'
   | 'status'
@@ -45,6 +47,7 @@ export class Comment
   declare parentId: number | null;
   declare authorName: string;
   declare authorEmail: string | null;
+  declare authorPhone: string | null;
   declare authorUrl: string | null;
   declare authorIp: string | null;
   declare content: string;
@@ -90,6 +93,11 @@ export function initCommentModel(sequelize: Sequelize): typeof Comment {
         type: DataTypes.STRING(255),
         allowNull: true,
         comment: '访客邮箱',
+      },
+      authorPhone: {
+        type: DataTypes.STRING(255),
+        allowNull: true,
+        comment: '访客手机号',
       },
       authorUrl: {
         type: DataTypes.STRING(255),

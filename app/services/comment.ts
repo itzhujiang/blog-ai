@@ -16,6 +16,7 @@ export interface CreateCommentParams {
   parentId: number | null;
   authorName: string;
   authorEmail: string | null;
+  authorPhone: string | null;
   content: string;
   authorIp: string | null;
 }
@@ -67,6 +68,7 @@ export async function createComment(params: CreateCommentParams) {
     parentId: params.parentId,
     authorName: params.authorName,
     authorEmail: params.authorEmail,
+    authorPhone: params.authorPhone,
     content: params.content,
     authorIp: params.authorIp,
     status: 'pending',
