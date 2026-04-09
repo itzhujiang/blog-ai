@@ -4,8 +4,6 @@
 
 import { literal } from 'sequelize';
 
-import { defaultLogger } from '@/utils/logger';
-
 import { getVirtualInt } from './helpers';
 
 export interface CategoryWithCount {
@@ -34,7 +32,7 @@ export async function getCategoriesWithCount(): Promise<CategoryWithCount[]> {
             SELECT COUNT(*)
             FROM article_categories ac
             JOIN articles a ON ac.article_id = a.id
-            WHERE ac.category_id = "c".id
+            WHERE ac.category_id = "Category".id
               AND a.status = 'published'
               AND a.deleted_at IS NULL
           )`),
@@ -50,7 +48,7 @@ export async function getCategoriesWithCount(): Promise<CategoryWithCount[]> {
       articleCount: getVirtualInt(cat.dataValues, 'articleCount'),
     }));
   } catch (error) {
-    defaultLogger.error('获取分类失败:', error);
+    console.error('获取分类失败:', error);
     return [];
   }
 }

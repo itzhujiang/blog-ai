@@ -13,13 +13,16 @@
     "code-quality": "npm run lint && npm run format:check"
   },
   "dependencies": {
+    "@ag-ui/client": "^0.0.47",
+    "@ag-ui/core": "^0.0.47",
     "@tailwindcss/typography": "^0.5.19",
     "axios": "^1.13.4",
     "cls-hooked": "^4.2.2",
     "clsx": "^2.1.1",
+    "fast-json-patch": "^3.1.1",
     "highlight.js": "^11.11.1",
     "log4js": "^6.9.1",
-    "next": "16.0.1",
+    "next": "16.0.6",
     "pg": "^8.18.0",
     "pg-hstore": "^2.3.4",
     "react": "19.2.0",

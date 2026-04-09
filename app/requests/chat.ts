@@ -1,6 +1,6 @@
 import { aiHttp } from '@/utils/http';
+import { AiChatMessageRoleType } from '@/utils/types';
 
-import { AiChatMessageRoleType } from '../utils/chatEventSource';
 import { AiChatMessageType } from '../utils/types';
 
 export type ParamType = {

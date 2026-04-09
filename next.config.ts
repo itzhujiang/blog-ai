@@ -24,15 +24,6 @@ const nextConfig: NextConfig = {
       },
     ],
   },
-  // 转发 ai请求到后端服务
-  rewrites: async () => {
-    return [
-      {
-        source: '/uploads/:path*',
-        destination: `${process.env.BACKEND_BASE_URL}/uploads/:path*`,
-      },
-    ];
-  },
   // 预连接第三方资源
   async headers() {
     return [
@@ -61,7 +52,11 @@ const nextConfig: NextConfig = {
       {
         source: '/api/tool/:path*',
         destination: `${process.env.AI_BASE_URL}/api/tool/:path*`,
-      }
+      },
+      {
+        source: '/uploads/:path*',
+        destination: `${process.env.BACKEND_BASE_URL}/uploads/:path*`,
+      },
     ];
   },
 };

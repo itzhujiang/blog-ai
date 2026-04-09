@@ -2,17 +2,15 @@
 
 import React, { useEffect, useState } from 'react';
 
-import aiEventSource from '@/app/utils/chatEventSource';
+import { useCountdown } from '@/hooks/useCountdown';
+import { getUserInfo, login, sendPhoneCode } from '@/requests/index';
 import { userInfoStore } from '@/store/index';
 import eventEmitter from '@/utils/eventEmitter';
-import { useCountdown } from '@/utils/hook';
 
 
 import { showMessage } from '../utils/utils';
 
 import { Modal, ModalContainer, Input, Button } from './ui';
-
-import { getUserInfo, login, sendPhoneCode } from '@/requests/index';
 
 
 export default function PhoneDialog() {
@@ -24,12 +22,10 @@ export default function PhoneDialog() {
   });
   const [countdown, isSending, startCountdown, clearCountdown] = useCountdown();
   const [visible, setVisible] = useState(false);
-  const [isChat, setIsChat] = useState(false);
 
   useEffect(() => {
-    const handleUnAuth = (isChat: boolean = false) => {
+    const handleUnAuth = () => {
       setVisible(true);
-      setIsChat(isChat);
     };
     eventEmitter.on('API:UN_AUTH', handleUnAuth);
   }, []);
@@ -94,9 +90,6 @@ export default function PhoneDialog() {
           type: 'error'
         });
         return;
-      }
-      if (isChat) {
-        aiEventSource.createConnection();
       }
       setUserInfo({
         id: result.data?.data.id,
