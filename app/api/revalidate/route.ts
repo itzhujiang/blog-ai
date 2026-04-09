@@ -7,8 +7,8 @@
  * - paths 为需要刷新的路径数组，每项以 / 开头，最多 20 个
  */
 
-import { NextRequest, NextResponse } from 'next/server';
 import { revalidatePath } from 'next/cache';
+import { NextRequest, NextResponse } from 'next/server';
 
 const MAX_PATHS = 20;
 

@@ -1,6 +1,6 @@
-import { LatestArticles, CategoryNav, HeroSection } from './components';
-
 import { getLatestArticles, getCategoriesWithCount } from '@/services';
+
+import { LatestArticles, CategoryNav, HeroSection } from './components';
 
 // ISR: 每小时重新验证
 export const revalidate = 3600;

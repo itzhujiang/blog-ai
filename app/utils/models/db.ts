@@ -1,6 +1,6 @@
 import cls from 'cls-hooked';
-import { Sequelize, type Dialect } from 'sequelize';
 import pg from 'pg';
+import { Sequelize, type Dialect } from 'sequelize';
 
 import { sqlLogger } from '../logger';
 

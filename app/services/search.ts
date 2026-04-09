@@ -4,6 +4,8 @@
 
 import { Op, Sequelize } from 'sequelize';
 
+import type { SearchResultItem } from '../search/types';
+
 import {
   commentCountAttribute,
   getVirtualInt,
@@ -11,8 +13,6 @@ import {
   extractThumbnailUrl,
   escapeLikePattern,
 } from './helpers';
-
-import type { SearchResultItem } from '../search/types';
 
 export type SearchSortType = 'relevance' | 'latest' | 'comments';
 

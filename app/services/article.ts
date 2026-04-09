@@ -2,10 +2,12 @@
  * 文章服务
  */
 
-import axios from 'axios';
 import { Sequelize } from 'sequelize';
 
-import { getArticleFileUrl } from '@/utils/file-url';
+import type { ArticleItem } from '@/components/LatestArticles';
+
+import type { ArticleDetail } from '../articles/[slug]/types';
+import type { ArticleListItem, CategoryTag, SortType } from '../articles/types';
 
 import {
   commentCountAttribute,
@@ -13,11 +15,6 @@ import {
   extractCategories,
   extractThumbnailUrl,
 } from './helpers';
-
-// 复用已有类型
-import type { ArticleItem } from '@/components/LatestArticles';
-import type { ArticleListItem, CategoryTag, SortType } from '../articles/types';
-import type { ArticleDetail } from '../articles/[slug]/types';
 
 /**
  * 获取最新文章（首页用）
@@ -222,17 +219,8 @@ export async function getArticleBySlug(
 
     if (!article) return null;
 
-    // 获取 Markdown 文件内容
-    let content = '';
-    if (article.filePath) {
-      try {
-        const fileUrl = getArticleFileUrl(article.filePath);
-        const response = await axios.get<string>(fileUrl, { timeout: 10000 });
-        content = response.data;
-      } catch (err) {
-        console.error('获取文章内容文件失败:', err);
-      }
-    }
+    // 文章正文直接来自数据库 content 字段
+    const content = article.content || '';
 
     return {
       id: article.id,

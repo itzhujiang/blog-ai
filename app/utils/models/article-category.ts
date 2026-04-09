@@ -1,5 +1,6 @@
 import { Model, DataTypes, Optional, Sequelize } from 'sequelize';
 
+import type { Article } from './article';
 import type { Category } from './category';
 
 /**
@@ -24,6 +25,7 @@ export class ArticleCategory
   declare createdAt: number | null;
 
   // 关联属性（eager loading 时使用）
+  declare article?: Article;
   declare category?: Category;
 }
 
