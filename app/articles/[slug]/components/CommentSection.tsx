@@ -74,14 +74,17 @@ export function CommentSection({ articleId }: CommentSectionProps) {
   if (loading) {
     return (
       <section className="mt-16 sm:mt-24">
-        <div className="h-8 w-32 animate-pulse rounded bg-primary/10" />
-        <div className="mt-6 space-y-6">
+        <div className="mb-7 h-8 w-32 animate-pulse rounded bg-primary/10" />
+        <div className="space-y-6 sm:space-y-7">
           {[1, 2, 3].map((i) => (
-            <div key={i} className="flex items-start gap-4">
-              <div className="h-10 w-10 animate-pulse rounded-full bg-primary/10" />
-              <div className="flex-1 space-y-2">
-                <div className="h-4 w-24 animate-pulse rounded bg-primary/10" />
-                <div className="h-16 animate-pulse rounded-lg bg-primary/5" />
+            <div key={i} className="flex items-start gap-3 sm:gap-4">
+              <div className="comment-avatar-shell animate-pulse">
+                <div className="h-10 w-10 rounded-full bg-primary/10" />
+              </div>
+              <div className="comment-state-card flex-1 animate-pulse text-left">
+                <div className="h-4 w-28 rounded bg-primary/10" />
+                <div className="mt-3 h-4 w-20 rounded bg-primary/10" />
+                <div className="mt-4 h-16 rounded-xl bg-primary/10" />
               </div>
             </div>
           ))}
@@ -92,53 +95,54 @@ export function CommentSection({ articleId }: CommentSectionProps) {
 
   return (
     <section className="mt-16 sm:mt-24">
-      <h2 className="text-2xl font-bold text-[#5a472b] dark:text-text-dark mb-6">
+      <h2 className="mb-6 text-2xl font-bold text-[#5a472b] dark:text-text-dark sm:mb-8">
         评论 ({total})
       </h2>
 
-      <div className="space-y-8">
-        {/* 发表评论表单 */}
+      <div className="space-y-8 sm:space-y-10">
         <CommentForm
           articleId={articleId}
           onSubmitSuccess={handleReplySuccess}
         />
 
-        {/* 错误提示 */}
-        {error && (
-          <div className="text-center py-8">
-            <p className="text-sm text-red-500 mb-3">{error}</p>
-            <button
-              type="button"
-              onClick={fetchComments}
-              className="text-sm text-primary hover:underline"
-            >
-              重试
-            </button>
-          </div>
-        )}
+        <div className="border-t border-primary/12 pt-8 dark:border-primary/18 sm:pt-10">
+          {error && (
+            <div className="comment-state-card">
+              <p className="text-sm text-red-500">{error}</p>
+              <button
+                type="button"
+                onClick={fetchComments}
+                className="mt-3 text-sm font-medium text-primary transition-colors hover:text-[#c08c58]"
+              >
+                重试
+              </button>
+            </div>
+          )}
 
-        {/* 评论列表 */}
-        {!error && comments.length === 0 && (
-          <p className="py-8 text-center text-sm text-text-light/60 dark:text-text-dark/60">
-            暂无评论，来发表第一条评论吧
-          </p>
-        )}
+          {!error && comments.length === 0 && (
+            <div className="comment-state-card">
+              <p className="text-sm text-text-light/75 dark:text-text-dark/70">
+                暂无评论，来发表第一条评论吧
+              </p>
+            </div>
+          )}
 
-        {!error && comments.length > 0 && (
-          <div className="space-y-6">
-            {comments.map((comment) => (
-              <CommentItem
-                key={comment.id}
-                comment={comment}
-                articleId={articleId}
-                onReplySuccess={handleReplySuccess}
-                replyingTo={replyingTo}
-                onReplyClick={setReplyingTo}
-                onCancelReply={() => setReplyingTo(null)}
-              />
-            ))}
-          </div>
-        )}
+          {!error && comments.length > 0 && (
+            <div className="space-y-6 sm:space-y-7">
+              {comments.map((comment) => (
+                <CommentItem
+                  key={comment.id}
+                  comment={comment}
+                  articleId={articleId}
+                  onReplySuccess={handleReplySuccess}
+                  replyingTo={replyingTo}
+                  onReplyClick={setReplyingTo}
+                  onCancelReply={() => setReplyingTo(null)}
+                />
+              ))}
+            </div>
+          )}
+        </div>
       </div>
     </section>
   );

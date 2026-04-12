@@ -20,7 +20,7 @@ export interface SiteConfig {
 const DEFAULT_SITE_CONFIG: SiteConfig = {
   siteTitle: '暖木博客',
   siteDescription: '一个探索科技、设计、生活及AI创作潜能的个人博客',
-  avatarPath: '/images/avatar.jpg',
+  avatarPath: '',
   footerCopyright: '© 2024 暖木博客. 版权所有.',
 };
 

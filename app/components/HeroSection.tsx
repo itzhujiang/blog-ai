@@ -5,6 +5,8 @@ import { Button } from '@/components/ui';
 import { getThumbnailUrl } from '@/utils/file-url';
 import { getSiteConfigSSR } from '@/utils/site-config';
 
+import defaultImg from '../assets/default-img.png';
+
 /**
  * 首页个人简介区域组件
  * 展示博主头像、欢迎语和 CTA 按钮
@@ -14,7 +16,9 @@ import { getSiteConfigSSR } from '@/utils/site-config';
 export async function HeroSection() {
   // 从数据库获取网站配置（SSR）
   const siteConfig = await getSiteConfigSSR();
-  const avatarUrl = getThumbnailUrl(siteConfig.avatarPath);
+  const avatarUrl = siteConfig.avatarPath
+    ? getThumbnailUrl(siteConfig.avatarPath)
+    : defaultImg;
 
   return (
     <section className="py-16 sm:py-24">

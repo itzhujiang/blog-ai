@@ -4,7 +4,7 @@
 
 import axios from 'axios';
 
-import { getFileUrl } from '@/utils/file-url';
+import { getFileUrl, getServerFileUrl } from '@/utils/file-url';
 
 import type { AboutPageData } from '../about/types';
 
@@ -56,7 +56,7 @@ export async function getAboutPageData(): Promise<AboutPageData | null> {
     const contentMedia = medias.find((m) => m.usageType === 'content');
     if (contentMedia?.media?.fileUrl) {
       try {
-        const fileUrl = getFileUrl(contentMedia.media.fileUrl);
+        const fileUrl = getServerFileUrl(contentMedia.media.fileUrl);
         const response = await axios.get<string>(fileUrl, {
           timeout: 10000,
         });

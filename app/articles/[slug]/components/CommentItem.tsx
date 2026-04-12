@@ -45,48 +45,55 @@ export function CommentItem({
   depth = 0,
 }: CommentItemProps) {
   const isReplying = replyingTo === comment.id;
+  const isReply = depth > 0;
+  const canReply = depth < 2;
+  const cardClassName = isReply
+    ? 'comment-card comment-card-reply'
+    : 'comment-card';
+  const threadClassName = depth >= 1
+    ? 'comment-thread pl-3 sm:pl-4'
+    : 'comment-thread';
 
   return (
-    <div className="flex items-start gap-4">
-      <CommentAvatar name={comment.authorName} />
-      <div className="flex-1 min-w-0">
-        {/* 评论气泡 */}
-        <div className="rounded-lg bg-primary/5 dark:bg-primary/10 p-4">
-          <div className="flex items-center justify-between gap-2">
-            <p className="font-bold text-[#5a472b] dark:text-text-dark">
+    <div className="flex items-start gap-3 sm:gap-4">
+      <div className="comment-avatar-shell">
+        <CommentAvatar name={comment.authorName} />
+      </div>
+      <div className="min-w-0 flex-1">
+        <div className={cardClassName}>
+          <div className="comment-meta-row">
+            <p className="text-sm font-semibold text-[#5a472b] dark:text-text-dark sm:text-base">
               {comment.authorName}
-              {comment.isAuthor && (
-                <span className="ml-1 rounded bg-cta-light/20 px-1.5 py-0.5
-                  text-xs font-normal text-cta-light
-                  dark:bg-cta-dark/20 dark:text-cta-dark">
-                  作者
-                </span>
-              )}
             </p>
-            <p className="shrink-0 text-xs text-text-light/70 dark:text-text-dark/70">
+            {comment.isAuthor && (
+              <span className="inline-flex items-center rounded-full bg-cta-light/15 px-2.5 py-1 text-[11px] font-medium text-cta-light dark:bg-cta-dark/20 dark:text-cta-dark">
+                作者
+              </span>
+            )}
+            <p className="text-xs text-text-light/65 dark:text-text-dark/60">
               {formatRelativeTime(comment.createdAt)}
             </p>
           </div>
-          <p className="mt-2 text-sm text-text-light dark:text-text-dark/90 whitespace-pre-wrap break-words">
+
+          <p className="mt-3 whitespace-pre-wrap break-words text-sm leading-7 text-text-light dark:text-text-dark/90">
             {comment.content}
           </p>
+
+          {canReply && (
+            <div className="comment-action-row">
+              <button
+                type="button"
+                onClick={() => onReplyClick(comment.id)}
+                className="text-xs font-medium text-text-light/70 transition-colors hover:text-primary dark:text-text-dark/65"
+              >
+                回复
+              </button>
+            </div>
+          )}
         </div>
 
-        {/* 回复按钮 */}
-        {depth < 2 && (
-          <button
-            type="button"
-            onClick={() => onReplyClick(comment.id)}
-            className="mt-2 text-xs text-text-light/60 dark:text-text-dark/60
-              hover:text-primary transition-colors"
-          >
-            回复
-          </button>
-        )}
-
-        {/* 回复表单 */}
-        {isReplying && (
-          <div className="mt-3">
+        {isReplying && canReply && (
+          <div className="mt-3 sm:mt-4">
             <CommentForm
               articleId={articleId}
               parentId={comment.id}
@@ -97,9 +104,8 @@ export function CommentItem({
           </div>
         )}
 
-        {/* 嵌套回复 */}
-        {comment.replies.length > 0 && depth < 2 && (
-          <div className="mt-4 ml-4 sm:ml-8 space-y-4">
+        {comment.replies.length > 0 && (
+          <div className={threadClassName}>
             {comment.replies.map((reply) => (
               <CommentItem
                 key={reply.id}

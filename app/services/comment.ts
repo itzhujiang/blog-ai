@@ -28,14 +28,7 @@ export async function getCommentsByArticleId(
   articleId: number,
 ): Promise<{ comments: CommentResult[]; total: number }> {
   const { initAllModels } = await import('@/utils/models');
-  const { Comment, SiteSetting } = await initAllModels();
-
-  // 获取博主名称，用于标记 isAuthor
-  const authorSetting = await SiteSetting.findOne({
-    where: { settingKey: 'author_name' },
-    attributes: ['settingValue'],
-  });
-  const blogAuthorName = authorSetting?.settingValue || '';
+  const { Comment } = await initAllModels();
 
   const rows = await Comment.findAll({
     where: { articleId, status: 'approved' },
@@ -49,7 +42,7 @@ export async function getCommentsByArticleId(
     createdAt: c.createdAt
       ? parseInt(String(c.createdAt), 10)
       : Date.now(),
-    isAuthor: c.authorName === blogAuthorName,
+    isAuthor: Boolean(c.isAuthor),
     parentId: c.parentId ?? null,
   }));
 
