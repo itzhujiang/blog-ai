@@ -2,20 +2,19 @@
  * 搜索服务
  */
 
-import { Op, Sequelize } from 'sequelize';
+import { Op } from 'sequelize';
 
 import { defaultLogger } from '@/utils/logger';
 
 import type { SearchResultItem } from '../search/types';
 
+
 import {
-  commentCountAttribute,
-  getVirtualInt,
+  getApprovedCommentCountMap,
   extractCategories,
   extractThumbnailUrl,
   escapeLikePattern,
 } from './helpers';
-
 
 export type SearchSortType = 'relevance' | 'latest' | 'comments';
 
@@ -32,16 +31,11 @@ export async function searchArticles(
     const { initAllModels } = await import('@/utils/models');
     const {
       Article, ArticleCategory, Category,
-      ArticleMedia, MediaFile,
+      ArticleMedia, MediaFile, Comment,
     } = await initAllModels();
 
     const escaped = escapeLikePattern(query);
     const likePattern = `%${escaped}%`;
-
-    const order: [string | ReturnType<typeof Sequelize.literal>, string][] =
-      sort === 'comments'
-        ? [[Sequelize.literal('"commentCount"'), 'DESC']]
-        : [['publishedAt', 'DESC']];
 
     const { count, rows } = await Article.findAndCountAll({
       where: {
@@ -50,9 +44,6 @@ export async function searchArticles(
           { title: { [Op.iLike]: likePattern } },
           { excerpt: { [Op.iLike]: likePattern } },
         ],
-      },
-      attributes: {
-        include: [commentCountAttribute()],
       },
       include: [
         {
@@ -78,12 +69,15 @@ export async function searchArticles(
           }],
         },
       ],
-      order,
+      order: [['publishedAt', 'DESC']],
       limit: pageSize,
       offset: (page - 1) * pageSize,
       distinct: true,
       subQuery: false,
     });
+
+    const articleIds = rows.map((article) => article.id);
+    const commentCountMap = await getApprovedCommentCountMap(Comment, articleIds);
 
     const articles: SearchResultItem[] = rows.map((article) => ({
       id: article.id,
@@ -95,8 +89,12 @@ export async function searchArticles(
         : null,
       thumbnailUrl: extractThumbnailUrl(article.articleMedias),
       categories: extractCategories(article.articleCategories),
-      commentCount: getVirtualInt(article.dataValues, 'commentCount'),
+      commentCount: commentCountMap[article.id] || 0,
     }));
+
+    if (sort === 'comments') {
+      articles.sort((a, b) => b.commentCount - a.commentCount);
+    }
 
     return { articles, total: count };
   } catch (error) {

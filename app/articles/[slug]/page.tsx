@@ -2,7 +2,7 @@ import type { Metadata } from 'next';
 import { notFound } from 'next/navigation';
 
 import { getArticleBySlug } from '@/services';
-import { getThumbnailUrl } from '@/utils/file-url';
+import { getServerFileUrl } from '@/utils/file-url';
 
 import {
   Breadcrumb,
@@ -42,7 +42,7 @@ export async function generateMetadata({
       title: article.title,
       description: article.excerpt || undefined,
       images: article.thumbnailUrl
-        ? [getThumbnailUrl(article.thumbnailUrl)]
+        ? [getServerFileUrl(article.thumbnailUrl)]
         : undefined,
     },
   };

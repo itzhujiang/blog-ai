@@ -1,38 +1,59 @@
 /**
  * 文件 URL 处理工具函数
- * 处理数据库中的相对路径，转换为完整的 URL
  */
 
-// 后端服务的基础 URL
-const BACKEND_BASE_URL = process.env.BACKEND_BASE_URL || '';
+const ABSOLUTE_URL_PATTERN = /^https?:\/\//i;
+
+function isAbsoluteUrl(path: string): boolean {
+  return ABSOLUTE_URL_PATTERN.test(path);
+}
+
+function normalizePath(path: string): string {
+  return path.startsWith('/') ? path : `/${path}`;
+}
+
+function joinUrl(baseUrl: string | undefined, path: string): string {
+  if (!baseUrl) {
+    return normalizePath(path);
+  }
+
+  return `${baseUrl.replace(/\/$/, '')}${normalizePath(path)}`;
+}
 
 /**
- * 将数据库中的相对路径转换为完整的 URL
- *
- * @param relativePath - 数据库中存储的相对路径（如 '/images/avatar.jpg'）
- * @returns 完整的访问 URL（如 'http://localhost:8089/images/avatar.jpg'）
+ * 获取前端展示用文件 URL。
+ * 相对路径统一返回站内稳定路径，避免 SSR 与客户端地址不一致。
  */
-export function getFileUrl(relativePath: string | null | undefined): string {
-  if (!relativePath) {
+export function getFileUrl(filePath: string | null | undefined): string {
+  if (!filePath) {
     return '';
   }
 
-  // 如果已经是完整 URL，直接返回
-  if (relativePath.startsWith('http://') || relativePath.startsWith('https://')) {
-    return relativePath;
+  if (isAbsoluteUrl(filePath)) {
+    return filePath;
   }
 
-  // 确保路径以 '/' 开头
-  const normalizedPath = relativePath.startsWith('/') ? relativePath : `/${relativePath}`;
+  return normalizePath(filePath);
+}
 
-  return `${BACKEND_BASE_URL}${normalizedPath}`;
+/**
+ * 获取仅服务端使用的绝对文件 URL。
+ * 优先使用服务端环境变量，确保服务端请求和 metadata 生成拿到可访问的绝对地址。
+ */
+export function getServerFileUrl(filePath: string | null | undefined): string {
+  if (!filePath) {
+    return '';
+  }
+
+  if (isAbsoluteUrl(filePath)) {
+    return filePath;
+  }
+
+  return joinUrl(process.env.BACKEND_BASE_URL, filePath);
 }
 
 /**
  * 获取文章缩略图 URL
- *
- * @param thumbnailUrl - 数据库中的缩略图路径
- * @returns 完整的缩略图访问 URL
  */
 export function getThumbnailUrl(thumbnailUrl: string | null | undefined): string {
   return getFileUrl(thumbnailUrl);
@@ -40,19 +61,20 @@ export function getThumbnailUrl(thumbnailUrl: string | null | undefined): string
 
 /**
  * 获取文章内容文件 URL（用于获取 Markdown 文件）
- *
- * @param filePath - 数据库中的文件路径
- * @returns 完整的文件访问 URL
  */
 export function getArticleFileUrl(filePath: string | null | undefined): string {
   return getFileUrl(filePath);
 }
 
 /**
+ * 获取服务端文章内容文件 URL
+ */
+export function getServerArticleFileUrl(filePath: string | null | undefined): string {
+  return getServerFileUrl(filePath);
+}
+
+/**
  * 获取媒体文件 URL
- *
- * @param filePath - 数据库中的媒体文件路径
- * @returns 完整的媒体文件访问 URL
  */
 export function getMediaUrl(filePath: string | null | undefined): string {
   return getFileUrl(filePath);

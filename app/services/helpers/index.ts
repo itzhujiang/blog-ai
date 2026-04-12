@@ -1,5 +1,5 @@
 export {
-  commentCountAttribute,
+  getApprovedCommentCountMap,
   getVirtualInt,
   extractCategories,
   extractThumbnailUrl,

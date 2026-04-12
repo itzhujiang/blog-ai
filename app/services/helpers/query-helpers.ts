@@ -2,24 +2,42 @@
  * 共享 SQL 片段和映射工具
  */
 
-import { Sequelize } from 'sequelize';
+import { Op, Sequelize } from 'sequelize';
+
+import type { Comment } from '../../utils/models/comment';
 
 /**
- * 评论数 SQL 子查询属性
- * 用于在文章查询中附加已审核评论数
+ * 批量获取文章的已审核评论数
  */
-export function commentCountAttribute(): [
-  ReturnType<typeof Sequelize.literal>,
-  string,
-  ] {
-  return [
-    Sequelize.literal(
-      '(SELECT COUNT(*) FROM comments'
-      + ' WHERE comments.article_id = "Article".id'
-      + ' AND comments.status = \'approved\')'
-    ),
-    'commentCount',
-  ];
+export async function getApprovedCommentCountMap(
+  CommentModel: typeof Comment,
+  articleIds: number[],
+): Promise<Record<number, number>> {
+  if (articleIds.length === 0) {
+    return {};
+  }
+
+  const rows = await CommentModel.findAll({
+    attributes: [
+      'articleId',
+      [Sequelize.fn('COUNT', Sequelize.col('id')), 'commentCount'],
+    ],
+    where: {
+      articleId: { [Op.in]: articleIds },
+      status: 'approved',
+    },
+    group: ['articleId'],
+  });
+
+  const countMap: Record<number, number> = {};
+
+  for (const row of rows) {
+    const articleId = parseInt(String(row.get('articleId')), 10);
+    const commentCount = parseInt(String(row.get('commentCount')), 10);
+    countMap[articleId] = commentCount;
+  }
+
+  return countMap;
 }
 
 /**

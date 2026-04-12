@@ -2,10 +2,8 @@
  * 文章服务
  */
 
-import axios from 'axios';
-import { Sequelize } from 'sequelize';
-
 import type { ArticleItem } from '@/components/LatestArticles';
+
 import { getArticleFileUrl } from '@/utils/file-url';
 import { defaultLogger } from '@/utils/logger';
 
@@ -13,13 +11,10 @@ import type { ArticleDetail } from '../articles/[slug]/types';
 import type { ArticleListItem, CategoryTag, SortType } from '../articles/types';
 
 import {
-  commentCountAttribute,
-  getVirtualInt,
+  getApprovedCommentCountMap,
   extractCategories,
   extractThumbnailUrl,
 } from './helpers';
-
-// 复用已有类型
 
 /**
  * 获取最新文章（首页用）
@@ -92,7 +87,7 @@ export async function getArticles(
     const { initAllModels } = await import('@/utils/models');
     const {
       Article, ArticleCategory, Category,
-      ArticleMedia, MediaFile,
+      ArticleMedia, MediaFile, Comment,
     } = await initAllModels();
 
     const offset = (page - 1) * pageSize;
@@ -121,16 +116,8 @@ export async function getArticles(
         }],
       };
 
-    const order: [string | ReturnType<typeof Sequelize.literal>, string][] =
-      sort === 'comments'
-        ? [[Sequelize.literal('"commentCount"'), 'DESC']]
-        : [['publishedAt', 'DESC']];
-
     const { count, rows } = await Article.findAndCountAll({
       where: { status: 'published' },
-      attributes: {
-        include: [commentCountAttribute()],
-      },
       include: [
         categoryInclude,
         {
@@ -146,12 +133,15 @@ export async function getArticles(
           }],
         },
       ],
-      order,
+      order: [['publishedAt', 'DESC']],
       limit: pageSize,
       offset,
       distinct: true,
       subQuery: false,
     });
+
+    const articleIds = rows.map((article) => article.id);
+    const commentCountMap = await getApprovedCommentCountMap(Comment, articleIds);
 
     const articles: ArticleListItem[] = rows.map((article) => {
       const categories: CategoryTag[] = extractCategories(article.articleCategories);
@@ -165,9 +155,13 @@ export async function getArticles(
           : null,
         thumbnailUrl: extractThumbnailUrl(article.articleMedias),
         categories,
-        commentCount: getVirtualInt(article.dataValues, 'commentCount'),
+        commentCount: commentCountMap[article.id] || 0,
       };
     });
+
+    if (sort === 'comments') {
+      articles.sort((a, b) => b.commentCount - a.commentCount);
+    }
 
     return { articles, total: count };
   } catch (error) {
@@ -187,14 +181,11 @@ export async function getArticleBySlug(
     const { initAllModels } = await import('@/utils/models');
     const {
       Article, ArticleCategory, Category,
-      ArticleMedia, MediaFile,
+      ArticleMedia, MediaFile, Comment,
     } = await initAllModels();
 
     const article = await Article.findOne({
       where: { slug: normalizedSlug, status: 'published' },
-      attributes: {
-        include: [commentCountAttribute()],
-      },
       include: [
         {
           model: ArticleCategory,
@@ -224,17 +215,15 @@ export async function getArticleBySlug(
 
     if (!article) return null;
 
-    // 获取 Markdown 文件内容
-    let content = '';
-    if (article.filePath) {
-      try {
-        const fileUrl = getArticleFileUrl(article.filePath);
-        const response = await axios.get<string>(fileUrl, { timeout: 10000 });
-        content = response.data;
-      } catch (err) {
-        defaultLogger.error('获取文章内容文件失败:', err);
-      }
-    }
+    const commentCount = await Comment.count({
+      where: {
+        articleId: article.id,
+        status: 'approved',
+      },
+    });
+
+    // 文章正文直接来自数据库 content 字段
+    const content = article.content || '';
 
     return {
       id: article.id,
@@ -247,7 +236,7 @@ export async function getArticleBySlug(
         : null,
       thumbnailUrl: extractThumbnailUrl(article.articleMedias),
       categories: extractCategories(article.articleCategories),
-      commentCount: getVirtualInt(article.dataValues, 'commentCount'),
+      commentCount,
       content,
     };
   } catch (error) {

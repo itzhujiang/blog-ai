@@ -43,3 +43,5 @@ logs
 # typescript
 *.tsbuildinfo
 next-env.d.ts
+
+docs/Footer--.tsx
