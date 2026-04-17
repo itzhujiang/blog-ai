@@ -301,7 +301,9 @@ export const useAiChat = () => {
         }
       });
     },
+    // agent开始生成文本消息
     onTextMessageStartEvent: (params: { event: TextMessageStartEvent } & AgentSubscriberParams) => {
+      console.log('onTextMessageStartEvent', params);
       dispatch({
         type: 'pushMessage',
         payload: {
@@ -315,6 +317,7 @@ export const useAiChat = () => {
         }
       });
     },
+    // agent内容输出中
     onTextMessageContentEvent: (params: { event: TextMessageContentEvent; textMessageBuffer: string } & AgentSubscriberParams) => {
       console.log('onTextMessageContentEvent', params);
       dispatch({
@@ -340,6 +343,7 @@ export const useAiChat = () => {
     onToolCallStartEvent: (params) => {
       console.log('onToolCallStartEvent', params);
     },
+    // agent开始
     onRunStartedEvent: (params: { event: RunStartedEvent } & AgentSubscriberParams) => {
       console.log('onRunStartedEvent', params);
       const msg = params.messages[params.messages.length - 1];
@@ -476,17 +480,6 @@ export const useAiChat = () => {
         });
         return;
       }
-
-      // const historyMessages = mapHistoryMessages(res.data?.data || []);
-      // const total = res.data?.pagination.total || 0;
-
-      // dispatch({
-      //   type: 'appendMessageList',
-      //   payload: {
-      //     messageList: historyMessages,
-      //     total
-      //   }
-      // });
 
 
     } catch (error) {
