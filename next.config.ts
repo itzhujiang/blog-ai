@@ -2,6 +2,19 @@ import type { NextConfig } from 'next';
 
 
 const nextConfig: NextConfig = {
+  images: {
+    remotePatterns: [
+      {
+        protocol: 'https',
+        hostname: '**',
+      },
+      {
+        protocol: 'http',
+        hostname: 'localhost',
+        port: '**',
+      },
+    ],
+  },
   /* 配置优化 */
   // svg-captcha 依赖 __dirname 加载字体文件，需排除在 Turbopack 打包之外
   serverExternalPackages: ['svg-captcha'],

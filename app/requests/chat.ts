@@ -95,3 +95,12 @@ type SendMessageResponseType = {
 
 export const sendMessage = async (data: SendMessageRequestType) => 
   await aiHttp.post<SendMessageRequestType, SendMessageResponseType, 'obj'>('/api/ai/ai-chat/sendMessage', data);
+
+type ToolResultResponseType = {
+  /** 工具id */
+  toolId: string;
+  /** 工具返回结果 */
+  toolResult: string;
+}
+
+export const toolResult = async (data:ToolResultResponseType) => await aiHttp.post<ToolResultResponseType, null, 'obj'>('/api/ai/ai-chat/toolResult', data);

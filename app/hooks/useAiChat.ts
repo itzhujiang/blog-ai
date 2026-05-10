@@ -1,13 +1,13 @@
 'use client';
-import { AgentSubscriber, AgentSubscriberParams, RunStartedEvent, StepStartedEvent, TextMessageContentEvent, TextMessageEndEvent, TextMessageStartEvent } from '@ag-ui/client';
+import { AgentSubscriber, AgentSubscriberParams, RunStartedEvent, StepStartedEvent, TextMessageContentEvent, TextMessageEndEvent, TextMessageStartEvent, ToolCallStartEvent } from '@ag-ui/client';
 import { applyPatch } from 'fast-json-patch';
 import { useCallback, useEffect, useMemo, useReducer, useRef } from 'react';
 
 import { getMessageList, getSessionList, SessionListResponseType, ParamType, SessionListRequestType, MessageListRequestType } from '@/requests/index';
+import { createTools, toolsArr } from '@/tool';
 import AgUi from '@/utils/chatAgui';
-import { AiChatMessageStatus, ChatMessage, SSEMessage } from '@/utils/types';
+import { A2UI, AiChatMessageStatus, ChatMessage, SSEMessage } from '@/utils/types';
 import { showMessage } from '@/utils/utils';
-
 
 type SessionParam = ParamType & SessionListRequestType;
 
@@ -218,8 +218,8 @@ function reducer(state: AiChateState, action: AiChateAction): AiChateState {
           return {
             ...item,
             status: action.payload.status || item.status,
-            content: (action.payload.content || item.content as string)
-          };
+            content: action.payload.content !== undefined ? action.payload.content : item.content
+          } as ChatMessage;
         }
         return item;
       });  
@@ -255,6 +255,8 @@ export const useAiChat = () => {
         type: 'pushMessage',
         payload: {
           message: {
+            contentPos: 'chat',
+            contentType: 'string',
             id: msg.id,
             content: msg.content as string,
             role: msg.role,
@@ -272,6 +274,8 @@ export const useAiChat = () => {
         type: 'pushMessage',
         payload: {
           message: {
+            contentPos: 'chat',
+            contentType: 'string',
             id: params.event.messageId,
             content: params.event.content.content,
             role: 'activity',
@@ -308,6 +312,8 @@ export const useAiChat = () => {
         type: 'pushMessage',
         payload: {
           message: {
+            contentPos: 'chat',
+            contentType: 'string',
             id: params.event.messageId,
             content: '',
             role: params.event.role,
@@ -317,6 +323,7 @@ export const useAiChat = () => {
         }
       });
     },
+
     // agent内容输出中
     onTextMessageContentEvent: (params: { event: TextMessageContentEvent; textMessageBuffer: string } & AgentSubscriberParams) => {
       console.log('onTextMessageContentEvent', params);
@@ -340,8 +347,44 @@ export const useAiChat = () => {
         }      
       });
     },
-    onToolCallStartEvent: (params) => {
-      console.log('onToolCallStartEvent', params);
+    onToolCallStartEvent: (params: { event: ToolCallStartEvent & {toolType: 'clientTool' | 'serverTool', toolCallArgs: {input: string}} } & AgentSubscriberParams ) => {
+      const toolType = params.event.toolType;
+      const toolCallName = params.event.toolCallName;
+      const toolParams = params.event.toolCallArgs.input;
+      const toolId = params.event.toolCallId;
+      if (toolType === 'clientTool') {
+        const tool = toolsArr.find(item => item.name === toolCallName);
+        if (!tool) {
+          return;
+        }
+        const dom = tool.run(JSON.parse(toolParams), toolId);
+        dispatch({
+          type: 'pushMessage',
+          payload: {
+            message: {
+              contentType: 'reactDom',
+              content: dom,
+              id: toolId,
+              createdAt: params.event.timestamp!,
+              role: 'assistant',
+              status: 'success',
+              contentPos: tool.renderingPos,
+            }
+          }
+        });
+      }
+    },
+    onToolCallEndEvent(params) {
+      const toolId = params.event.toolCallId;
+      if (toolId) {
+        dispatch({
+          type: 'updateMessage',
+          payload: {
+            id: toolId,
+            status:  'success'
+          }
+        });
+      }
     },
     // agent开始
     onRunStartedEvent: (params: { event: RunStartedEvent } & AgentSubscriberParams) => {
@@ -354,6 +397,28 @@ export const useAiChat = () => {
           status: 'success'
         }
       });
+    },
+    onCustomEvent: (params) => {
+      console.log('onCustomEvent', params);
+      const event = params.event;
+      if (event.name === 'a2ui') {
+        const content = event.value as A2UI[];
+        const id = event.customId as string;
+        dispatch({
+          type: 'pushMessage',
+          payload: {
+            message: {
+              id,
+              content,
+              contentPos: 'chat',
+              contentType: 'a2ui',
+              createdAt: params.event.timestamp!,
+              role: 'assistant',
+              status: 'success'
+            }
+          }
+        });
+      }
     }
   };
   /**
@@ -522,7 +587,8 @@ export const useAiChat = () => {
     const localMessage = agUiRef.current!.createUserMessage(content);
     const runId = agUiRef.current!.createRunId();
     try {
-      await agUiRef.current!.run(localMessage, runId);
+      const tools = createTools(toolsArr);
+      await agUiRef.current!.run(localMessage, runId, tools);
     } catch (error) {
       console.error(error);
     }

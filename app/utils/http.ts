@@ -93,8 +93,6 @@ const instance = <T extends Server>(server: T) => {
           });
         }
         if (error.response.status === 401) {
-          console.log('error.response', error.response.config.url);
-
           showMessage({
             message: '权限不通，请重新登录',
             type: 'error',

@@ -69,7 +69,7 @@ class AgUi {
   private createAgent(threadId?: string) {
     this.agent =  new HttpAgent({
       url: '/api/ai/ai-chat/chat',
-      threadId
+      threadId,
     });
   }
 
@@ -82,7 +82,7 @@ class AgUi {
    * @param input 信息
    * @returns
    */
-  async run(message: RunAgentInput['messages'][number], runId: string) {
+  async run(message: RunAgentInput['messages'][number], runId: string, tools?: RunAgentInput['tools']) {
     try {
       if (!this.isConnection()) {
         return;
@@ -90,6 +90,7 @@ class AgUi {
       this.agent!.addMessage(message);
       return await this.agent!.runAgent({
         runId,
+        tools
       });
     } catch (error: any) {
 

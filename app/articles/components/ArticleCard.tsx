@@ -1,8 +1,8 @@
 import Image from 'next/image';
 import Link from 'next/link';
 
-import { formatDate } from '@/app/utils/utils';
 import { getThumbnailUrl } from '@/utils/file-url';
+import { formatDate } from '@/utils/utils';
 
 import type { ArticleListItem } from '../types';
 

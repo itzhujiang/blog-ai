@@ -15,6 +15,7 @@
   "dependencies": {
     "@ag-ui/client": "^0.0.47",
     "@ag-ui/core": "^0.0.47",
+    "@langchain/core": "^1.1.41",
     "@tailwindcss/typography": "^0.5.19",
     "axios": "^1.13.4",
     "cls-hooked": "^4.2.2",
@@ -33,6 +34,8 @@
     "sequelize": "^6.37.7",
     "svg-captcha": "^1.4.0",
     "tailwind-merge": "^3.4.0",
+    "zod": "^4.3.6",
+    "zod-to-json-schema": "^3.25.2",
     "zustand": "^5.0.11"
   },
   "devDependencies": {

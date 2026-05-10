@@ -1,12 +1,16 @@
 'use client';
 
 import type { ReactElement } from 'react';
+import ReactDOM from 'react-dom';
+
 
 import { userInfoStore } from '@/store/index';
 import { AiChatMessageRoleType, ChatMessage } from '@/utils/types';
 import { formatDate } from '@/utils/utils';
 
+import { A2UIRenderer } from './A2UIRenderer';
 import { Input } from './ui/index';
+
 
 interface AiDialogueProps {
   /** 表单触发 */
@@ -63,13 +67,16 @@ export default function AiDialogue({
 
   const renderingMap: Record<AiChatMessageRoleType, (_item: ChatMessage) => ReactElement> = {
     system: (item: ChatMessage) => {
-      return (
-        <div className="flex justify-center">
-          <span className="rounded-full border border-primary/10 bg-primary/[0.04] px-3 py-1 text-[11px] leading-5 text-text-light/60 shadow-sm dark:text-text-dark/60">
-            系统提示：{item.content}
-          </span>
-        </div>
-      );
+      if (item.contentType !== 'a2ui') {
+        return (
+          <div className="flex justify-center">
+            <span className="rounded-full border border-primary/10 bg-primary/[0.04] px-3 py-1 text-[11px] leading-5 text-text-light/60 shadow-sm dark:text-text-dark/60">
+              系统提示：{item.content}
+            </span>
+          </div>
+        );
+      }
+      return <></>;
     },
     assistant: (item: ChatMessage) => {
       return (
@@ -79,27 +86,37 @@ export default function AiDialogue({
           </div>
           <div className="flex max-w-[88%] flex-col gap-2">
             <div className="rounded-3xl rounded-tl-md border border-primary/10 bg-white px-4 py-3 text-sm leading-7 text-text-light shadow-[0_8px_24px_rgba(0,0,0,0.06)] dark:bg-background-dark dark:text-text-dark">
-              {item.content}
+              {
+                item.contentType === 'a2ui' ? <A2UIRenderer value={item.content} /> : item.content
+              }
             </div>
             <span className="px-1 text-[10px] text-text-light/35 dark:text-text-dark/35">{formatDate(item.createdAt)}</span>
           </div>
         </div>
       );
+      
     },
     user: (item: ChatMessage) => {
-      return (
-        <div className="flex justify-end">
-          <div className="flex max-w-[82%] flex-col items-end gap-2">
-            <span className="px-1 text-[11px] font-medium text-text-light/45 dark:text-text-dark/45">
-              {userInfo.phone}
-            </span>
-            <div className="rounded-3xl rounded-br-md bg-primary px-4 py-3 text-sm leading-7 text-white shadow-[0_8px_20px_rgba(212,165,116,0.28)]">
-              {item.content}
+      if (item.contentPos === 'body' && item.contentType !== 'a2ui') {
+        return  <>{ReactDOM.createPortal(item.content, document.body)}</>;
+      };
+      if (item.contentType !== 'a2ui') {
+        return (
+          <div className="flex justify-end">
+            <div className="flex max-w-[82%] flex-col items-end gap-2">
+              <span className="px-1 text-[11px] font-medium text-text-light/45 dark:text-text-dark/45">
+                {userInfo.phone}
+              </span>
+              <div className="rounded-3xl rounded-br-md bg-primary px-4 py-3 text-sm leading-7 text-white shadow-[0_8px_20px_rgba(212,165,116,0.28)]">
+                {item.content}
+              </div>
+              <span className="px-1 text-[10px] text-text-light/35 dark:text-text-dark/35">{formatDate(item.createdAt)}</span>
             </div>
-            <span className="px-1 text-[10px] text-text-light/35 dark:text-text-dark/35">{formatDate(item.createdAt)}</span>
           </div>
-        </div>
-      );
+        );
+      }
+
+      return <></>;
     },
     activity: (item: ChatMessage) => {
       const activityStyle = getActivityStyle(item.status);
