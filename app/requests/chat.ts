@@ -19,6 +19,8 @@ export type SessionListRequestType = {
 export type SessionListResponseType = {
   /** id */
   id: number;
+  /** 会话id */
+  sessionId: string;
   /** 标题 */
   title: string;
   /** 最后一条实际消息的摘要，用于会话列表展示 */
@@ -51,8 +53,8 @@ export type MessageListRequestType = {
 export type MessagesResponseType = {
   /** 消息id */
   id: number;
-  /** 服务id */
-  serverId: string;
+  /** 信息id */
+  messageId: string;
   /** 会话id */
   sessionId: number;
   /** 角色 */

@@ -64,7 +64,7 @@ export default function AiDialogue({
 }: AiDialogueProps) {
 
   const { userInfo } = userInfoStore();
-
+  
   const renderingMap: Record<AiChatMessageRoleType, (_item: ChatMessage) => ReactElement> = {
     system: (item: ChatMessage) => {
       if (item.contentType !== 'a2ui') {

@@ -16,15 +16,14 @@ interface AiSessionListProps {
   /** 是否加载中 */
   isLoading: boolean,
   /** 当前选中的会话id */
-  sessionId?: number,
+  id?: number,
   /** 选中会话事件 */
-  onSelectSessionClick: (_id: number) => void
+  onSelectSessionClick: (_id: number, _threadId: string) => void
 }
 
-export default function AiSessionList({ sessionList, onSessionPullUp, isLoading = false, sessionId, onSelectSessionClick }: AiSessionListProps) {
+export default function AiSessionList({ sessionList, onSessionPullUp, isLoading = false, id, onSelectSessionClick }: AiSessionListProps) {
   const scrollContainerRef = useRef<HTMLDivElement>(null);
   const onSessionScroll = async (e: UIEvent<HTMLDivElement>) => {
-    console.log(e.currentTarget.scrollTop + e.currentTarget.clientHeight);
     if (scrollContainerRef.current!.scrollHeight - (e.currentTarget.scrollTop + e.currentTarget.clientHeight) < 50) {
       onSessionPullUp();
     }
@@ -42,9 +41,9 @@ export default function AiSessionList({ sessionList, onSessionPullUp, isLoading 
                 return (<button className={
                   cn(
                     'group flex items-start gap-4 rounded-xl border  p-4 text-left transition-all hover:bg-primary/5 dark:bg-white/5 dark:hover:bg-primary/10 cursor-pointer',
-                    sessionId === item.id ? 'border-primary/10 bg-white/50' : 'border-transparent'
+                    id === item.id ? 'border-primary/10 bg-white/50' : 'border-transparent'
                   )
-                } key={item.id} onClick={() => onSelectSessionClick(item.id)}>
+                } key={item.id} onClick={() => onSelectSessionClick(item.id, item.sessionId)}>
                   <div className='flex size-10 shrink-0 items-center justify-center rounded-full bg-primary/10 text-primary'>
                     <span className='material-symbols-outlined text-xl!'>nature_people</span>
                   </div>

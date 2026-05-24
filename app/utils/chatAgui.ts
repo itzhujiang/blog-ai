@@ -55,6 +55,8 @@ class AgUi {
     this.agent = null;
     this.createAgent(threadId);
     if (historyMessages) {
+      console.log('进入了', historyMessages);
+      
       this.agent!.addMessages(historyMessages);
     }
     if (subscriber) {
@@ -70,6 +72,7 @@ class AgUi {
     this.agent =  new HttpAgent({
       url: '/api/ai/ai-chat/chat',
       threadId,
+      
     });
   }
 
@@ -90,7 +93,7 @@ class AgUi {
       this.agent!.addMessage(message);
       return await this.agent!.runAgent({
         runId,
-        tools
+        tools,
       });
     } catch (error: any) {
 

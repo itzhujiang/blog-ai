@@ -20,7 +20,6 @@ export default function AiChat() {
     onSessionScroll,
     onTabSwitchClick,
     openChat,
-
     submitMessage,
   } = useAiChat();
 
@@ -39,7 +38,6 @@ export default function AiChat() {
 
     return '';
   }
-
   return (
     <div className="absolute bottom-10 right-10 z-30 flex flex-col items-end">
       {state.visible ?
@@ -93,7 +91,7 @@ export default function AiChat() {
               isLoading={state.isSessionLoading}
               onSelectSessionClick={onSelectSessionClick}
               onSessionPullUp={onSessionScroll}
-              sessionId={state.messageParam.id}
+              id={state.messageParam.id}
               sessionList={state.sessionList}
             />
           )}

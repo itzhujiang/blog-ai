@@ -39,6 +39,9 @@ export async function submitComment(
     const parentId = formData.get('parentId') ? Number(formData.get('parentId')) : null;
     const captchaToken = String(formData.get('captchaToken') || '');
     const captchaAnswer = String(formData.get('captchaAnswer') || '');
+    const authorPhone = formData.get('authorPhone')
+      ? String(formData.get('authorPhone')).trim().slice(0, 20)
+      : null;
 
     apiLogger.info(`[submitComment] articleId=${articleId}, authorName=${authorName}`);
 
@@ -68,6 +71,7 @@ export async function submitComment(
       authorEmail,
       content,
       authorIp: ip,
+      authorPhone,
     });
 
     // 6. 自动刷新文章详情页缓存

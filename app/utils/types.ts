@@ -13,7 +13,7 @@ export interface UserInfo {
 
 export type AiChatMessageStatus = 'pending' | 'success' | 'fail'
 
-export type AiChatMessageType = 'text' | 'system';
+export type AiChatMessageType = 'text' | 'A2UI';
 
 export type AiChatMessageRoleType = Role;
 
@@ -38,7 +38,7 @@ export type ChatMessage =
 
 export interface SSEMessage {
   /** 服务端id */
-  serverId: string;
+  messageId: string;
   /** 消息内容 */
   content?: string;
   /** 发送者角色 */

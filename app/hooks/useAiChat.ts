@@ -1,5 +1,5 @@
 'use client';
-import { AgentSubscriber, AgentSubscriberParams, RunStartedEvent, StepStartedEvent, TextMessageContentEvent, TextMessageEndEvent, TextMessageStartEvent, ToolCallStartEvent } from '@ag-ui/client';
+import { AgentSubscriber, AgentSubscriberParams, RunAgentInput, RunStartedEvent, StepStartedEvent, TextMessageContentEvent, TextMessageEndEvent, TextMessageStartEvent, ToolCallStartEvent } from '@ag-ui/client';
 import { applyPatch } from 'fast-json-patch';
 import { useCallback, useEffect, useMemo, useReducer, useRef } from 'react';
 
@@ -20,7 +20,7 @@ const DEFAULT_SESSION_PARAM: SessionParam = {
 
 const DEFAULT_MESSAGE_PARAM: MessageListRequestType = {
   page: 1,
-  size: 10,
+  size: 20,
   id: undefined,
   sort: 'DESC'
 };
@@ -46,6 +46,8 @@ interface AiChateState {
   sessionTerminate: boolean;
   /** 消息列表请求是否终止 */
   messageTerminate: boolean;
+  /** 线程id(会话id) */
+  threadId: string;
 }
 
 type AiChateAction =  {
@@ -57,6 +59,9 @@ type AiChateAction =  {
 } | {
   /** 重置所有状态 */
   type: 'resetState',
+  payload?: {
+    visible?: boolean
+  }
 } | {
   /** 应用SSE消息 */
   type: 'applySseMessage',
@@ -115,6 +120,11 @@ type AiChateAction =  {
   payload: {
     tab: 1 | 2
   }
+} | {
+  type: 'setThreadId',
+  payload:{
+    threadId: string
+  }
 }
 
 const initialState: AiChateState = {
@@ -122,6 +132,7 @@ const initialState: AiChateState = {
   messages: [],
   sessionList: [],
   tab: 1,
+  threadId: '',
   sessionParam: DEFAULT_SESSION_PARAM,
   messageParam: DEFAULT_MESSAGE_PARAM,
   isSessionLoading: false,
@@ -145,7 +156,12 @@ function reducer(state: AiChateState, action: AiChateAction): AiChateState {
         visible: false
       };
     case 'resetState':
-      return initialState;
+      return {
+        ...initialState,
+        visible: action.payload?.visible || false,
+        threadId: action.payload?.visible ? state.threadId : '', // 如果关闭聊天窗口，则重置 threadId
+        messages: action.payload?.visible ? state.messages : [], // 如果关闭聊天窗口，则清空消息列表
+      };
     case 'applySseMessage':
       return {
         ...state,
@@ -233,6 +249,25 @@ function reducer(state: AiChateState, action: AiChateAction): AiChateState {
         ...state,
         tab: action.payload.tab
       };
+    case 'appendMessageList':
+      const existingMsgIds = new Set(state.messages.map((item) => item.id));
+      const nextMsgItems = action.payload.messageList.filter((item) => !existingMsgIds.has(item.id));
+      const mergedMessageList = [...state.messages, ...nextMsgItems];
+      const isMsgDone = action.payload.total > 0 && mergedMessageList.length >= action.payload.total;
+      return {
+        ...state,
+        messages: mergedMessageList.reverse(),
+        messageTerminate: isMsgDone,
+        messageParam: {
+          ...state.messageParam,
+          page: (state.messageParam.page || 0) + 1,
+        },
+      };
+    case 'setThreadId':
+      return {
+        ...state,
+        threadId: action.payload.threadId
+      };
     default:
       return state;
   }
@@ -246,7 +281,7 @@ function reducer(state: AiChateState, action: AiChateAction): AiChateState {
 export const useAiChat = () => {
   const [state, dispatch] = useReducer(reducer, initialState);
   const agUiRef = useRef<AgUi>(null);
-
+  const isCloseView = useRef<boolean>(true); // 是否是关闭窗口引起的 threadId 变更，避免误触发 useEffect
   const subscriber: AgentSubscriber  = {
     onRunInitialized: (params: AgentSubscriberParams) => {
       console.log('onRunInitialized', params);
@@ -428,18 +463,31 @@ export const useAiChat = () => {
     if (!state.visible) {
       return;
     }
+    console.log('state.messages', JSON.stringify(state.messages), state.threadId);
     agUiRef.current = new AgUi({
-      subscriber
+      threadId: state.threadId || '',
+      subscriber,
+      historyMessages: state.messages.map(item => {
+        return {
+          role: item.role,
+          content: item.contentType === 'string' ? item.content as string : '',
+          id: item.id,
+        };
+      }) as RunAgentInput['messages'],
     });
 
     return () => {
       agUiRef.current?.clearSubscribe();
       agUiRef.current = null;
       dispatch({
-        type: 'resetState'
+        type: 'resetState',
+        payload: {
+          visible: !isCloseView.current || false,
+
+        }
       });
     };
-  }, [state.visible]);
+  }, [state.visible, state.threadId]);
 
   /**
    * 重置会话列表及其分页状态
@@ -493,7 +541,6 @@ export const useAiChat = () => {
         });
         return;
       }
-
       dispatch({
         type: 'appendSessionList',
         payload: {
@@ -515,29 +562,27 @@ export const useAiChat = () => {
 
   /**
    * 拉取指定会话的历史消息，并在顶部追加更早的消息记录。
+   * @param {Boolean} isAppend 是否强制追加 
+   * 
    */
-  const loadMessageList = useCallback(async (params?: MessageListRequestType) => {
+  const loadMessageList = useCallback(async (params?: MessageListRequestType, isAppend: boolean = false) => {
     const requestParam = params || state.messageParam;
-
-    if (state.isMessageLoading || state.messageTerminate || !requestParam.id) {
+    if ((state.isMessageLoading || state.messageTerminate || !requestParam.id) && !isAppend) {
       return;
     }
-
     dispatch({
       type: 'setMessageLoading',
       payload: {
         loading: true
       }
     });
-
     try {
       const res = await getMessageList({
         id: requestParam.id,
         page: requestParam.page || 1,
-        size: requestParam.size || 10,
+        size: requestParam.size || 20,
         sort: requestParam.sort || 'DESC',
       });
-
       if (res.code !== 200) {
         showMessage({
           message: res.msg,
@@ -545,8 +590,37 @@ export const useAiChat = () => {
         });
         return;
       }
-
-
+      const messageList: ChatMessage[] = res.data?.data.map(item => {
+        if (item.messageType === 'A2UI') {
+          return {
+            id: item.messageId,
+            createdAt: item.createdAt,
+            status: 'success' as AiChatMessageStatus,
+            content: item.content as unknown as A2UI[],
+            contentPos: 'chat' as const,
+            contentType: 'a2ui' as const,
+            role: item.role,
+          };
+        }
+        return {
+          id: item.messageId,
+          createdAt: item.createdAt,
+          status: 'success' as AiChatMessageStatus,
+          content: item.content as string,
+          contentPos: 'chat' as const,
+          contentType: 'string' as const,
+          role: item.role,
+        };
+      }) || [];
+      console.log('loadMessageList', messageList);
+      console.log('state.threadId', state.threadId);
+      dispatch({
+        type: 'appendMessageList',
+        payload: {
+          messageList: messageList,
+          total: res.data?.pagination.total || 0,
+        }
+      });
     } catch (error) {
       console.error(error);
     } finally {
@@ -575,6 +649,7 @@ export const useAiChat = () => {
    * 关闭聊天窗口。
    */
   const closeChat = useCallback(() => {
+    isCloseView.current = true;
     dispatch({
       type: 'closeChat'
     });
@@ -608,7 +683,6 @@ export const useAiChat = () => {
     if (!state.messageParam.id) {
       return;
     }
-
     await loadMessageList({
       ...state.messageParam,
       id: state.messageParam.id,
@@ -633,12 +707,11 @@ export const useAiChat = () => {
   /**
    * 选择历史会话后重置当前消息状态，并加载对应的聊天记录。
    */
-  const onSelectSessionClick = useCallback(async (id: number) => {
+  const onSelectSessionClick = useCallback(async (id: number, threadId: string) => {
     const nextMessageParam: MessageListRequestType = {
       ...DEFAULT_MESSAGE_PARAM,
       id
     };
-
     resetMessageState(id);
     dispatch({
       type: 'switchTab',
@@ -646,7 +719,15 @@ export const useAiChat = () => {
         tab: 1
       }
     });
-    await loadMessageList(nextMessageParam);
+    isCloseView.current = false;
+    
+    await loadMessageList(nextMessageParam, true);
+    dispatch({
+      type: 'setThreadId',
+      payload: {
+        threadId,
+      }
+    });
   }, [loadMessageList, resetMessageState]);
 
   return useMemo(() => ({
