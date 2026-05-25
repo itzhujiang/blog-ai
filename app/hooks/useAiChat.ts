@@ -465,7 +465,7 @@ export const useAiChat = () => {
     }
     console.log('state.messages', JSON.stringify(state.messages), state.threadId);
     agUiRef.current = new AgUi({
-      threadId: state.threadId || '',
+      threadId: state.threadId || undefined,
       subscriber,
       historyMessages: state.messages.map(item => {
         return {
@@ -612,8 +612,6 @@ export const useAiChat = () => {
           role: item.role,
         };
       }) || [];
-      console.log('loadMessageList', messageList);
-      console.log('state.threadId', state.threadId);
       dispatch({
         type: 'appendMessageList',
         payload: {
@@ -720,6 +718,8 @@ export const useAiChat = () => {
       }
     });
     isCloseView.current = false;
+    console.log('threadId',threadId);
+    console.log('onSelectSessionClick', state.threadId);
     
     await loadMessageList(nextMessageParam, true);
     dispatch({
