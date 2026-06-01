@@ -596,7 +596,7 @@ export const useAiChat = () => {
             id: item.messageId,
             createdAt: item.createdAt,
             status: 'success' as AiChatMessageStatus,
-            content: item.content as unknown as A2UI[],
+            content: typeof item.content === 'string' ? JSON.parse(item.content) as A2UI[] : item.content as unknown as A2UI[],
             contentPos: 'chat' as const,
             contentType: 'a2ui' as const,
             role: item.role,
@@ -718,7 +718,7 @@ export const useAiChat = () => {
       }
     });
     isCloseView.current = false;
-    console.log('threadId',threadId);
+    console.log('threadId', threadId);
     console.log('onSelectSessionClick', state.threadId);
     
     await loadMessageList(nextMessageParam, true);

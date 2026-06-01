@@ -55,8 +55,6 @@ class AgUi {
     this.agent = null;
     this.createAgent(threadId);
     if (historyMessages) {
-      console.log('进入了', historyMessages);
-      
       this.agent!.addMessages(historyMessages);
     }
     if (subscriber) {

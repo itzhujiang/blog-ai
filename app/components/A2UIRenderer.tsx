@@ -13,6 +13,8 @@ function buildComponentMap(components: A2UIComponent[]): Record<string, A2UIComp
 }
 
 export function A2UIRenderer({ value }: { value: A2UI[] }) {
+  console.log('A2UIRenderer value:', value);
+  if (!Array.isArray(value)) return null;
   const updateMsg = value.find(msg => 'updateComponents' in msg) as
     | { updateComponents: { components: A2UIComponent[] } }
     | undefined;
@@ -65,11 +67,12 @@ function renderNode(id: string, componentMap: Record<string, A2UIComponent>): Re
       );
     }
 
-    case 'Image':
+    case 'Image': {
+      const src = node.src.replace(/^https?:\/\/[^/]+/, '');
       return (
         <div key={id} className="relative overflow-hidden rounded-lg border border-primary/15 shadow-natural">
           <Image
-            src={node.src}
+            src={src}
             alt={node.alt || ''}
             width={400}
             height={300}
@@ -77,6 +80,7 @@ function renderNode(id: string, componentMap: Record<string, A2UIComponent>): Re
           />
         </div>
       );
+    }
 
     default:
       return null;
