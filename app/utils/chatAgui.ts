@@ -35,6 +35,7 @@ interface AgUiType {
   threadId?: string;
 }
 
+let agUiInstanceCount = 0;
 
 class AgUi {
   private agent: HttpAgent | null = null;
@@ -45,14 +46,20 @@ class AgUi {
   }
   /**
    * 切换会话
-   * @param param0 
+   * @param param
    */
   switchSession({ historyMessages, threadId, subscriber }:AgUiType) {
     this.connection({ historyMessages, threadId, subscriber });
   }
   
   private connection({ historyMessages, threadId, subscriber }:AgUiType) {
-    this.agent = null;
+    agUiInstanceCount = agUiInstanceCount + 1;
+    console.log(`[Memory Monitor] AgUi created,  total: ${agUiInstanceCount}`);
+    if (!!this.agent) {
+      this.agent.abortController.abort();
+      this.unsubscribe();
+      this.agent = null;
+    }
     this.createAgent(threadId);
     if (historyMessages) {
       this.agent!.addMessages(historyMessages);

@@ -1,10 +1,11 @@
 /**
- * 网站配置工具函数
+ * 网站配置工具函数 (Prisma 版本)
  * SSR/ISR 服务端渲染时使用，直接查询数据库
  * 客户端组件使用 /api/site-config 端点
  */
 
-import { defaultLogger } from './logger';
+import { prisma } from '@/utils/prisma';
+import { defaultLogger } from '@/utils/logger';
 
 /**
  * 网站配置项类型
@@ -28,39 +29,36 @@ const DEFAULT_SITE_CONFIG: SiteConfig = {
 
 /**
  * SSR/ISR 服务端渲染时获取网站配置
- * 直接使用 Sequelize 模型查询数据库
+ * 直接使用 Prisma 查询数据库
  */
 export async function getSiteConfigSSR(): Promise<SiteConfig> {
   try {
-    const { initAllModels } = await import('./models');
-    const { SiteSetting } = await initAllModels();
-
     // 并行获取所有配置
     const [titleSetting, descriptionSetting, avatarSetting, copyrightSetting] = await Promise.all([
-      SiteSetting.findOne({
-        where: { settingKey: 'site_title' },
-        attributes: ['settingValue'],
+      prisma.site_settings.findUnique({
+        where: { setting_key: 'site_title' },
+        select: { setting_value: true },
       }),
-      SiteSetting.findOne({
-        where: { settingKey: 'site_description' },
-        attributes: ['settingValue'],
+      prisma.site_settings.findUnique({
+        where: { setting_key: 'site_description' },
+        select: { setting_value: true },
       }),
-      SiteSetting.findOne({
-        where: { settingKey: 'avatar_path' },
-        attributes: ['settingValue'],
+      prisma.site_settings.findUnique({
+        where: { setting_key: 'avatar_path' },
+        select: { setting_value: true },
       }),
-      SiteSetting.findOne({
-        where: { settingKey: 'footer_copyright' },
-        attributes: ['settingValue'],
+      prisma.site_settings.findUnique({
+        where: { setting_key: 'footer_copyright' },
+        select: { setting_value: true },
       }),
     ]);
 
     return {
-      siteTitle: titleSetting?.settingValue || DEFAULT_SITE_CONFIG.siteTitle,
+      siteTitle: titleSetting?.setting_value || DEFAULT_SITE_CONFIG.siteTitle,
       siteDescription:
-        descriptionSetting?.settingValue || DEFAULT_SITE_CONFIG.siteDescription,
-      avatarPath: avatarSetting?.settingValue || DEFAULT_SITE_CONFIG.avatarPath,
-      footerCopyright: copyrightSetting?.settingValue || DEFAULT_SITE_CONFIG.footerCopyright,
+        descriptionSetting?.setting_value || DEFAULT_SITE_CONFIG.siteDescription,
+      avatarPath: avatarSetting?.setting_value || DEFAULT_SITE_CONFIG.avatarPath,
+      footerCopyright: copyrightSetting?.setting_value || DEFAULT_SITE_CONFIG.footerCopyright,
     };
   } catch (error) {
     defaultLogger.error('获取网站配置失败:', error);

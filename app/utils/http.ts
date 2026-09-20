@@ -106,5 +106,6 @@ const instance = <T extends Server>(server: T) => {
   return request as T extends 'ai' ? AiHttp : Http;
 };
 
-export const http = instance('');
 export const aiHttp = instance('ai');
+export const http =  instance('');
+

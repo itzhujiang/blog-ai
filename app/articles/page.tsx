@@ -29,10 +29,10 @@ export async function generateMetadata(
   const categorySlug = params.category || null;
 
   if (categorySlug) {
-    const { initAllModels } = await import('@/utils/models');
-    const { Category } = await initAllModels();
-    const category = await Category.findOne({
+    const { prisma } = await import('@/utils/prisma');
+    const category = await prisma.categories.findUnique({
       where: { slug: categorySlug },
+      select: { name: true }
     });
 
     if (category) {

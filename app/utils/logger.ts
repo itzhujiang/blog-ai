@@ -29,11 +29,14 @@ logDirs.forEach(dir => {
   }
 });
 
+// 开发环境使用 console，避免文件流泄漏
+const isDev = process.env.NODE_ENV === 'development';
+
 log4js.configure({
   appenders: {
-    sql: getCommonAppenders('sql'),
-    default: getCommonAppenders('default'),
-    api: getCommonAppenders('api'),
+    sql: isDev ? { type: 'console' } : getCommonAppenders('sql'),
+    default: isDev ? { type: 'console' } : getCommonAppenders('default'),
+    api: isDev ? { type: 'console' } : getCommonAppenders('api'),
   },
   categories: {
     sql: {

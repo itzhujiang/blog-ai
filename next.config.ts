@@ -1,7 +1,17 @@
 import type { NextConfig } from 'next';
 
 
+setInterval(() => {
+  const usage = process.memoryUsage();
+  console.log('[Server Memory]', {
+    rss: `${Math.round(usage.rss / 1024 / 1024)}MB`,
+    heapUsed: `${Math.round(usage.heapUsed / 1024 / 1024)}MB`,
+    heapTotal: `${Math.round(usage.heapTotal / 1024 / 1024)}MB`,
+  });
+}, 10000);
+
 const nextConfig: NextConfig = {
+  allowedDevOrigins: ['192.168.0.108', '192.168.2.109'],
   images: {
     remotePatterns: [
       {
@@ -20,6 +30,11 @@ const nextConfig: NextConfig = {
   serverExternalPackages: ['svg-captcha'],
   // 预连接第三方资源
   async headers() {
+    // 开发环境跳过安全头（避免 localhost vs 127.0.0.1 的警告）
+    if (process.env.NODE_ENV === 'development') {
+      return [];
+    }
+
     return [
       {
         source: '/:path*',
@@ -48,8 +63,8 @@ const nextConfig: NextConfig = {
         destination: `${process.env.AI_BASE_URL}/api/tool/:path*`,
       },
       {
-        source: '/uploads/:path*',
-        destination: `${process.env.BACKEND_BASE_URL}/uploads/:path*`,
+        source: '/api/uploads/:path*',
+        destination: `${process.env.BACKEND_BASE_URL}/api/uploads/:path*`,
       },
     ];
   },

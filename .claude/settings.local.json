@@ -1,8 +1,38 @@
 {
+  "permissions": {
+    "allow": [
+      "Bash(PGPASSWORD='ZJW15824662871' psql *)",
+      "Bash(PGCLIENTENCODING=UTF8 PGPASSWORD='ZJW15824662871' psql -h localhost -p 5432 -U postgres -d blog -t -A -c \"SELECT slug FROM articles WHERE status='published' LIMIT 3;\")",
+      "Bash(curl -s \"http://localhost:3000/articles/%E6%9D%80%E6%9D%80%E6%9D%80\" -o /tmp/detail.html)",
+      "Read(//tmp/**)",
+      "Bash(node *)",
+      "Bash(curl -s \"http://localhost:3000/articles/%E6%9D%80%E6%9D%80%E6%9D%80\" -o \"$\\(pwd\\)/detail_debug.html\")",
+      "Bash(npx playwright *)",
+      "Bash(tasklist)",
+      "mcp__playwright__browser_navigate",
+      "mcp__playwright__browser_console_messages",
+      "mcp__playwright__browser_network_requests",
+      "mcp__playwright__browser_find",
+      "mcp__playwright__browser_network_request",
+      "mcp__playwright__browser_take_screenshot",
+      "mcp__playwright__browser_wait_for",
+      "mcp__playwright__browser_evaluate",
+      "mcp__playwright__browser_snapshot",
+      "Bash(curl -s \"http://192.168.2.119:3000/articles/%E6%9D%80%E6%9D%80%E6%9D%80\" -o \"$\\(pwd\\)/detail_ip.html\")",
+      "mcp__playwright__browser_run_code_unsafe",
+      "Bash(npm install *)",
+      "Bash(npx prisma *)",
+      "Bash(xargs grep -l \"interface ArticleListItem\")",
+      "Bash(xargs grep -l \"type SortType\")",
+      "Bash(xargs grep -l \"interface ArticleDetail\")",
+      "Bash(npx tsc *)",
+      "Bash(xargs grep -l \"zustand\\\\|create\\(\")"
+    ]
+  },
+  "enableAllProjectMcpServers": true,
   "enabledMcpjsonServers": [
     "promptx",
     "playwright",
     "context7"
-  ],
-  "enableAllProjectMcpServers": true
+  ]
 }

@@ -1,6 +1,9 @@
 /**
- * 评论服务
+ * 评论服务 (Prisma 版本)
  */
+
+import { defaultLogger } from '@/utils/logger';
+import { prisma } from '@/utils/prisma';
 
 export interface CommentResult {
   id: number;
@@ -27,53 +30,67 @@ export interface CreateCommentParams {
 export async function getCommentsByArticleId(
   articleId: number,
 ): Promise<{ comments: CommentResult[]; total: number }> {
-  const { initAllModels } = await import('@/utils/models');
-  const { Comment } = await initAllModels();
+  try {
+    const rows = await prisma.comments.findMany({
+      where: {
+        article_id: articleId,
+        status: 'approved'
+      },
+      orderBy: { created_at: 'asc' },
+      select: {
+        id: true,
+        author_name: true,
+        content: true,
+        created_at: true,
+        is_author: true,
+        parent_id: true,
+      }
+    });
 
-  const rows = await Comment.findAll({
-    where: { articleId, status: 'approved' },
-    order: [['createdAt', 'ASC']],
-  });
+    const comments: CommentResult[] = rows.map((c) => ({
+      id: c.id,
+      authorName: c.author_name,
+      content: c.content,
+      createdAt: Number(c.created_at),
+      isAuthor: c.is_author,
+      parentId: c.parent_id ?? null,
+    }));
 
-  const comments: CommentResult[] = rows.map((c) => ({
-    id: c.id,
-    authorName: c.authorName,
-    content: c.content,
-    createdAt: c.createdAt
-      ? parseInt(String(c.createdAt), 10)
-      : Date.now(),
-    isAuthor: Boolean(c.isAuthor),
-    parentId: c.parentId ?? null,
-  }));
-
-  return { comments, total: comments.length };
+    return { comments, total: comments.length };
+  } catch (error) {
+    defaultLogger.error('获取评论失败:', error);
+    return { comments: [], total: 0 };
+  }
 }
 
 /**
  * 创建新评论（待审核状态）
  */
 export async function createComment(params: CreateCommentParams) {
-  const { initAllModels } = await import('@/utils/models');
-  const { Comment } = await initAllModels();
+  try {
+    const comment = await prisma.comments.create({
+      data: {
+        article_id: params.articleId,
+        parent_id: params.parentId,
+        author_name: params.authorName,
+        author_email: params.authorEmail,
+        author_phone: params.authorPhone,
+        content: params.content,
+        author_ip: params.authorIp,
+        status: 'pending',
+        created_at: BigInt(Date.now()),
+      },
+    });
 
-  const comment = await Comment.create({
-    articleId: params.articleId,
-    parentId: params.parentId,
-    authorName: params.authorName,
-    authorEmail: params.authorEmail,
-    authorPhone: params.authorPhone,
-    content: params.content,
-    authorIp: params.authorIp,
-    status: 'pending',
-  });
-
-  return {
-    id: comment.id,
-    authorName: comment.authorName,
-    content: comment.content,
-    createdAt: comment.createdAt
-      ? parseInt(String(comment.createdAt), 10)
-      : Date.now(),
-    status: comment.status,
-  };
+    return {
+      id: comment.id,
+      authorName: comment.author_name,
+      content: comment.content,
+      createdAt: Number(comment.created_at),
+      status: comment.status,
+    };
+  } catch (error) {
+    defaultLogger.error('创建评论失败:', error);
+    throw error;
+  }
 }

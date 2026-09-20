@@ -99,7 +99,10 @@ export default function AiChat() {
         : ''}
 
       <button className="flex h-14 w-14 items-center justify-center rounded-full bg-primary text-white shadow-natural transition-all duration-300 hover:scale-105 hover:shadow-natural-hover active:scale-95 cursor-pointer" onClick={openChat}>
-        <span className="material-symbols-outlined text-3xl!">chat_bubble</span>
+        <span className="material-symbols-outlined text-3xl!">chat_bubble </span>
+        <div>
+          {state.visible}
+        </div>
       </button>
     </div>
   );

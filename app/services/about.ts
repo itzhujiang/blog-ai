@@ -1,11 +1,12 @@
 /**
- * 关于页服务
+ * 关于页服务 (Prisma 版本)
  */
 
 import axios from 'axios';
 
 import { getFileUrl, getServerFileUrl } from '@/utils/file-url';
 import { defaultLogger } from '@/utils/logger';
+import { prisma } from '@/utils/prisma';
 
 import type { AboutPageData } from '../about/types';
 
@@ -14,50 +15,38 @@ import type { AboutPageData } from '../about/types';
  */
 export async function getAboutPageData(): Promise<AboutPageData | null> {
   try {
-    const { initAllModels } = await import('@/utils/models');
-    const { AboutPage, AboutPageMedia, MediaFile } =
-      await initAllModels();
-
-    const page = await AboutPage.findOne({
+    const page = await prisma.about_page.findUnique({
       where: { id: 1 },
-      include: [
-        {
-          model: AboutPageMedia,
-          as: 'aboutPageMedias',
-          required: false,
-          include: [
-            {
-              model: MediaFile,
-              as: 'media',
-              attributes: ['fileUrl'],
-            },
-          ],
-        },
-      ],
+      include: {
+        about_page_media: {
+          include: {
+            media_files: {
+              select: {
+                file_path: true
+              }
+            }
+          }
+        }
+      },
     });
 
     if (!page) return null;
 
     // 提取媒体文件
-    const medias = (page as unknown as {
-      aboutPageMedias?: Array<{
-        usageType: string;
-        media?: { fileUrl: string };
-      }>;
-    }).aboutPageMedias || [];
+    const medias = page.about_page_media || [];
 
     // 头像
-    const avatarMedia = medias.find((m) => m.usageType === 'avatar');
-    const avatarUrl = avatarMedia?.media?.fileUrl
-      ? getFileUrl(avatarMedia.media.fileUrl)
+    const avatarMedia = medias.find((m) => m.usage_type === 'avatar');
+    const avatarUrl = avatarMedia?.media_files?.file_path
+      ? getFileUrl(avatarMedia.media_files.file_path)
       : null;
 
     // 内容 Markdown
     let introContent = '';
-    const contentMedia = medias.find((m) => m.usageType === 'content');
-    if (contentMedia?.media?.fileUrl) {
+    const contentMedia = medias.find((m) => m.usage_type === 'content');
+    if (contentMedia?.media_files?.file_path) {
       try {
-        const fileUrl = getServerFileUrl(contentMedia.media.fileUrl);
+        const fileUrl = getServerFileUrl(contentMedia.media_files.file_path);
         const response = await axios.get<string>(fileUrl, {
           timeout: 10000,
         });
@@ -68,15 +57,15 @@ export async function getAboutPageData(): Promise<AboutPageData | null> {
     }
 
     return {
-      nickname: page.nickname,
-      jobTitle: page.jobTitle,
-      personalTags: page.personalTags,
+      nickname: page.nickname || '',
+      jobTitle: page.job_title || '',
+      personalTags: page.personal_tags as string[] || [],
       avatarUrl,
       introContent,
-      skills: page.skills,
-      timeline: page.timeline,
-      contactInfo: page.contactInfo as AboutPageData['contactInfo'],
-      socialLinks: page.socialLinks as AboutPageData['socialLinks'],
+      skills: page.skills as any,
+      timeline: page.timeline as any,
+      contactInfo: page.contact_info as AboutPageData['contactInfo'],
+      socialLinks: page.social_links as AboutPageData['socialLinks'],
     };
   } catch (error) {
     defaultLogger.error('获取关于我页面数据失败:', error);

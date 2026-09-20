@@ -7,7 +7,7 @@
 import { NextResponse } from 'next/server';
 
 import { apiLogger, defaultLogger } from '@/utils/logger';
-import { SiteSetting } from '@/utils/models';
+import { prisma } from '@/utils/prisma';
 
 const DEFAULT_SITE_CONFIG = {
   siteTitle: '暖木博客 - 暖木与阳光',
@@ -20,22 +20,22 @@ export async function GET() {
 
     // 并行获取标题和描述
     const [titleSetting, descriptionSetting] = await Promise.all([
-      SiteSetting.findOne({
-        where: { settingKey: 'site_title' },
-        attributes: ['settingValue'],
+      prisma.site_settings.findUnique({
+        where: { setting_key: 'site_title' },
+        select: { setting_value: true },
       }),
-      SiteSetting.findOne({
-        where: { settingKey: 'site_description' },
-        attributes: ['settingValue'],
+      prisma.site_settings.findUnique({
+        where: { setting_key: 'site_description' },
+        select: { setting_value: true },
       }),
     ]);
 
     return NextResponse.json({
       success: true,
       data: {
-        siteTitle: titleSetting?.settingValue || DEFAULT_SITE_CONFIG.siteTitle,
+        siteTitle: titleSetting?.setting_value || DEFAULT_SITE_CONFIG.siteTitle,
         siteDescription:
-          descriptionSetting?.settingValue || DEFAULT_SITE_CONFIG.siteDescription,
+          descriptionSetting?.setting_value || DEFAULT_SITE_CONFIG.siteDescription,
       },
     });
   } catch (error) {

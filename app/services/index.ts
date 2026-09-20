@@ -1,5 +1,5 @@
 /**
- * 服务层统一导出
+ * 服务层统一导出 (Prisma 版本)
  */
 
 // 文章服务
@@ -27,8 +27,8 @@ export type { SearchSortType, LogSearchParams } from './search';
 export { getAboutPageData } from './about';
 
 // 站点配置
-export { getSiteConfigSSR } from './site-config';
-export type { SiteConfig } from './site-config';
+export { getSiteConfigSSR } from '@/utils/site-config';
+export type { SiteConfig } from '@/utils/site-config';
 
 // 工具函数
 export { escapeLikePattern } from './helpers';

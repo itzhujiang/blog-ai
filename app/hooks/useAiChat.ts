@@ -282,7 +282,9 @@ export const useAiChat = () => {
   const [state, dispatch] = useReducer(reducer, initialState);
   const agUiRef = useRef<AgUi>(null);
   const isCloseView = useRef<boolean>(true); // 是否是关闭窗口引起的 threadId 变更，避免误触发 useEffect
-  const subscriber: AgentSubscriber  = {
+
+  // 使用 useMemo 稳定 subscriber 对象，避免每次渲染都重新创建
+  const subscriber: AgentSubscriber = useMemo(() => ({
     onRunInitialized: (params: AgentSubscriberParams) => {
       console.log('onRunInitialized', params);
       const msg = params.messages[params.messages.length - 1];
@@ -321,7 +323,7 @@ export const useAiChat = () => {
       });
     },
     onActivityDeltaEvent: (params) => {
-      console.log('onActivityDeltaEvent', params, state.messages);
+      console.log('onActivityDeltaEvent', params);
       const activityMessage = params.activityMessage;
       if (!activityMessage) {
         return;
@@ -455,30 +457,43 @@ export const useAiChat = () => {
         });
       }
     }
-  };
+  }), []); // 空依赖数组，subscriber 只创建一次
   /**
    * 在聊天窗口打开时建立 SSE 订阅，并在关闭或卸载时清理连接。
    */
   useEffect(() => {
+    console.log('进入了11111111111');
+    
     if (!state.visible) {
       return;
     }
-    console.log('state.messages', JSON.stringify(state.messages), state.threadId);
-    agUiRef.current = new AgUi({
-      threadId: state.threadId || undefined,
-      subscriber,
-      historyMessages: state.messages.map(item => {
-        return {
-          role: item.role,
-          content: item.contentType === 'string' ? item.content as string : '',
-          id: item.id,
-        };
-      }) as RunAgentInput['messages'],
-    });
-
+    if (!agUiRef.current) {
+      agUiRef.current = new AgUi({
+        threadId: state.threadId || undefined,
+        subscriber,
+        historyMessages: state.messages.map(item => {
+          return {
+            role: item.role,
+            content: item.contentType === 'string' ? item.content as string : '',
+            id: item.id,
+          };
+        }) as RunAgentInput['messages'],
+      });
+    } else {
+      agUiRef.current.switchSession({
+        threadId: state.threadId || undefined,
+        subscriber,
+        historyMessages: state.messages.map(item => {
+          return {
+            role: item.role,
+            content: item.contentType === 'string' ? item.content as string : '',
+            id: item.id,
+          };
+        }) as RunAgentInput['messages'],
+      });
+    }
     return () => {
       agUiRef.current?.clearSubscribe();
-      agUiRef.current = null;
       dispatch({
         type: 'resetState',
         payload: {
@@ -635,6 +650,7 @@ export const useAiChat = () => {
    * 切换聊天窗口显隐，并在打开时初始化会话与消息数据。
    */
   const openChat = useCallback(async () => {
+    console.log('openChat', state.visible);
     dispatch({
       type: 'openChat'
     });

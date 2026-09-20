@@ -1,0 +1,580 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model about_page {
+  id               Int                @id @default(autoincrement())
+  title            String             @default("关于我") @db.VarChar(255)
+  nickname         String?            @db.VarChar(100)
+  job_title        String?            @db.VarChar(100)
+  personal_tags    Json?
+  contact_info     Json?
+  social_links     Json?
+  skills           Json?
+  timeline         Json?
+  updated_at       BigInt             @default(0)
+  about_page_media about_page_media[]
+}
+
+model about_page_media {
+  id            Int                    @id @default(autoincrement())
+  about_page_id Int
+  media_id      Int
+  usage_type    about_page_media_usage @default(avatar)
+  created_at    BigInt                 @default(0)
+  about_page    about_page             @relation(fields: [about_page_id], references: [id], onDelete: Cascade, onUpdate: NoAction)
+  media_files   media_files            @relation(fields: [media_id], references: [id], onDelete: Cascade, onUpdate: NoAction)
+
+  @@index([about_page_id], map: "about_page_media_about_page_id")
+  @@index([media_id], map: "about_page_media_media_id")
+  @@index([usage_type], map: "about_page_media_usage_type")
+  @@index([media_id], map: "idx_about_page_media_media_id")
+  @@index([about_page_id], map: "idx_about_page_media_page_id")
+  @@index([usage_type], map: "idx_about_page_media_usage_type")
+}
+
+model admin_users {
+  id             Int          @id @default(autoincrement())
+  username       String       @unique(map: "admin_users_username") @db.VarChar(100)
+  email          String       @unique(map: "admin_users_email") @db.VarChar(255)
+  display_name   String?      @db.VarChar(100)
+  avatar_url     String?      @db.VarChar(500)
+  phone          String?      @db.VarChar(20)
+  password_hash  String       @db.VarChar(255)
+  password_salt  String       @db.VarChar(255)
+  status         admin_status @default(active)
+  last_login_at  BigInt?
+  last_login_ip  String?      @db.VarChar(45)
+  login_attempts Int          @default(0)
+  locked_until   BigInt?
+  created_at     BigInt       @default(0)
+  updated_at     BigInt       @default(0)
+
+  @@index([last_login_ip], map: "admin_users_last_login_ip")
+  @@index([status], map: "admin_users_status")
+  @@index([last_login_ip], map: "idx_admin_users_last_login_ip")
+  @@index([status], map: "idx_admin_users_status")
+}
+
+model ai_artworks {
+  id              Int             @id @default(autoincrement())
+  title           String          @db.VarChar(255)
+  slug            String          @unique(map: "ai_artworks_slug") @db.VarChar(255)
+  description     String?
+  category        String?         @db.VarChar(50)
+  creation_prompt String?
+  ai_model        String?         @db.VarChar(100)
+  view_count      Int             @default(0)
+  like_count      Int             @default(0)
+  is_featured     Boolean         @default(false)
+  sort_order      Int             @default(0)
+  status          artwork_status  @default(published)
+  created_at      BigInt          @default(0)
+  updated_at      BigInt          @default(0)
+  artwork_media   artwork_media[]
+
+  @@index([category], map: "ai_artworks_category")
+  @@index([created_at], map: "ai_artworks_created_at")
+  @@index([status, is_featured, sort_order], map: "ai_artworks_status_is_featured_sort_order")
+  @@index([category], map: "idx_ai_artworks_category")
+  @@index([created_at], map: "idx_ai_artworks_created_at")
+  @@index([status, is_featured, sort_order], map: "idx_ai_artworks_status_featured")
+}
+
+model ai_chat_messages {
+  id               BigInt               @id @default(autoincrement())
+  message_id       String               @unique(map: "idx_ai_chat_messages_message_id") @db.VarChar(255)
+  session_id       BigInt
+  role             ai_chat_message_role
+  message_type     ai_chat_message_type @default(text)
+  content          String
+  created_at       BigInt               @default(0)
+  updated_at       BigInt               @default(0)
+  ai_chat_sessions ai_chat_sessions     @relation(fields: [session_id], references: [id], onUpdate: NoAction)
+
+  @@index([session_id, created_at], map: "idx_ai_chat_messages_session_created_at")
+}
+
+model ai_chat_sessions {
+  id                   BigInt             @id @default(autoincrement())
+  session_id           String             @unique(map: "ai_chat_sessions_session_id") @db.VarChar(255)
+  user_id              Int
+  title                String             @db.VarChar(255)
+  last_message_preview String?
+  last_message_at      BigInt             @default(0)
+  created_at           BigInt             @default(0)
+  updated_at           BigInt             @default(0)
+  deleted_at           BigInt             @default(0)
+  ai_chat_messages     ai_chat_messages[]
+  ai_chat_users        ai_chat_users      @relation(fields: [user_id], references: [id], onUpdate: NoAction)
+
+  @@index([user_id, created_at(sort: Desc)], map: "idx_ai_chat_sessions_user_created_at")
+  @@index([user_id, deleted_at, last_message_at(sort: Desc)], map: "idx_ai_chat_sessions_user_deleted_last_message")
+}
+
+model ai_chat_users {
+  id               Int                 @id @default(autoincrement())
+  phone            String?             @unique(map: "ai_chat_users_phone") @db.VarChar(20)
+  status           ai_chat_user_status @default(active)
+  last_verified_at BigInt?
+  last_login_ip    String?             @db.VarChar(45)
+  created_at       BigInt              @default(0)
+  updated_at       BigInt              @default(0)
+  ai_chat_sessions ai_chat_sessions[]
+
+  @@index([last_login_ip], map: "ai_chat_users_last_login_ip")
+  @@index([status], map: "ai_chat_users_status")
+  @@index([last_login_ip], map: "idx_ai_chat_users_last_login_ip")
+  @@index([status], map: "idx_ai_chat_users_status")
+}
+
+model ai_global_chat_memories {
+  id               Int                             @id @default(autoincrement())
+  user_id          Int
+  category         ai_global_chat_memory_category?
+  content          String?
+  access_count     Int                             @default(0)
+  last_accessed_at BigInt?
+  skip_index       Boolean                         @default(false)
+  created_at       BigInt                          @default(0)
+  updated_at       BigInt                          @default(0)
+  deleted_at       BigInt                          @default(0)
+
+  @@index([user_id, category], map: "idx_ai_global_chat_memories_user_category")
+  @@index([user_id, last_accessed_at], map: "idx_ai_global_chat_memories_user_last_accessed")
+  @@index([user_id, category], map: "idx_user_category")
+  @@index([user_id, last_accessed_at], map: "idx_user_last_accessed")
+}
+
+model ai_session_memories {
+  id              Int     @id @default(autoincrement())
+  user_id         Int
+  thread_id       String  @unique(map: "idx_ai_session_memories_thread_id") @db.VarChar(255)
+  content         String?
+  last_message_id String  @db.VarChar(255)
+  created_at      BigInt  @default(0)
+  updated_at      BigInt  @default(0)
+
+  @@index([user_id], map: "idx_ai_session_memories_user_id")
+  @@index([user_id], map: "idx_user_id")
+}
+
+model article_categories {
+  article_id  Int
+  category_id Int
+  created_at  BigInt     @default(0)
+  articles    articles   @relation(fields: [article_id], references: [id], onDelete: Cascade, onUpdate: NoAction)
+  categories  categories @relation(fields: [category_id], references: [id], onDelete: Cascade, onUpdate: NoAction)
+
+  @@id([article_id, category_id])
+  @@index([article_id], map: "article_categories_article_id")
+  @@index([category_id], map: "article_categories_category_id")
+  @@index([article_id], map: "idx_article_categories_article_id")
+  @@index([category_id], map: "idx_article_categories_category_id")
+}
+
+model article_media {
+  id          Int                 @id @default(autoincrement())
+  article_id  Int
+  media_id    Int
+  usage_type  article_media_usage @default(attachment)
+  sort_order  Int                 @default(0)
+  created_at  BigInt              @default(0)
+  articles    articles            @relation(fields: [article_id], references: [id], onDelete: Cascade, onUpdate: NoAction)
+  media_files media_files         @relation(fields: [media_id], references: [id], onDelete: Cascade, onUpdate: NoAction)
+
+  @@unique([article_id, media_id, usage_type], map: "article_media_article_id_media_id_usage_type")
+  @@unique([article_id, media_id, usage_type], map: "idx_article_media_unique")
+  @@index([article_id], map: "article_media_article_id")
+  @@index([media_id], map: "article_media_media_id")
+  @@index([usage_type], map: "article_media_usage_type")
+  @@index([article_id], map: "idx_article_media_article_id")
+  @@index([media_id], map: "idx_article_media_media_id")
+  @@index([usage_type], map: "idx_article_media_usage_type")
+}
+
+model articles {
+  id                 Int                  @id @default(autoincrement())
+  title              String               @db.VarChar(255)
+  slug               String               @unique(map: "articles_slug") @db.VarChar(255)
+  content            String               @default("")
+  excerpt            String?
+  author_name        String               @default("木心") @db.VarChar(100)
+  reading_time       Int                  @default(0)
+  view_count         Int                  @default(0)
+  status             article_status       @default(published)
+  published_at       BigInt?
+  created_at         BigInt               @default(0)
+  updated_at         BigInt               @default(0)
+  deleted_at         BigInt               @default(0)
+  article_categories article_categories[]
+  article_media      article_media[]
+  comments           comments[]
+
+  @@index([author_name], map: "articles_author_name")
+  @@index([created_at], map: "articles_created_at")
+  @@index([author_name], map: "idx_articles_author_name")
+  @@index([created_at], map: "idx_articles_created_at")
+  @@index([status, published_at], map: "idx_articles_status_published")
+}
+
+model artwork_media {
+  id          Int                 @id @default(autoincrement())
+  artwork_id  Int
+  media_id    Int
+  usage_type  artwork_media_usage @default(main)
+  sort_order  Int                 @default(0)
+  created_at  BigInt              @default(0)
+  ai_artworks ai_artworks         @relation(fields: [artwork_id], references: [id], onDelete: Cascade, onUpdate: NoAction)
+  media_files media_files         @relation(fields: [media_id], references: [id], onDelete: Cascade, onUpdate: NoAction)
+
+  @@index([artwork_id], map: "artwork_media_artwork_id")
+  @@index([media_id], map: "artwork_media_media_id")
+  @@index([usage_type], map: "artwork_media_usage_type")
+  @@index([artwork_id], map: "idx_artwork_media_artwork_id")
+  @@index([media_id], map: "idx_artwork_media_media_id")
+  @@index([usage_type], map: "idx_artwork_media_usage_type")
+}
+
+model big_file_chunks {
+  id              Int                   @id @default(autoincrement())
+  file_identifier String                @db.VarChar(36)
+  chunk_number    Int
+  chunk_size      Int
+  chunk_hash      String?               @db.VarChar(32)
+  chunk_path      String                @db.VarChar(500)
+  status          big_file_chunk_status @default(pending)
+  uploaded_at     BigInt?
+
+  @@unique([file_identifier, chunk_number], map: "big_file_chunks_file_identifier_chunk_number")
+  @@unique([file_identifier, chunk_number], map: "idx_big_file_chunks_identifier_number")
+  @@index([file_identifier], map: "big_file_chunks_file_identifier")
+  @@index([file_identifier], map: "idx_big_file_chunks_file_identifier")
+}
+
+model big_file_records {
+  id            Int             @id @default(autoincrement())
+  identifier    String          @unique(map: "big_file_records_identifier") @db.VarChar(36)
+  original_name String          @db.VarChar(255)
+  total_size    BigInt
+  chunk_size    Int
+  total_chunks  Int
+  mime_type     String          @db.VarChar(100)
+  status        big_file_status @default(uploading)
+  file_hash     String?         @db.VarChar(32)
+  stored_name   String?         @db.VarChar(255)
+  file_path     String?         @db.VarChar(500)
+  file_url      String?         @db.VarChar(500)
+  created_at    BigInt          @default(0)
+  completed_at  BigInt?
+
+  @@index([created_at], map: "big_file_records_created_at")
+  @@index([status], map: "big_file_records_status")
+  @@index([created_at], map: "idx_big_file_records_created_at")
+  @@index([status], map: "idx_big_file_records_status")
+}
+
+model categories {
+  id                 Int                  @id @default(autoincrement())
+  name               String               @db.VarChar(100)
+  slug               String               @unique(map: "categories_slug") @db.VarChar(100)
+  created_at         BigInt               @default(0)
+  updated_at         BigInt               @default(0)
+  deleted_at         BigInt               @default(0)
+  article_categories article_categories[]
+}
+
+model comments {
+  id             Int            @id @default(autoincrement())
+  article_id     Int
+  parent_id      Int?
+  author_name    String         @db.VarChar(100)
+  is_author      Boolean        @default(false)
+  author_email   String?        @db.VarChar(255)
+  author_phone   String?        @db.VarChar(255)
+  author_ip      String?        @db.VarChar(45)
+  content        String
+  status         comment_status @default(pending)
+  like_count     Int            @default(0)
+  created_at     BigInt         @default(0)
+  updated_at     BigInt         @default(0)
+  articles       articles       @relation(fields: [article_id], references: [id], onDelete: Cascade, onUpdate: NoAction)
+  comments       comments?      @relation("commentsTocomments", fields: [parent_id], references: [id], onUpdate: NoAction)
+  other_comments comments[]     @relation("commentsTocomments")
+
+  @@index([article_id, status], map: "comments_article_id_status")
+  @@index([author_ip], map: "comments_author_ip")
+  @@index([created_at], map: "comments_created_at")
+  @@index([parent_id], map: "comments_parent_id")
+  @@index([article_id, status], map: "idx_comments_article_status")
+  @@index([author_ip], map: "idx_comments_author_ip")
+  @@index([created_at], map: "idx_comments_created_at")
+  @@index([parent_id], map: "idx_comments_parent_id")
+}
+
+model flyway_schema_history {
+  installed_rank Int      @id(map: "flyway_schema_history_pk")
+  version        String?  @db.VarChar(50)
+  description    String   @db.VarChar(200)
+  type           String   @db.VarChar(20)
+  script         String   @db.VarChar(1000)
+  checksum       Int?
+  installed_by   String   @db.VarChar(100)
+  installed_on   DateTime @default(now()) @db.Timestamp(6)
+  execution_time Int
+  success        Boolean
+
+  @@index([success], map: "flyway_schema_history_s_idx")
+}
+
+model media_files {
+  id               Int                @id @default(autoincrement())
+  original_name    String             @db.VarChar(255)
+  stored_name      String             @db.VarChar(255)
+  file_path        String             @db.VarChar(500)
+  file_url         String             @db.VarChar(500)
+  file_size        BigInt?
+  mime_type        String?            @db.VarChar(100)
+  width            Int?
+  height           Int?
+  alt_text         String?
+  uploader_name    String?            @db.VarChar(100)
+  file_hash        String             @default("") @db.VarChar(32)
+  created_at       BigInt             @default(0)
+  updated_at       BigInt             @default(0)
+  about_page_media about_page_media[]
+  article_media    article_media[]
+  artwork_media    artwork_media[]
+
+  @@index([created_at], map: "idx_media_files_created_at")
+  @@index([file_hash], map: "idx_media_files_file_hash")
+  @@index([mime_type], map: "idx_media_files_mime_type")
+  @@index([uploader_name], map: "idx_media_files_uploader_name")
+  @@index([created_at], map: "media_files_created_at")
+  @@index([file_hash], map: "media_files_file_hash")
+  @@index([mime_type], map: "media_files_mime_type")
+  @@index([uploader_name], map: "media_files_uploader_name")
+}
+
+model search_logs {
+  id            Int     @id @default(autoincrement())
+  query         String  @db.VarChar(255)
+  results_count Int     @default(0)
+  ip_address    String? @db.VarChar(45)
+  user_agent    String?
+  created_at    BigInt  @default(0)
+
+  @@index([created_at], map: "idx_search_logs_created_at")
+  @@index([ip_address], map: "idx_search_logs_ip_address")
+  @@index([query], map: "idx_search_logs_query")
+  @@index([created_at], map: "search_logs_created_at")
+  @@index([ip_address], map: "search_logs_ip_address")
+  @@index([query], map: "search_logs_query")
+}
+
+model site_settings {
+  id            Int          @id @default(autoincrement())
+  setting_key   String       @unique(map: "idx_site_settings_key") @db.VarChar(100)
+  setting_value String?
+  setting_type  setting_type @default(string)
+  description   String?
+  created_at    BigInt       @default(0)
+  updated_at    BigInt       @default(0)
+}
+
+model temp_media {
+  code          String  @id @db.VarChar(50)
+  original_name String  @db.VarChar(255)
+  stored_name   String  @db.VarChar(255)
+  file_path     String  @db.VarChar(500)
+  file_size     BigInt
+  mime_type     String  @db.VarChar(100)
+  expires_at    BigInt
+  is_used       Boolean @default(false)
+  created_at    BigInt  @default(0)
+  deleted       Int     @default(0)
+
+  @@index([expires_at], map: "idx_temp_media_expires_at")
+  @@index([is_used], map: "idx_temp_media_is_used")
+  @@index([expires_at], map: "temp_media_expires_at")
+  @@index([is_used], map: "temp_media_is_used")
+}
+
+enum about_page_media_usage {
+  avatar
+  content
+}
+
+enum admin_status {
+  active
+  inactive
+  locked
+}
+
+enum ai_chat_message_role {
+  user
+  assistant
+  system
+}
+
+enum ai_chat_message_type {
+  text
+  system
+}
+
+enum ai_chat_user_status {
+  active
+  blocked
+}
+
+enum ai_global_chat_memory_category {
+  user
+  feedback
+  reference
+}
+
+enum article_media_usage {
+  thumbnail
+  attachment
+  content
+}
+
+enum article_status {
+  draft
+  published
+  archived
+}
+
+enum artwork_media_usage {
+  main
+  thumbnail
+  process
+  variant
+}
+
+enum artwork_status {
+  draft
+  published
+}
+
+enum big_file_chunk_status {
+  pending
+  uploaded
+}
+
+enum big_file_status {
+  uploading
+  completed
+  failed
+}
+
+enum comment_status {
+  pending
+  approved
+  spam
+  trash
+}
+
+enum enum_about_page_media_usage_type {
+  avatar
+  content
+}
+
+enum enum_admin_users_status {
+  active
+  inactive
+  locked
+}
+
+enum enum_ai_artworks_status {
+  draft
+  published
+}
+
+enum enum_ai_chat_messages_message_type {
+  text
+  system
+  A2UI
+}
+
+enum enum_ai_chat_messages_role {
+  user
+  assistant
+  system
+}
+
+enum enum_ai_chat_users_status {
+  active
+  blocked
+}
+
+enum enum_ai_global_chat_memories_category {
+  preference
+  user
+  feedback
+  reference
+}
+
+enum enum_article_media_usage_type {
+  thumbnail
+  featured
+  content
+  attachment
+}
+
+enum enum_articles_status {
+  draft
+  published
+  archived
+}
+
+enum enum_artwork_media_usage_type {
+  main
+  thumbnail
+  process
+  variant
+}
+
+enum enum_big_file_chunks_status {
+  pending
+  uploaded
+}
+
+enum enum_big_file_records_status {
+  uploading
+  completed
+  failed
+}
+
+enum enum_comments_status {
+  pending
+  approved
+  spam
+  trash
+}
+
+enum enum_media_files_usage_type {
+  article
+  avatar
+  artwork
+  general
+}
+
+enum enum_site_settings_setting_type {
+  string
+  number
+  boolean
+  json
+}
+
+enum setting_type {
+  string
+  number
+  boolean
+  json
+}

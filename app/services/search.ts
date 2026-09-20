@@ -1,20 +1,11 @@
 /**
- * 搜索服务
+ * 搜索服务 (Prisma 版本)
  */
 
-import { Op } from 'sequelize';
-
 import { defaultLogger } from '@/utils/logger';
+import { prisma } from '@/utils/prisma';
 
 import type { SearchResultItem } from '../search/types';
-
-
-import {
-  getApprovedCommentCountMap,
-  extractCategories,
-  extractThumbnailUrl,
-  escapeLikePattern,
-} from './helpers';
 
 export type SearchSortType = 'relevance' | 'latest' | 'comments';
 
@@ -28,75 +19,79 @@ export async function searchArticles(
   pageSize = 10,
 ): Promise<{ articles: SearchResultItem[]; total: number }> {
   try {
-    const { initAllModels } = await import('@/utils/models');
-    const {
-      Article, ArticleCategory, Category,
-      ArticleMedia, MediaFile, Comment,
-    } = await initAllModels();
+    const offset = (page - 1) * pageSize;
 
-    const escaped = escapeLikePattern(query);
-    const likePattern = `%${escaped}%`;
-
-    const { count, rows } = await Article.findAndCountAll({
-      where: {
-        status: 'published',
-        [Op.or]: [
-          { title: { [Op.iLike]: likePattern } },
-          { excerpt: { [Op.iLike]: likePattern } },
-        ],
-      },
-      include: [
-        {
-          model: ArticleCategory,
-          as: 'articleCategories',
-          required: false,
-          include: [{
-            model: Category,
-            as: 'category',
-            attributes: ['id', 'name', 'slug'],
-          }],
-        },
-        {
-          model: ArticleMedia,
-          as: 'articleMedias',
-          where: { usageType: 'thumbnail' },
-          required: false,
-          limit: 1,
-          include: [{
-            model: MediaFile,
-            as: 'media',
-            attributes: ['fileUrl'],
-          }],
-        },
+    const where = {
+      status: 'published' as const,
+      deleted_at: 0,
+      OR: [
+        { title: { contains: query, mode: 'insensitive' as const } },
+        { excerpt: { contains: query, mode: 'insensitive' as const } },
       ],
-      order: [['publishedAt', 'DESC']],
-      limit: pageSize,
-      offset: (page - 1) * pageSize,
-      distinct: true,
-      subQuery: false,
-    });
+    };
 
-    const articleIds = rows.map((article) => article.id);
-    const commentCountMap = await getApprovedCommentCountMap(Comment, articleIds);
+    const [articles, total] = await Promise.all([
+      prisma.articles.findMany({
+        where,
+        orderBy: sort === 'latest' ? { published_at: 'desc' } : undefined,
+        skip: offset,
+        take: pageSize,
+        select: {
+          id: true,
+          title: true,
+          slug: true,
+          excerpt: true,
+          published_at: true,
+          article_categories: {
+            include: {
+              categories: {
+                select: {
+                  id: true,
+                  name: true,
+                  slug: true,
+                }
+              }
+            }
+          },
+          article_media: {
+            take: 1,
+            where: { usage_type: 'thumbnail' },
+            include: {
+              media_files: {
+                select: { file_url: true }
+              }
+            }
+          },
+          comments: {
+            where: { status: 'approved' },
+            select: { id: true }
+          }
+        },
+      }),
+      prisma.articles.count({ where }),
+    ]);
 
-    const articles: SearchResultItem[] = rows.map((article) => ({
+    let results: SearchResultItem[] = articles.map((article) => ({
       id: article.id,
       title: article.title,
       slug: article.slug,
       excerpt: article.excerpt || null,
-      publishedAt: article.publishedAt
-        ? parseInt(String(article.publishedAt), 10)
-        : null,
-      thumbnailUrl: extractThumbnailUrl(article.articleMedias),
-      categories: extractCategories(article.articleCategories),
-      commentCount: commentCountMap[article.id] || 0,
+      publishedAt: article.published_at ? Number(article.published_at) : null,
+      thumbnailUrl: article.article_media[0]?.media_files?.file_url || null,
+      categories: article.article_categories.map(ac => ({
+        id: ac.categories.id,
+        name: ac.categories.name,
+        slug: ac.categories.slug,
+      })),
+      commentCount: article.comments.length,
     }));
 
+    // 按评论数排序
     if (sort === 'comments') {
-      articles.sort((a, b) => b.commentCount - a.commentCount);
+      results.sort((a, b) => b.commentCount - a.commentCount);
     }
 
-    return { articles, total: count };
+    return { articles: results, total };
   } catch (error) {
     defaultLogger.error('搜索失败:', error);
     return { articles: [], total: 0 };
@@ -114,15 +109,15 @@ export interface LogSearchParams {
  * 记录搜索日志（fire-and-forget）
  */
 export function logSearch(params: LogSearchParams): void {
-  import('@/utils/models')
-    .then(({ initAllModels }) => initAllModels())
-    .then(({ SearchLog }) => {
-      SearchLog.create({
-        query: params.query,
-        resultsCount: params.resultsCount,
-        ipAddress: params.ipAddress || null,
-        userAgent: params.userAgent || null,
-      }).catch(() => {});
-    })
-    .catch(() => {});
+  prisma.search_logs.create({
+    data: {
+      query: params.query,
+      results_count: params.resultsCount,
+      ip_address: params.ipAddress || null,
+      user_agent: params.userAgent || null,
+      created_at: BigInt(Date.now()),
+    },
+  }).catch(() => {
+    // 忽略错误
+  });
 }

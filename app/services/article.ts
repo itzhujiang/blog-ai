@@ -1,20 +1,14 @@
 /**
- * 文章服务
+ * 文章服务 (Prisma 版本)
  */
 
 import type { ArticleItem } from '@/components/LatestArticles';
 
-import { getArticleFileUrl } from '@/utils/file-url';
+import { prisma } from '@/utils/prisma';
 import { defaultLogger } from '@/utils/logger';
 
 import type { ArticleDetail } from '../articles/[slug]/types';
-import type { ArticleListItem, CategoryTag, SortType } from '../articles/types';
-
-import {
-  getApprovedCommentCountMap,
-  extractCategories,
-  extractThumbnailUrl,
-} from './helpers';
+import type { ArticleListItem, SortType } from '../articles/types';
 
 /**
  * 获取最新文章（首页用）
@@ -23,50 +17,47 @@ export async function getLatestArticles(
   limit = 6,
 ): Promise<ArticleItem[]> {
   try {
-    const { initAllModels } = await import('@/utils/models');
-    const {
-      Article, ArticleCategory, Category,
-      ArticleMedia, MediaFile,
-    } = await initAllModels();
-
-    const articles = await Article.findAll({
-      where: { status: 'published' },
-      order: [['publishedAt', 'DESC']],
-      limit,
-      attributes: ['id', 'title', 'slug', 'excerpt', 'publishedAt'],
-      include: [
-        {
-          model: ArticleCategory,
-          as: 'articleCategories',
-          include: [{
-            model: Category,
-            as: 'category',
-            attributes: ['name'],
-          }],
+    const articles = await prisma.articles.findMany({
+      where: {
+        status: 'published',
+        deleted_at: 0
+      },
+      orderBy: { published_at: 'desc' },
+      take: limit,
+      select: {
+        id: true,
+        title: true,
+        slug: true,
+        excerpt: true,
+        published_at: true,
+        article_categories: {
+          take: 1,
+          include: {
+            categories: {
+              select: { name: true }
+            }
+          }
         },
-        {
-          model: ArticleMedia,
-          as: 'articleMedias',
-          where: { usageType: 'thumbnail' },
-          required: false,
-          limit: 1,
-          include: [{
-            model: MediaFile,
-            as: 'media',
-            attributes: ['fileUrl'],
-          }],
-        },
-      ],
+        article_media: {
+          take: 1,
+          where: { usage_type: 'thumbnail' },
+          include: {
+            media_files: {
+              select: { file_url: true }
+            }
+          }
+        }
+      },
     });
 
     return articles.map((article) => ({
       id: article.id,
       title: article.title,
       slug: article.slug,
-      excerpt: article.excerpt,
-      publishedAt: article.publishedAt,
-      thumbnailUrl: extractThumbnailUrl(article.articleMedias),
-      categoryName: article.articleCategories?.[0]?.category?.name || undefined,
+      excerpt: article.excerpt || '',
+      publishedAt: article.published_at ? Number(article.published_at) : null,
+      thumbnailUrl: article.article_media[0]?.media_files?.file_url || null,
+      categoryName: article.article_categories[0]?.categories?.name || undefined,
     }));
   } catch (error) {
     defaultLogger.error('获取文章失败:', error);
@@ -84,86 +75,98 @@ export async function getArticles(
   pageSize = 6,
 ): Promise<{ articles: ArticleListItem[]; total: number }> {
   try {
-    const { initAllModels } = await import('@/utils/models');
-    const {
-      Article, ArticleCategory, Category,
-      ArticleMedia, MediaFile, Comment,
-    } = await initAllModels();
-
     const offset = (page - 1) * pageSize;
 
-    // 构建分类筛选条件
-    const categoryInclude = categorySlug
-      ? {
-        model: ArticleCategory,
-        as: 'articleCategories' as const,
-        required: true,
-        include: [{
-          model: Category,
-          as: 'category' as const,
-          attributes: ['id', 'name', 'slug'],
-          where: { slug: categorySlug },
-        }],
-      }
-      : {
-        model: ArticleCategory,
-        as: 'articleCategories' as const,
-        required: false,
-        include: [{
-          model: Category,
-          as: 'category' as const,
-          attributes: ['id', 'name', 'slug'],
-        }],
+    // 构建查询条件
+    const where: any = {
+      status: 'published',
+      deleted_at: 0,
+    };
+
+    // 分类筛选
+    if (categorySlug) {
+      where.article_categories = {
+        some: {
+          categories: {
+            slug: categorySlug
+          }
+        }
       };
-
-    const { count, rows } = await Article.findAndCountAll({
-      where: { status: 'published' },
-      include: [
-        categoryInclude,
-        {
-          model: ArticleMedia,
-          as: 'articleMedias',
-          where: { usageType: 'thumbnail' },
-          required: false,
-          limit: 1,
-          include: [{
-            model: MediaFile,
-            as: 'media',
-            attributes: ['fileUrl'],
-          }],
-        },
-      ],
-      order: [['publishedAt', 'DESC']],
-      limit: pageSize,
-      offset,
-      distinct: true,
-      subQuery: false,
-    });
-
-    const articleIds = rows.map((article) => article.id);
-    const commentCountMap = await getApprovedCommentCountMap(Comment, articleIds);
-
-    const articles: ArticleListItem[] = rows.map((article) => {
-      const categories: CategoryTag[] = extractCategories(article.articleCategories);
-      return {
-        id: article.id,
-        title: article.title,
-        slug: article.slug,
-        excerpt: article.excerpt || null,
-        publishedAt: article.publishedAt
-          ? parseInt(String(article.publishedAt), 10)
-          : null,
-        thumbnailUrl: extractThumbnailUrl(article.articleMedias),
-        categories,
-        commentCount: commentCountMap[article.id] || 0,
-      };
-    });
-
-    if (sort === 'comments') {
-      articles.sort((a, b) => b.commentCount - a.commentCount);
     }
 
-    return { articles, total: count };
+    // 排序
+    let orderBy: any = {};
+    switch (sort) {
+      case 'latest':
+        orderBy = { published_at: 'desc' };
+        break;
+      case 'comments':
+        // 按评论数排序需要在查询后处理
+        orderBy = { published_at: 'desc' };
+        break;
+      default:
+        orderBy = { published_at: 'desc' };
+    }
+
+    // 并行查询文章和总数
+    const [articles, total] = await Promise.all([
+      prisma.articles.findMany({
+        where,
+        orderBy,
+        skip: offset,
+        take: pageSize,
+        select: {
+          id: true,
+          title: true,
+          slug: true,
+          excerpt: true,
+          view_count: true,
+          published_at: true,
+          article_categories: {
+            include: {
+              categories: {
+                select: {
+                  id: true,
+                  name: true,
+                  slug: true,
+                }
+              }
+            }
+          },
+          article_media: {
+            take: 1,
+            where: { usage_type: 'thumbnail' },
+            include: {
+              media_files: {
+                select: { file_url: true }
+              }
+            }
+          },
+          comments: {
+            where: { status: 'approved' },
+            select: { id: true }
+          }
+        },
+      }),
+      prisma.articles.count({ where }),
+    ]);
+
+    const articleList: ArticleListItem[] = articles.map((article) => ({
+      id: article.id,
+      title: article.title,
+      slug: article.slug,
+      excerpt: article.excerpt || null,
+      thumbnailUrl: article.article_media[0]?.media_files?.file_url || null,
+      commentCount: article.comments.length,
+      publishedAt: article.published_at ? Number(article.published_at) : null,
+      categories: article.article_categories.map(ac => ({
+        id: ac.categories.id,
+        name: ac.categories.name,
+        slug: ac.categories.slug,
+      })),
+    }));
+
+    return { articles: articleList, total };
   } catch (error) {
     defaultLogger.error('获取文章列表失败:', error);
     return { articles: [], total: 0 };
@@ -171,73 +174,66 @@ export async function getArticles(
 }
 
 /**
- * 获取文章详情（含 Markdown 内容）
+ * 根据 slug 获取单篇文章详情
  */
-export async function getArticleBySlug(
-  slug: string,
-): Promise<ArticleDetail | null> {
+export async function getArticleBySlug(slug: string): Promise<ArticleDetail | null> {
   try {
-    const normalizedSlug = decodeURIComponent(slug);
-    const { initAllModels } = await import('@/utils/models');
-    const {
-      Article, ArticleCategory, Category,
-      ArticleMedia, MediaFile, Comment,
-    } = await initAllModels();
-
-    const article = await Article.findOne({
-      where: { slug: normalizedSlug, status: 'published' },
-      include: [
-        {
-          model: ArticleCategory,
-          as: 'articleCategories' as const,
-          required: false,
-          include: [{
-            model: Category,
-            as: 'category' as const,
-            attributes: ['id', 'name', 'slug'],
-          }],
+    const article = await prisma.articles.findUnique({
+      where: { slug },
+      select: {
+        id: true,
+        title: true,
+        slug: true,
+        excerpt: true,
+        author_name: true,
+        content: true,
+        published_at: true,
+        article_categories: {
+          include: {
+            categories: {
+              select: {
+                id: true,
+                name: true,
+                slug: true,
+              }
+            }
+          }
         },
-        {
-          model: ArticleMedia,
-          as: 'articleMedias',
-          where: { usageType: 'thumbnail' },
-          required: false,
-          limit: 1,
-          include: [{
-            model: MediaFile,
-            as: 'media',
-            attributes: ['fileUrl'],
-          }],
+        article_media: {
+          take: 1,
+          where: { usage_type: 'thumbnail' },
+          include: {
+            media_files: {
+              select: { file_url: true }
+            }
+          }
         },
-      ],
-      subQuery: false,
-    });
-
-    if (!article) return null;
-
-    const commentCount = await Comment.count({
-      where: {
-        articleId: article.id,
-        status: 'approved',
+        comments: {
+          where: { status: 'approved' },
+          select: { id: true }
+        }
       },
     });
 
-    // 文章正文直接来自数据库 content 字段
-    const content = article.content || '';
+    if (!article) {
+      return null;
+    }
 
     return {
       id: article.id,
       title: article.title,
       slug: article.slug,
       excerpt: article.excerpt || null,
-      authorName: article.authorName,
-      publishedAt: article.publishedAt
-        ? parseInt(String(article.publishedAt), 10)
-        : null,
-      thumbnailUrl: extractThumbnailUrl(article.articleMedias),
-      categories: extractCategories(article.articleCategories),
-      commentCount,
-      content,
+      authorName: article.author_name,
+      content: article.content,
+      publishedAt: article.published_at ? Number(article.published_at) : null,
+      thumbnailUrl: article.article_media[0]?.media_files?.file_url || null,
+      commentCount: article.comments.length,
+      categories: article.article_categories.map(ac => ({
+        id: ac.categories.id,
+        name: ac.categories.name,
+        slug: ac.categories.slug,
+      })),
     };
   } catch (error) {
     defaultLogger.error('获取文章详情失败:', error);
@@ -246,50 +242,84 @@ export async function getArticleBySlug(
 }
 
 /**
- * 批量获取文章统计数据（阅读量、阅读时间）
+ * 获取文章统计信息（支持批量查询）
  */
-export async function getArticleStats(
-  ids: number[],
-): Promise<Record<string, { viewCount: number; readingTime: number }>> {
-  const { initAllModels } = await import('@/utils/models');
-  const { Article } = await initAllModels();
+export async function getArticleStats(articleIds: number | number[]) {
+  try {
+    // 单个 ID
+    if (typeof articleIds === 'number') {
+      const article = await prisma.articles.findUnique({
+        where: { id: articleIds },
+        select: {
+          view_count: true,
+          comments: {
+            where: { status: 'approved' },
+            select: { id: true }
+          }
+        },
+      });
 
-  const rows = await Article.findAll({
-    where: { id: ids },
-    attributes: ['id', 'viewCount', 'readingTime'],
-  });
+      if (!article) {
+        return { viewCount: 0, commentCount: 0 };
+      }
 
-  const stats: Record<string, { viewCount: number; readingTime: number }> = {};
-  for (const row of rows) {
-    stats[String(row.id)] = {
-      viewCount: row.viewCount,
-      readingTime: row.readingTime,
-    };
+      return {
+        viewCount: article.view_count,
+        commentCount: article.comments.length,
+      };
+    }
+
+    // 批量查询
+    const articles = await prisma.articles.findMany({
+      where: {
+        id: { in: articleIds }
+      },
+      select: {
+        id: true,
+        view_count: true,
+        comments: {
+          where: { status: 'approved' },
+          select: { id: true }
+        }
+      },
+    });
+
+    const statsMap: Record<number, { viewCount: number; commentCount: number }> = {};
+
+    articles.forEach((article) => {
+      statsMap[article.id] = {
+        viewCount: article.view_count,
+        commentCount: article.comments.length,
+      };
+    });
+
+    return statsMap;
+  } catch (error) {
+    defaultLogger.error('获取文章统计失败:', error);
+    return typeof articleIds === 'number'
+      ? { viewCount: 0, commentCount: 0 }
+      : {};
   }
-  return stats;
 }
 
 /**
- * 递增文章阅读量并返回最新统计
+ * 增加文章浏览次数
  */
-export async function incrementViewCount(
-  articleId: number,
-): Promise<{ viewCount: number; readingTime: number } | null> {
-  const { initAllModels } = await import('@/utils/models');
-  const { Article } = await initAllModels();
+export async function incrementViewCount(articleId: number): Promise<{ viewCount: number; commentCount: number } | null> {
+  try {
+    await prisma.articles.update({
+      where: { id: articleId },
+      data: {
+        view_count: {
+          increment: 1
+        }
+      },
+    });
 
-  await Article.increment('viewCount', {
-    where: { id: articleId },
-  });
-
-  const article = await Article.findByPk(articleId, {
-    attributes: ['viewCount', 'readingTime'],
-  });
-
-  if (!article) return null;
-
-  return {
-    viewCount: article.viewCount,
-    readingTime: article.readingTime,
-  };
+    // 返回更新后的统计信息
+    return await getArticleStats(articleId) as { viewCount: number; commentCount: number };
+  } catch (error) {
+    defaultLogger.error('增加浏览次数失败:', error);
+    return null;
+  }
 }

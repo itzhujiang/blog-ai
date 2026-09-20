@@ -1,6 +1,4 @@
 export {
-  getApprovedCommentCountMap,
-  getVirtualInt,
   extractCategories,
   extractThumbnailUrl,
   escapeLikePattern,
