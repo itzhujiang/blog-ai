@@ -55,12 +55,8 @@ const nextConfig: NextConfig = {
   rewrites: async () => {
     return [
       {
-        source: '/api/ai/:path*',
-        destination: `${process.env.AI_BASE_URL}/api/ai/:path*`,
-      },
-      {
-        source: '/api/tool/:path*',
-        destination: `${process.env.AI_BASE_URL}/api/tool/:path*`,
+        source: '/ai/api/:path*',
+        destination: `${process.env.AI_BASE_URL}/api/:path*`,
       },
       {
         source: '/api/uploads/:path*',

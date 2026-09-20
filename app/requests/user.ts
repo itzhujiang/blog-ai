@@ -1,8 +1,8 @@
 import { aiHttp } from '@/utils/http';
 
 export type LoginRequest = {
-  /** 手机号 */
-  phone: string,
+  /** 邮箱 */
+  email: string,
   /** 验证码 */
   code: string
 };
@@ -12,7 +12,7 @@ export type LoginRequest = {
  * @returns 
  */
 export const login = async (data: LoginRequest) => 
-  await aiHttp.post<LoginRequest, null, 'obj'>('/api/ai/ai-user/aiLogin', data);
+  await aiHttp.post<LoginRequest, null, 'obj'>('/api/user/login', data);
 
 
 export type UserInfo = {
@@ -27,4 +27,4 @@ export type UserInfo = {
  * @returns 
  */
 export const getUserInfo = async () => 
-  await aiHttp.get<null, UserInfo, 'obj'>('/api/ai/ai-user/getUserInfo');
+  await aiHttp.get<null, UserInfo, 'obj'>('/api/user/getUserInfo');

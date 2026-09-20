@@ -63,8 +63,9 @@ type Server = 'ai' | '';
 
 const instance = <T extends Server>(server: T) => {
   const request = axios.create({
-    baseURL: process.env.NEXT_PUBLIC_API_URL || '',
+    baseURL:  server === 'ai' ? '/ai' : '/',
     timeout: 10000,
+    
     headers: {
       'Content-Type': 'application/json',
     },

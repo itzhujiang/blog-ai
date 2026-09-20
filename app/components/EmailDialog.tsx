@@ -3,7 +3,7 @@
 import React, { useEffect, useState } from 'react';
 
 import { useCountdown } from '@/hooks/useCountdown';
-import { getUserInfo, login, sendPhoneCode } from '@/requests/index';
+import { getUserInfo, login, sendEmailCode } from '@/requests/index';
 import { userInfoStore } from '@/store/index';
 import eventEmitter from '@/utils/eventEmitter';
 
@@ -13,11 +13,11 @@ import { showMessage } from '../utils/utils';
 import { Modal, ModalContainer, Input, Button } from './ui';
 
 
-export default function PhoneDialog() {
+export default function EmailDialog() {
   const { setUserInfo } = userInfoStore();
 
   const [formData, setFormData] = useState({
-    phone: '',
+    email: '',
     code: ''
   });
   const [countdown, isSending, startCountdown, clearCountdown] = useCountdown();
@@ -32,7 +32,7 @@ export default function PhoneDialog() {
 
   const onClose = () => {
     setVisible(false);
-    setFormData({ phone: '', code: '' });
+    setFormData({ email: '', code: '' });
     clearCountdown();
   };
 
@@ -41,16 +41,16 @@ export default function PhoneDialog() {
    */
   const onSendCodeClick = async () => {
     if (!isSending) {
-      if (!formData.phone) {
-        showMessage({ type: 'error', message: '请输入手机号' });
+      if (!formData.email) {
+        showMessage({ type: 'error', message: '请输入邮箱' });
         return;
       }
-      if (!/^[1](([3-9][0-9]))[0-9]{8}$/.test(formData.phone)) {
-        showMessage({ type: 'error', message: '请输入正确的手机号' });
+      if (!/^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/.test(formData.email)) {
+        showMessage({ type: 'error', message: '请输入正确的邮箱' });
         return;
       }
-      const res = await sendPhoneCode({
-        phone: formData.phone
+      const res = await sendEmailCode({
+        email: formData.email
       });
       if (res.code === 200) {
         startCountdown(60);
@@ -69,12 +69,13 @@ export default function PhoneDialog() {
 
   const onLoginSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (!formData.phone) {
-      showMessage({ type: 'error', message: '请输入手机号' });
+    if (!formData.email) {
+      showMessage({ type: 'error', message: '请输入邮箱' });
       return;
     }
-    if (!/^[1](([3-9][0-9]))[0-9]{8}$/.test(formData.phone)) {
-      showMessage({ type: 'error', message: '请输入正确的手机号' });
+    console.log(formData.email);
+    if (!/^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/.test(formData.email)) {
+      showMessage({ type: 'error', message: '请输入正确的邮箱' });
       return;
     }
     if (!formData.code) {
@@ -84,13 +85,6 @@ export default function PhoneDialog() {
     const res = await login(formData);
     if (res.code === 200) {
       const result = await getUserInfo();
-      if (result.code !== 200) {
-        showMessage({
-          message: res.msg,
-          type: 'error'
-        });
-        return;
-      }
       setUserInfo({
         id: result.data?.data.id,
         phone: result.data?.data.phone,
@@ -122,20 +116,19 @@ export default function PhoneDialog() {
             <div className='inline-flex items-center justify-center w-12 h-12 bg-primary/10 rounded-full mb-4'>
               <span className='material-symbols-outlined text-primary text-[28px]'>phonelink_ring</span>
             </div>
-            <h2 className='text-muji-brown dark:text-slate-100 text-2xl font-bold tracking-tight'>手机号验证</h2>
-            <p className='text-muji-taupe dark:text-slate-400 text-sm mt-2'>因: AI服务需要消耗token，使用的是我的账户，无法随意供人使用，需要手机验证</p>
+            <h2 className='text-muji-brown dark:text-slate-100 text-2xl font-bold tracking-tight'>邮箱验证</h2>
+            <p className='text-muji-taupe dark:text-slate-400 text-sm mt-2'>因: AI服务需要消耗token，使用的是我的账户，无法随意供人使用，需要邮箱验证</p>
           </div>
           <form className='space-y-5' onSubmit={(e) => onLoginSubmit(e)}>
             <div className='space-y-1.5'>
-              <label className='text-muji-brown dark:text-slate-200 text-sm font-medium ml-1'>手机号</label>
+              <label className='text-muji-brown dark:text-slate-200 text-sm font-medium ml-1'>邮箱</label>
               <div className='relative flex items-center mt-1'>
                 <Input 
                   className='w-full pl-11 pr-28 py-3.5 bg-white dark:bg-background-dark/50  rounded-lg focus:ring-1 focus:ring-primary focus:border-primary outline-none transition-all text-muji-brown dark:text-slate-100 placeholder:text-muji-taupe/50'
                   icon={<span className="text-muji-taupe dark:text-primary/60 material-symbols-outlined text-[24px]">smartphone</span>}
-                  placeholder='请输入手机号'
-                  value={formData.phone}
-                  maxLength={11}
-                  onChange={(e) => setFormData({ ...formData, phone: e.target.value })}
+                  placeholder='请输入邮箱'
+                  value={formData.email}
+                  onChange={(e) => setFormData({ ...formData, email: e.target.value })}
                 />
                 <button 
                   type='button'

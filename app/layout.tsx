@@ -3,11 +3,12 @@ import { Geist, Geist_Mono } from 'next/font/google';
 import React from 'react';
 
 import AiChat from '@/components/AiChat';
+import EmailDialog from '@/components/EmailDialog';
 import { Header, Footer } from '@/components/layout';
-import PhoneDialog from '@/components/PhoneDialog';
 import { getSiteConfigSSR } from '@/utils/site-config';
 
 import './globals.css';
+
 
 const geistSans = Geist({
   variable: '--font-geist-sans',
@@ -68,7 +69,7 @@ export default function RootLayout({
           </div>
           <div>
             <AiChat></AiChat>
-            <PhoneDialog></PhoneDialog>
+            <EmailDialog></EmailDialog>
           </div>
         </div>
       </body>

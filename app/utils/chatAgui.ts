@@ -75,7 +75,7 @@ class AgUi {
    */
   private createAgent(threadId?: string) {
     this.agent =  new HttpAgent({
-      url: '/api/ai/ai-chat/chat',
+      url: '/ai/api/aiChat/chat',
       threadId,
     });
   }
