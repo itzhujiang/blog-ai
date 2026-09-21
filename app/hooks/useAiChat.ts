@@ -286,7 +286,7 @@ export const useAiChat = () => {
   // 使用 useMemo 稳定 subscriber 对象，避免每次渲染都重新创建
   const subscriber: AgentSubscriber = useMemo(() => ({
     onRunInitialized: (params: AgentSubscriberParams) => {
-      console.log('onRunInitialized', params);
+      console.log('✅ SSE Event: onRunInitialized', params);
       const msg = params.messages[params.messages.length - 1];
       dispatch({
         type: 'pushMessage',
@@ -304,7 +304,7 @@ export const useAiChat = () => {
       });
     },
     onStepStartedEvent: (params: { event: StepStartedEvent } & AgentSubscriberParams) => {
-      console.log('onStepStartedEvent', params);
+      console.log('✅ SSE Event: onStepStartedEvent', params);
     },
     onActivitySnapshotEvent: (params) => {
       dispatch({
@@ -323,7 +323,7 @@ export const useAiChat = () => {
       });
     },
     onActivityDeltaEvent: (params) => {
-      console.log('onActivityDeltaEvent', params);
+      console.log('✅ SSE Event: onActivityDeltaEvent', params);
       const activityMessage = params.activityMessage;
       if (!activityMessage) {
         return;
@@ -344,7 +344,7 @@ export const useAiChat = () => {
     },
     // agent开始生成文本消息
     onTextMessageStartEvent: (params: { event: TextMessageStartEvent } & AgentSubscriberParams) => {
-      console.log('onTextMessageStartEvent', params);
+      console.log('✅ SSE Event: onTextMessageStartEvent', params);
       dispatch({
         type: 'pushMessage',
         payload: {
@@ -363,7 +363,7 @@ export const useAiChat = () => {
 
     // agent内容输出中
     onTextMessageContentEvent: (params: { event: TextMessageContentEvent; textMessageBuffer: string } & AgentSubscriberParams) => {
-      console.log('onTextMessageContentEvent', params);
+      console.log('✅ SSE Event: onTextMessageContentEvent', params.event.delta);
       dispatch({
         type: 'updateMessage',
         payload: {
@@ -374,7 +374,7 @@ export const useAiChat = () => {
       });
     },
     onTextMessageEndEvent: (params: { event: TextMessageEndEvent; textMessageBuffer: string } & AgentSubscriberParams) => {
-      console.log('onTextMessageEndEvent', params);
+      console.log('✅ SSE Event: onTextMessageEndEvent', params);
       dispatch({
         type: 'updateMessage',
         payload: {
@@ -425,7 +425,7 @@ export const useAiChat = () => {
     },
     // agent开始
     onRunStartedEvent: (params: { event: RunStartedEvent } & AgentSubscriberParams) => {
-      console.log('onRunStartedEvent', params);
+      console.log('✅ SSE Event: onRunStartedEvent', params);
       const msg = params.messages[params.messages.length - 1];
       dispatch({
         type: 'updateMessage',
@@ -436,7 +436,7 @@ export const useAiChat = () => {
       });
     },
     onCustomEvent: (params) => {
-      console.log('onCustomEvent', params);
+      console.log('✅ SSE Event: onCustomEvent', params);
       const event = params.event;
       if (event.name === 'a2ui') {
         const content = event.value as A2UI[];
@@ -462,7 +462,6 @@ export const useAiChat = () => {
    * 在聊天窗口打开时建立 SSE 订阅，并在关闭或卸载时清理连接。
    */
   useEffect(() => {
-    console.log('进入了11111111111');
     
     if (!state.visible) {
       return;
